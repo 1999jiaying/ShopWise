@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopWise AI — Pricing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #fafafa; color: #111827; line-height: 1.6; }
+    :root { --accent: #111827; --neutral-100: #f5f5f5; --neutral-200: #e5e5e5; --neutral-300: #d1d5db; --neutral-400: #9ca3af; --neutral-700: #374151; --radius: 10px; --shadow: 0 10px 30px rgba(17,24,39,.08); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+    nav { background: #fff; border-bottom: 1px solid #e5e5e5; position: sticky; top: 0; z-index: 100; }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    .nav-brand { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: #111827; text-decoration: none; }
+    .nav-actions { display: flex; align-items: center; gap: 16px; }
+    .nav-link { color: #4b5563; font-size: 14px; text-decoration: none; font-weight: 600; }
+    .nav-link:hover { color: #111827; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; padding: 12px 24px; border-radius: 999px; border: none; cursor: pointer; text-decoration: none; }
+    .btn-primary { background: #111827; color: #fff; }
+    .page-head { padding: 100px 0 32px; text-align: center; }
+    .page-head h1 { font-size: clamp(42px, 5vw, 64px); line-height: 1.05; font-weight: 900; max-width: 760px; margin: 0 auto; }
+    .page-head p { margin-top: 20px; font-size: 18px; color: #525252; max-width: 640px; margin-left: auto; margin-right: auto; }
+    .pricing-grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); padding-bottom: 120px; }
+    .price-card { background: #fff; border: 1px solid #e5e5e5; border-radius: 20px; padding: 32px; box-shadow: var(--shadow); position: relative; }
+    .price-card.popular { border-color: #111827; }
+    .popular-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: #111827; color: #fff; padding: 6px 18px; border-radius: 999px; font-size: 12px; }
+    .plan-icon { font-size: 28px; margin-bottom: 18px; }
+    .plan-name { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+    .plan-desc { color: #525252; font-size: 15px; line-height: 1.7; }
+    .plan-price { margin: 28px 0; border-top: 1px solid #f3f4f6; border-bottom: 1px solid #f3f4f6; padding: 22px 0; }
+    .price-amount { font-size: 42px; font-weight: 800; color: #111827; line-height: 1; }
+    .price-period { color: #525252; font-size: 13px; margin-top: 6px; }
+    .plan-features { list-style: none; margin: 0; padding: 0; }
+    .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: #4b5563; padding: 10px 0; }
+    .plan-features li::before { content: '✓'; color: #111827; font-weight: 700; }
+    .plan-features li.dim { color: #cbd5e1; }
+    .plan-features li.dim::before { color: #cbd5e1; }
+    .plan-cta { margin-top: 24px; }
+    .pill-label {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f3f4f6; color: #374151;
+      font-size: 12px; font-weight: 600; letter-spacing: .3px;
+      padding: 8px 16px; border-radius: 999px;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 0 20px; }
+      .page-head { padding: 64px 0 24px; }
+      .page-head h1 { font-size: clamp(32px, 7vw, 56px); }
+      .pricing-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="container nav-inner">
+    <a href="/" class="nav-brand">ShopWise</a>
+    <div class="nav-actions">
+      <a href="/dashboard/overview" class="nav-link">Dashboard</a>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/dashboard/overview" class="btn btn-primary">Analyze My Shop</a>
+    </div>
+  </div>
+</nav>
+<main class="container">
+  <section class="page-head">
+    <p class="pill-label">Simple pricing for local shops</p>
+    <h1>Choose the plan that fits your next growth step.</h1>
+    <p>Free scan gives a quick diagnosis, Pro report delivers full AI recommendations, and Growth Assistant keeps your shop moving forward.</p>
+  </section>
+
+  <section class="pricing-grid">
+    <article class="price-card">
+      <div class="plan-icon">🔍</div>
+      <div class="plan-name">Free Scan</div>
+      <div class="plan-desc">Quick shop score and a short list of recommendations to start improving today.</div>
+      <div class="plan-price">
+        <div class="price-amount">$0</div>
+        <div class="price-period">Free forever</div>
+      </div>
+      <ul class="plan-features">
+        <li>Overall business score</li>
+        <li>6 category grades</li>
+        <li>3 top actions preview</li>
+        <li class="dim">Full AI report</li>
+        <li class="dim">Monthly tracking</li>
+      </ul>
+      <div class="plan-cta"><a href="/dashboard/overview" class="btn btn-primary">Start Free Scan</a></div>
+    </article>
+
+    <article class="price-card popular">
+      <div class="popular-badge">Most popular</div>
+      <div class="plan-icon">📊</div>
+      <div class="plan-name">Pro Report</div>
+      <div class="plan-desc">A complete AI diagnosis with specific actions, competitor benchmarking, and a shareable export.</div>
+      <div class="plan-price">
+        <div class="price-amount"><sup>$</sup>29</div>
+        <div class="price-period">One-time report</div>
+      </div>
+      <ul class="plan-features">
+        <li>Everything in Free Scan</li>
+        <li>Full recommendations list</li>
+        <li>Review sentiment analysis</li>
+        <li>Website & delivery page audit</li>
+        <li>PDF export</li>
+      </ul>
+      <div class="plan-cta"><a href="/dashboard/overview" class="btn btn-primary">Get Full Report</a></div>
+    </article>
+
+    <article class="price-card">
+      <div class="plan-icon">🤝</div>
+      <div class="plan-name">Growth Assistant</div>
+      <div class="plan-desc">Monthly AI check-ins, updated benchmarks and progress tracking for ongoing improvement.</div>
+      <div class="plan-price">
+        <div class="price-amount"><sup>$</sup>49</div>
+        <div class="price-period">Per month</div>
+      </div>
+      <ul class="plan-features">
+        <li>Everything in Pro Report</li>
+        <li>Monthly progress updates</li>
+        <li>Competitor alerts</li>
+        <li>Priority support</li>
+        <li>Unlimited exports</li>
+      </ul>
+      <div class="plan-cta"><a href="/dashboard/overview" class="btn btn-primary">Start Monthly Plan</a></div>
+    </article>
+  </section>
+</main>
+</body>
+</html>
