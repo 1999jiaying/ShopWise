@@ -585,6 +585,19 @@
       display: none; background: none; border: none; cursor: pointer;
       color: var(--neutral-700); padding: 4px;
     }
+    .mobile-menu {
+      display: none; flex-direction: column;
+      background: #fff; border-bottom: 1px solid var(--neutral-200);
+      padding: 12px 20px 20px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      color: var(--neutral-700); text-decoration: none;
+      font-size: 16px; font-weight: 600;
+      padding: 12px 0; border-bottom: 1px solid var(--neutral-100);
+    }
+    .mobile-menu a:last-child { border-bottom: none; padding-top: 16px; }
+    .mobile-menu .btn { text-align: center; border-radius: 999px; margin-top: 4px; }
 
     /* ─── Responsive ────────────────────────────────────────── */
     @media (max-width: 1024px) {
@@ -648,15 +661,21 @@
   <div class="container nav-inner">
     <div class="nav-brand">ShopWise</div>
     <div class="nav-actions">
-      <a href="/dashboard/overview" class="nav-link">Sample report</a>
+      <a href="/sample/overview" class="nav-link">Sample report</a>
       <a href="/pricing" class="nav-link">Pricing</a>
-      <a href="/dashboard/overview" class="btn btn-primary">Analyze My Shop</a>
-      <button class="nav-mobile-toggle" aria-label="Menu">
+      <a href="/#analyze" class="btn btn-primary">Analyze My Shop</a>
+      <button class="nav-mobile-toggle" id="burgerBtn" aria-label="Menu">
         <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
         </svg>
       </button>
     </div>
+  </div>
+  <!-- Mobile dropdown — lives inside <nav> so it sticks with it -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/sample/overview">Sample report</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/#analyze" class="btn btn-primary">Analyze My Shop — Free</a>
   </div>
 </nav>
 
@@ -681,7 +700,7 @@
         and get clear, practical steps to grow your business starting today.
       </p>
 
-      <form action="/analyze" method="POST" style="background: rgba(255,255,255,0.9); border-radius: 16px; padding: 24px; margin: 24px 0; box-shadow: var(--shadow);">
+      <form id="analyze" action="/analyze" method="POST" style="background: rgba(255,255,255,0.9); border-radius: 16px; padding: 24px; margin: 24px 0; box-shadow: var(--shadow);">
         <h3 style="font-size: 18px; font-weight: 700; color: var(--neutral-900); margin-bottom: 16px;">Get Your Free AI Analysis</h3>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
           <input type="text" name="shopName" placeholder="Shop Name" required style="padding: 12px; border: 1px solid var(--neutral-300); border-radius: 8px; font-size: 14px;">
@@ -691,7 +710,7 @@
       </form>
 
       <div class="hero-actions">
-        <a href="/dashboard/overview" class="btn btn-ghost btn-lg">
+        <a href="/sample/overview" class="btn btn-ghost btn-lg">
           View sample dashboard
         </a>
       </div>
@@ -930,7 +949,7 @@
         <h2 class="section-title mt-12">See what your report looks like</h2>
         <p class="section-sub">A real AI diagnosis — scores, insights, and specific actions — generated for any local shop in under 60 seconds.</p>
       </div>
-      <a href="/dashboard/overview" class="btn btn-primary btn-lg">Get My Free Report →</a>
+      <a href="/sample/overview" class="btn btn-primary btn-lg">View Sample Report →</a>
     </div>
 
     <div class="mock-browser">
@@ -1194,7 +1213,7 @@
           <li class="dim">Detailed insights per category</li>
           <li class="dim">Monthly progress tracking</li>
         </ul>
-        <a href="/dashboard/overview" class="btn btn-outline btn-lg plan-cta">Start Free Scan</a>
+        <a href="/#analyze" class="btn btn-outline btn-lg plan-cta">Start Free Scan</a>
       </div>
 
       <!-- Pro -->
@@ -1217,7 +1236,7 @@
           <li>PDF export to share</li>
           <li class="dim">Monthly progress tracking</li>
         </ul>
-        <a href="/dashboard/overview" class="btn btn-primary btn-lg plan-cta">Get Full Report →</a>
+        <a href="/sample/overview" class="btn btn-primary btn-lg plan-cta">Get Full Report →</a>
       </div>
 
       <!-- Monthly -->
@@ -1238,7 +1257,7 @@
           <li>Seasonal recommendation updates</li>
           <li>Unlimited PDF exports</li>
         </ul>
-        <a href="/dashboard/overview" class="btn btn-outline btn-lg plan-cta">Start Monthly Plan</a>
+        <a href="/sample/overview" class="btn btn-outline btn-lg plan-cta">Start Monthly Plan</a>
       </div>
 
     </div>
@@ -1254,8 +1273,8 @@
     <h2>Ready to see how your shop scores?</h2>
     <p>Join 2,400+ shop owners who got their AI diagnosis and know exactly what to improve next.</p>
     <div class="cta-actions">
-      <a href="/dashboard/overview" class="btn btn-primary btn-xl">🔍 Analyze My Shop — Free</a>
-      <a href="/dashboard/overview" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.2);color:#fff;">View Sample Report</a>
+      <a href="/#analyze" class="btn btn-primary btn-xl">🔍 Analyze My Shop — Free</a>
+      <a href="/sample/overview" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.2);color:#fff;">View Sample Report</a>
     </div>
   </div>
 </section>
@@ -1307,5 +1326,11 @@
   </div>
 </footer>
 
+<script>
+  const burger = document.getElementById('burgerBtn');
+  const menu   = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+</script>
 </body>
 </html>

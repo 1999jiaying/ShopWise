@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-app.get('/dashboard/:section?', (req, res) => {
+app.get('/sample/:section?', (req, res) => {
   const section = req.params.section || 'overview';
   const shopData = {
     name: req.query.name || 'Golden Bowl Noodles',
@@ -61,7 +61,7 @@ app.get('/dashboard/:section?', (req, res) => {
 app.post('/analyze', (req, res) => {
   const { shopName, address } = req.body;
   // In a real app, this would process the data
-  res.redirect(`/dashboard/overview?name=${encodeURIComponent(shopName)}&address=${encodeURIComponent(address)}`);
+  res.redirect(`/sample/overview?name=${encodeURIComponent(shopName)}&address=${encodeURIComponent(address)}`);
 });
 
 app.get('/pricing', (req, res) => {
