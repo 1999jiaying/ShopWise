@@ -3,1325 +3,1007 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopWise AI — Business Advisor for Local Shops</title>
+  <title>ShopWise — Honest Business Diagnostics for Local Shops</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    /* ─── Reset & Base ─────────────────────────────────────── */
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #F8F7F4;
+      --surface:   #FFFFFF;
+      --surface-2: #F2F0EB;
+      --border:    #E3E1DB;
+      --border-2:  #CCCAC3;
+
+      --text-1: #0E0E0E;
+      --text-2: #484540;
+      --text-3: #8A877F;
+
+      --high:        #B91C1C;
+      --high-bg:     #FEF2F2;
+      --high-border: #FECACA;
+      --med:         #92400E;
+      --med-bg:      #FFFBEB;
+      --med-border:  #FDE68A;
+      --good:        #14532D;
+      --good-bg:     #F0FDF4;
+      --good-border: #BBF7D0;
+
+      --radius:    8px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
+      --shadow:    0 4px 16px rgba(0,0,0,.07);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,.09);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--neutral-50);
-      color: var(--neutral-900);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text-1);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
     }
 
-    /* ─── Tokens ────────────────────────────────────────────── */
-    :root {
-      --accent: #111827;
-      --accent-l: #f8fafc;
-      --accent-2: #4b5563;
-      --orange: #111827;
-      --orange-l: #f8fafc;
-      --orange-m: #f3f4f6;
-      --green: #4b5563;
-      --green-l: #f8fafc;
-      --blue: #4b5563;
-      --blue-l: #f8fafc;
-      --purple: #4b5563;
-      --purple-l: #f8fafc;
-      --rose: #4b5563;
-      --rose-l: #f8fafc;
-      --amber: #4b5563;
-      --amber-l: #f8fafc;
-      --neutral-50:  #fafafa;
-      --neutral-100: #f5f5f5;
-      --neutral-200: #e5e5e5;
-      --neutral-300: #d1d5db;
-      --neutral-400: #9ca3af;
-      --neutral-500: #6b7280;
-      --neutral-600: #4b5563;
-      --neutral-700: #374151;
-      --neutral-800: #1f2937;
-      --neutral-900: #111827;
-      --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.08);
-      --shadow:    0 4px 16px rgba(17, 24, 39, 0.08);
-      --shadow-lg: 0 10px 30px rgba(17, 24, 39, 0.12);
-      --radius:    10px;
-      --radius-lg: 20px;
-    }
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .container  { max-width: 1120px; margin: 0 auto; padding: 0 40px; }
+    .section    { padding: 100px 0; }
+    .section-sm { padding: 72px 0; }
 
-    /* ─── Layout helpers ────────────────────────────────────── */
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
-    .section    { padding: 96px 0; }
-    .section-sm { padding: 64px 0; }
-    .pill-label {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: var(--accent-l); color: var(--accent);
-      font-size: 12px; font-weight: 600; letter-spacing: .3px;
-      padding: 8px 16px; border-radius: 999px;
-      text-transform: uppercase;
-    }
-    h2.section-title {
-      font-size: clamp(42px, 5vw, 72px); font-weight: 900;
-      line-height: 1.05; color: var(--neutral-900); margin-top: 18px;
-    }
-    p.section-sub {
-      font-size: 17px; color: var(--neutral-500);
-      max-width: 540px; margin-top: 12px; line-height: 1.7;
-    }
-
-    /* ─── Navigation ────────────────────────────────────────── */
+    /* ─── Nav ────────────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: #fff;
-      border-bottom: 1px solid var(--neutral-200);
+      background: rgba(248,247,244,.93);
+      border-bottom: 1px solid var(--border);
       backdrop-filter: blur(12px);
     }
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between;
-      height: 72px;
+      height: 64px;
     }
     .nav-brand {
-      font-size: 18px; font-weight: 800;
-      color: var(--neutral-900);
-      letter-spacing: -0.02em;
-      text-decoration: none;
+      font-size: 17px; font-weight: 800; letter-spacing: -.03em;
+      color: var(--text-1); text-decoration: none;
     }
-    .nav-actions {
-      display: flex; align-items: center; gap: 16px;
-    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-link {
-      color: var(--neutral-700); font-size: 14px; text-decoration: none;
-      font-weight: 600;
-    }
-    .nav-link:hover { color: var(--neutral-900); }
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      font-family: inherit; font-size: 14px; font-weight: 700;
-      padding: 12px 24px; border-radius: 999px;
-      border: none; cursor: pointer; transition: all .15s ease;
-      text-decoration: none; white-space: nowrap;
-    }
-    .btn-ghost {
-      background: transparent; color: var(--neutral-900);
-      border: 1px solid var(--neutral-300);
-    }
-    .btn-ghost:hover { border-color: var(--neutral-400); color: var(--neutral-900); }
-    .btn-primary {
-      background: var(--neutral-900);
-      color: #fff; box-shadow: 0 8px 30px rgba(17, 24, 39, 0.1);
-    }
-    .btn-primary:hover { opacity: 0.95; }
-    .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: 999px; }
-    .btn-xl { padding: 16px 30px; font-size: 16px; border-radius: 999px; }
-
-    /* ─── Hero ──────────────────────────────────────────────── */
-    .hero {
-      padding: 100px 0 100px;
-      background: var(--neutral-50);
-      overflow: hidden; position: relative;
-    }
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(180deg, rgba(248,250,252,0.7), transparent 45%);
-      pointer-events: none;
-    }
-    .hero-inner {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
-      align-items: center; position: relative;
-    }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: #FFF; border: 1px solid var(--neutral-200);
-      border-radius: 999px; padding: 6px 14px 6px 8px;
-      font-size: 13px; font-weight: 500; color: var(--neutral-700);
-      box-shadow: var(--shadow-sm); margin-bottom: 20px;
-    }
-    .hero-badge-dot {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: linear-gradient(135deg, #111827, #4b5563);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px;
-    }
-    h1 {
-      font-size: clamp(48px, 5vw, 78px);
-      font-weight: 900; line-height: 1.05; letter-spacing: -0.04em;
-      color: var(--neutral-900);
-      max-width: 820px;
-    }
-    h1 .highlight {
-      color: var(--accent);
-      background: none;
-      -webkit-text-fill-color: initial;
-    }
-    .hero-sub {
-      font-size: 18px; color: var(--neutral-600); line-height: 1.8;
-      max-width: 540px; margin: 24px 0 42px;
-    }
-    .hero-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .hero-trust {
-      display: flex; align-items: center; gap: 12px;
-      margin-top: 36px;
-    }
-    .trust-avatars {
-      display: flex;
-    }
-    .trust-avatars span {
-      width: 30px; height: 30px; border-radius: 50%;
-      border: 2px solid #fff; margin-left: -8px; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      background: var(--neutral-100);
-    }
-    .trust-avatars span:first-child { margin-left: 0; }
-    .trust-text { font-size: 13px; color: var(--neutral-500); }
-    .trust-text strong { color: var(--neutral-900); font-weight: 600; }
-    .stars { color: var(--neutral-500); font-size: 12px; }
-
-    /* Hero Illustration */
-    .hero-visual {
-      position: relative; display: flex; justify-content: center; align-items: center;
-    }
-    .hero-card {
-      background: #fff; border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-lg);
-      padding: 28px; width: 100%; max-width: 480px;
-      position: relative; z-index: 1;
-    }
-    .hc-header {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;
-    }
-    .hc-title { font-size: 15px; font-weight: 700; color: var(--neutral-900); }
-    .hc-subtitle { font-size: 12px; color: var(--neutral-500); margin-top: 2px; }
-    .hc-badge {
-      background: var(--green-l); color: var(--green);
-      font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px;
-    }
-    .score-ring-wrap {
-      display: flex; align-items: center; gap: 24px; margin-bottom: 24px;
-    }
-    .score-ring {
-      position: relative; width: 96px; height: 96px; flex-shrink: 0;
-    }
-    .score-ring svg { transform: rotate(-90deg); }
-    .score-ring-inner {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .score-num { font-size: 26px; font-weight: 800; color: var(--neutral-900); }
-    .score-denom { font-size: 12px; color: var(--neutral-500); margin-top: -2px; }
-    .score-label { font-size: 13px; font-weight: 600; color: var(--neutral-900); }
-    .score-desc  { font-size: 12px; color: var(--neutral-500); margin-top: 2px; }
-    .mini-scores { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .mini-score {
-      background: var(--neutral-50); border-radius: 10px; padding: 10px 12px;
-    }
-    .ms-label { font-size: 11px; color: var(--neutral-500); font-weight: 500; }
-    .ms-bar-wrap {
-      height: 5px; background: var(--neutral-200); border-radius: 99px; margin: 6px 0 4px;
-    }
-    .ms-bar { height: 100%; border-radius: 99px; }
-    .ms-val { font-size: 13px; font-weight: 700; color: var(--neutral-900); }
-    .reco-card {
-      background: var(--neutral-100); border-radius: 10px; padding: 14px 16px; margin-top: 14px;
-    }
-    .reco-title { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; }
-    .reco-item {
-      display: flex; align-items: flex-start; gap: 8px;
-      font-size: 12px; color: var(--neutral-700); margin-top: 10px; line-height: 1.5;
-    }
-    .reco-item::before { content: '→'; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
-
-    /* Floating stickers */
-    .float-sticker {
-      position: absolute; background: #fff; border-radius: 12px;
-      box-shadow: var(--shadow); padding: 10px 14px;
-      display: flex; align-items: center; gap: 8px;
-      font-size: 13px; font-weight: 600; color: var(--neutral-900);
-      z-index: 2;
-    }
-    .float-sticker.top-right {
-      top: -18px; right: -20px;
-    }
-    .float-sticker.bottom-left {
-      bottom: -18px; left: -20px;
-    }
-    .fs-icon { font-size: 18px; }
-    .fs-sub { font-size: 11px; color: var(--neutral-500); font-weight: 400; }
-
-    /* ─── Problem ───────────────────────────────────────────── */
-    .problem { background: var(--neutral-900); }
-    .problem .section-title { color: #fff; }
-    .problem .section-sub  { color: var(--neutral-300); }
-    .pain-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 48px;
-    }
-    .pain-card {
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius); padding: 28px;
-      transition: background .2s;
-    }
-    .pain-card:hover { background: rgba(255,255,255,.08); }
-    .pain-icon { font-size: 28px; margin-bottom: 12px; }
-    .pain-title { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-    .pain-desc  { font-size: 14px; color: var(--neutral-300); line-height: 1.6; }
-    .problem-center { text-align: center; margin-bottom: 16px; }
-
-    /* ─── Features ──────────────────────────────────────────── */
-    .features { background: #fff; }
-    .features-header { text-align: center; margin-bottom: 52px; }
-    .features-header .section-sub { margin: 12px auto 0; }
-    .feature-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
-    }
-    .feature-card {
-      border: 1.5px solid var(--neutral-200);
-      border-radius: var(--radius); padding: 30px;
-      transition: all .25s; background: #fff;
-      position: relative; overflow: hidden;
-    }
-    .feature-card::before {
-      content: ''; position: absolute; inset: 0;
-      border-radius: var(--radius);
-      background: linear-gradient(135deg, var(--c1, #FFF7ED), transparent);
-      opacity: 0; transition: opacity .25s;
-    }
-    .feature-card:hover { border-color: var(--c2, var(--accent)); box-shadow: var(--shadow); transform: translateY(-2px); }
-    .feature-card:hover::before { opacity: 1; }
-    .feature-card.c-orange { --c1: #f5f5f7; --c2: #9ca3af; }
-    .feature-card.c-green  { --c1: #f8fafc; --c2: #9ca3af; }
-    .feature-card.c-blue   { --c1: #f8fafc; --c2: #9ca3af; }
-    .feature-card.c-purple { --c1: #f8fafc; --c2: #9ca3af; }
-    .feature-card.c-rose   { --c1: #f8fafc; --c2: #9ca3af; }
-    .feature-card.c-amber  { --c1: #f8fafc; --c2: #9ca3af; }
-    .fc-icon {
-      width: 46px; height: 46px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; margin-bottom: 16px; position: relative;
-    }
-    .c-orange .fc-icon { background: var(--orange-m); }
-    .c-green  .fc-icon { background: var(--green-l); }
-    .c-blue   .fc-icon { background: var(--blue-l); }
-    .c-purple .fc-icon { background: var(--purple-l); }
-    .c-rose   .fc-icon { background: var(--rose-l); }
-    .c-amber  .fc-icon { background: var(--amber-l); }
-    .fc-title { font-size: 16px; font-weight: 700; color: var(--neutral-900); margin-bottom: 8px; position: relative; }
-    .fc-desc  { font-size: 14px; color: var(--neutral-500); line-height: 1.6; position: relative; }
-    .fc-tags  { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; position: relative; }
-    .fc-tag   {
-      font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 99px;
-      background: var(--neutral-100); color: var(--neutral-500);
-    }
-
-    /* ─── Dashboard Preview ─────────────────────────────────── */
-    .dashboard { background: linear-gradient(160deg, #1C1917 0%, #292524 100%); }
-    .dashboard .section-title { color: #fff; }
-    .dashboard .section-sub   { color: var(--neutral-300); }
-    .dash-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 44px; }
-    .mock-browser {
-      background: #27272A; border-radius: 18px; overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.06);
-    }
-    .browser-bar {
-      background: #3F3F46; padding: 12px 16px;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .browser-dots { display: flex; gap: 6px; }
-    .browser-dots span {
-      width: 11px; height: 11px; border-radius: 50%;
-    }
-    .bd-r { background: #F87171; }
-    .bd-y { background: #d1d5db; }
-    .bd-g { background: #d1d5db; }
-    .browser-url {
-      background: rgba(255,255,255,.08); border-radius: 6px;
-      padding: 5px 14px; font-size: 12px; color: #A1A1AA;
-      flex: 1; text-align: center;
-    }
-    .dash-inner { padding: 28px; }
-    .dash-top {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 24px;
-    }
-    .dash-shop-info h3 { font-size: 18px; font-weight: 700; color: #fff; }
-    .dash-shop-info p  { font-size: 13px; color: #A1A1AA; margin-top: 2px; }
-    .dash-score-big {
-      display: flex; align-items: center; gap: 16px;
-    }
-    .score-circle-big {
-      width: 80px; height: 80px; position: relative;
-    }
-    .score-circle-big svg { transform: rotate(-90deg); }
-    .scb-inner {
-      position: absolute; inset: 0;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-    }
-    .scb-num   { font-size: 22px; font-weight: 800; color: #fff; line-height: 1; }
-    .scb-denom { font-size: 11px; color: #A1A1AA; }
-    .dash-score-label h4 { font-size: 14px; font-weight: 700; color: #fff; }
-    .dash-score-label p  { font-size: 12px; color: #A1A1AA; margin-top: 2px; }
-    .score-grade {
-      font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px;
-      margin-top: 6px; display: inline-block;
-    }
-    .grade-b { background: rgba(156,163,175,.15); color: #6b7280; }
-    .dash-score-grid {
-      display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px;
-    }
-    .score-tile {
-      background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
-      border-radius: 12px; padding: 14px; text-align: center;
-    }
-    .st-icon { font-size: 22px; margin-bottom: 8px; }
-    .st-label { font-size: 11px; color: #A1A1AA; font-weight: 500; margin-bottom: 6px; }
-    .st-bar-wrap { height: 4px; background: rgba(255,255,255,.1); border-radius: 99px; margin-bottom: 6px; }
-    .st-bar { height: 100%; border-radius: 99px; }
-    .st-val { font-size: 16px; font-weight: 800; color: #fff; }
-    .dash-recos {
-      background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
-      border-radius: 12px; padding: 18px;
-    }
-    .dr-title { font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
-    .dr-title span { background: var(--orange); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 99px; }
-    .reco-row {
-      display: flex; align-items: flex-start; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.05);
-    }
-    .reco-row:last-child { border-bottom: none; padding-bottom: 0; }
-    .rr-icon {
-      width: 28px; height: 28px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 14px; flex-shrink: 0;
-    }
-    .rr-text { font-size: 13px; color: #E4E4E7; line-height: 1.4; flex: 1; }
-    .rr-impact {
-      font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 99px;
-      flex-shrink: 0; align-self: center;
-    }
-    .imp-high { background: rgba(249,115,22,.2); color: #FB923C; }
-    .imp-med  { background: rgba(156,163,175,.15); color: #6b7280; }
-
-    /* ─── How It Works ──────────────────────────────────────── */
-    .how { background: var(--neutral-50); }
-    .how-header { text-align: center; margin-bottom: 60px; }
-    .how-header .section-sub { margin: 12px auto 0; }
-    .steps-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
-      position: relative;
-    }
-    .steps-row::before {
-      content: ''; position: absolute;
-      top: 40px; left: calc(16.66% + 40px); right: calc(16.66% + 40px);
-      height: 2px;
-      background: linear-gradient(90deg, var(--orange) 0%, var(--orange) 50%, var(--orange) 100%);
-      border-top: 2px dashed var(--orange-m);
-      background: none;
-    }
-    .step {
-      text-align: center; padding: 0 40px; position: relative;
-    }
-    .step-num {
-      width: 80px; height: 80px; border-radius: 50%;
-      background: linear-gradient(135deg, #111827, #4b5563);
-      color: #fff; font-size: 28px; font-weight: 800;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px; position: relative; z-index: 1;
-      box-shadow: 0 8px 24px rgba(249,115,22,.35);
-    }
-    .step-icon-wrap {
-      font-size: 28px; position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .step-title { font-size: 18px; font-weight: 700; color: var(--neutral-900); margin-bottom: 10px; }
-    .step-desc  { font-size: 14px; color: var(--neutral-500); line-height: 1.7; }
-    .step-connector {
-      position: absolute; top: 38px; right: -50%;
-      width: 100%; height: 4px;
-      border-top: 2.5px dashed var(--orange-m);
-      z-index: 0;
-    }
-    .step:last-child .step-connector { display: none; }
-
-    /* ─── Recommendations ───────────────────────────────────── */
-    .recos { background: var(--neutral-100); }
-    .recos-header { text-align: center; margin-bottom: 48px; }
-    .recos-header .section-sub { margin: 12px auto 0; }
-    .reco-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px;
-    }
-    .reco-item-card {
-      background: #fff; border-radius: var(--radius); padding: 22px 26px;
-      display: flex; align-items: flex-start; gap: 16px;
-      box-shadow: var(--shadow-sm); border: 1.5px solid var(--neutral-100);
-      transition: all .2s;
-    }
-    .reco-item-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
-    .ri-bullet {
-      width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 18px;
-    }
-    .ri-content {}
-    .ri-title { font-size: 15px; font-weight: 700; color: var(--neutral-900); margin-bottom: 4px; }
-    .ri-desc  { font-size: 13px; color: var(--neutral-500); line-height: 1.5; }
-    .ri-impact {
-      display: inline-flex; align-items: center; gap: 4px;
-      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px;
-      margin-top: 8px;
-    }
-
-    /* ─── Pricing ───────────────────────────────────────────── */
-    .pricing { background: #fff; }
-    .pricing-header { text-align: center; margin-bottom: 52px; }
-    .pricing-header .section-sub { margin: 12px auto 0; }
-    .pricing-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start;
-    }
-    .price-card {
-      border: 1.5px solid var(--neutral-200);
-      border-radius: var(--radius-lg); padding: 36px 32px;
-      background: #fff; position: relative; transition: all .25s;
-    }
-    .price-card:hover { box-shadow: var(--shadow); }
-    .price-card.popular {
-      border-color: var(--accent); box-shadow: 0 0 0 4px rgba(17,24,39,.08);
-    }
-    .popular-badge {
-      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
-      background: var(--accent);
-      color: #fff; font-size: 12px; font-weight: 700;
-      padding: 4px 16px; border-radius: 999px;
-      white-space: nowrap;
-    }
-    .plan-icon { font-size: 28px; margin-bottom: 14px; }
-    .plan-name { font-size: 16px; font-weight: 700; color: var(--neutral-900); }
-    .plan-desc { font-size: 14px; color: var(--neutral-500); margin-top: 6px; line-height: 1.5; }
-    .plan-price {
-      margin: 24px 0; padding: 20px 0;
-      border-top: 1px solid var(--neutral-100); border-bottom: 1px solid var(--neutral-100);
-    }
-    .price-amount {
-      font-size: 38px; font-weight: 800; color: var(--neutral-900); line-height: 1;
-    }
-    .price-amount sup { font-size: 20px; vertical-align: super; }
-    .price-period { font-size: 13px; color: var(--neutral-500); margin-top: 4px; }
-    .plan-features { list-style: none; }
-    .plan-features li {
-      display: flex; align-items: flex-start; gap: 10px;
-      font-size: 14px; color: var(--neutral-700); padding: 7px 0;
-    }
-    .plan-features li::before {
-      content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; margin-top: 1px;
-    }
-    .plan-features li.dim { color: var(--neutral-300); }
-    .plan-features li.dim::before { color: var(--neutral-200); }
-    .plan-cta { width: 100%; margin-top: 28px; justify-content: center; }
-    .btn-outline {
-      background: transparent; color: var(--accent);
-      border: 1.5px solid var(--accent);
-    }
-    .btn-outline:hover { background: var(--accent); color: #fff; }
-
-    /* ─── CTA Banner ────────────────────────────────────────── */
-    .cta-banner {
-      background: var(--accent);
-      padding: 80px 0; text-align: center;
-    }
-    .cta-banner h2 { color: #fff; font-size: clamp(28px, 3.5vw, 44px); font-weight: 800; }
-    .cta-banner p  { color: rgba(255,255,255,0.75); font-size: 17px; max-width: 540px; margin: 14px auto 36px; line-height: 1.8; }
-    .cta-actions   { display: flex; align-items: center; justify-content: center; gap: 14px; }
-
-    /* ─── Footer ────────────────────────────────────────────── */
-    footer {
-      background: var(--neutral-900); padding: 60px 0 36px;
-    }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px;
-      padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .footer-brand .logo { color: #fff; }
-    .footer-brand p { font-size: 14px; color: var(--neutral-300); margin-top: 12px; line-height: 1.7; max-width: 260px; }
-    .footer-col h4 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 16px; }
-    .footer-col ul { list-style: none; }
-    .footer-col li { margin-bottom: 10px; }
-    .footer-col a { font-size: 14px; color: var(--neutral-300); text-decoration: none; transition: color .2s; }
-    .footer-col a:hover { color: var(--accent); }
-    .footer-bottom {
-      display: flex; align-items: center; justify-content: space-between;
-      padding-top: 28px; font-size: 13px; color: var(--neutral-500);
-    }
-    .footer-social { display: flex; gap: 12px; }
-    .social-btn {
-      width: 34px; height: 34px; border-radius: 8px;
-      background: rgba(255,255,255,.07);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 15px; text-decoration: none;
-      transition: background .2s;
-    }
-    .social-btn:hover { background: rgba(255,255,255,.14); }
-
-    /* ─── Misc ──────────────────────────────────────────────── */
-    .text-center { text-align: center; }
-    .mt-8  { margin-top: 8px; }
-    .mt-12 { margin-top: 12px; }
-    .mt-16 { margin-top: 16px; }
-    .mt-24 { margin-top: 24px; }
-    .mt-32 { margin-top: 32px; }
-    .mt-48 { margin-top: 48px; }
-
-    /* Animated pulse dot */
-    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:.4} }
-    .pulse { animation: pulse 2s ease-in-out infinite; }
-
-    /* Gradient backgrounds */
-    .hero { background: linear-gradient(160deg, var(--neutral-50) 0%, var(--neutral-100) 40%, var(--neutral-50) 100%); }
-
-    /* ─── Mobile nav ────────────────────────────────────────── */
+      font-size: 14px; font-weight: 500; color: var(--text-2);
+      text-decoration: none; transition: color .15s;
+    }
+    .nav-link:hover { color: var(--text-1); }
+    .nav-cta {
+      display: inline-flex; align-items: center;
+      background: var(--text-1); color: #fff;
+      font-size: 13px; font-weight: 600;
+      padding: 9px 18px; border-radius: 6px;
+      text-decoration: none; transition: opacity .15s;
+    }
+    .nav-cta:hover { opacity: .88; }
     .nav-mobile-toggle {
-      display: none; background: none; border: none; cursor: pointer;
-      color: var(--neutral-700); padding: 4px;
+      display: none; background: none; border: none;
+      cursor: pointer; color: var(--text-2); padding: 4px;
     }
+    /* mobile menu lives inside <nav> so it sticks with the bar */
     .mobile-menu {
       display: none; flex-direction: column;
-      background: #fff; border-bottom: 1px solid var(--neutral-200);
-      padding: 12px 20px 20px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 12px 24px 20px;
     }
     .mobile-menu.open { display: flex; }
     .mobile-menu a {
-      color: var(--neutral-700); text-decoration: none;
-      font-size: 16px; font-weight: 600;
-      padding: 12px 0; border-bottom: 1px solid var(--neutral-100);
+      color: var(--text-2); text-decoration: none;
+      font-size: 15px; font-weight: 500;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
     }
-    .mobile-menu a:last-child { border-bottom: none; padding-top: 16px; }
-    .mobile-menu .btn { text-align: center; border-radius: 999px; margin-top: 4px; }
+    .mobile-menu a:last-child { border-bottom: none; }
 
-    /* ─── Responsive ────────────────────────────────────────── */
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      font-family: inherit; font-weight: 600; font-size: 14px;
+      border-radius: 7px; border: none; cursor: pointer;
+      text-decoration: none; transition: all .15s; white-space: nowrap;
+    }
+    .btn-primary  { background: var(--text-1); color: #fff; padding: 13px 24px; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-outline  { background: transparent; color: var(--text-1); padding: 12px 22px; border: 1.5px solid var(--border-2); }
+    .btn-outline:hover { border-color: var(--text-1); }
+    .btn-white    { background: #fff; color: var(--text-1); padding: 13px 24px; }
+    .btn-white:hover { background: rgba(255,255,255,.92); }
+    .btn-ghost-white {
+      background: transparent; color: rgba(255,255,255,.7);
+      border: 1.5px solid rgba(255,255,255,.2); padding: 13px 24px;
+    }
+    .btn-ghost-white:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+    .btn-lg { padding: 15px 28px; font-size: 15px; }
+
+    /* ─── Status chips ───────────────────────────────────────── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; letter-spacing: .1px;
+      padding: 3px 9px; border-radius: 5px;
+    }
+    .chip-high    { background: var(--high-bg);  color: var(--high);  border: 1px solid var(--high-border); }
+    .chip-med     { background: var(--med-bg);   color: var(--med);   border: 1px solid var(--med-border); }
+    .chip-good    { background: var(--good-bg);  color: var(--good);  border: 1px solid var(--good-border); }
+    .chip-neutral { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* ─── Section labels ─────────────────────────────────────── */
+    .label {
+      font-size: 11px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: var(--text-3);
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────── */
+    .hero { padding: 88px 0 96px; background: var(--bg); }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 400px;
+      gap: 72px; align-items: start;
+    }
+    .hero-eyebrow { margin-bottom: 18px; }
+    h1 {
+      font-size: clamp(38px, 4.2vw, 60px);
+      font-weight: 900; letter-spacing: -.04em;
+      line-height: 1.06; color: var(--text-1);
+    }
+    .hero-sub {
+      font-size: 17px; color: var(--text-2); line-height: 1.8;
+      max-width: 500px; margin: 18px 0 32px;
+    }
+
+    /* form card */
+    .hero-form-card {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px; box-shadow: var(--shadow);
+    }
+    .hero-form-card h3 {
+      font-size: 15px; font-weight: 700; color: var(--text-1); margin-bottom: 20px;
+    }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-field  { display: flex; flex-direction: column; gap: 5px; }
+    .form-label  { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--text-3); }
+    .form-input {
+      padding: 10px 12px; border: 1.5px solid var(--border);
+      border-radius: var(--radius); font-size: 14px;
+      font-family: inherit; color: var(--text-1);
+      background: var(--bg); outline: none; transition: border-color .15s;
+    }
+    .form-input:focus { border-color: var(--text-1); background: #fff; }
+    select.form-input { cursor: pointer; }
+    .form-note { font-size: 12px; color: var(--text-3); margin: 14px 0 18px; line-height: 1.6; }
+    .form-submit { width: 100%; }
+
+    /* hero preview card */
+    .hero-preview {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);
+      overflow: hidden; position: sticky; top: 80px;
+    }
+    .hp-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .hp-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .hp-shop    { font-size: 14px; font-weight: 700; color: var(--text-1); }
+    .hp-loc     { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+    .hp-metrics { padding: 0 22px; border-bottom: 1px solid var(--border); }
+    .hp-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .hp-row:last-child { border-bottom: none; }
+    .hp-row-label { color: var(--text-2); font-weight: 500; }
+    .fixbar-wrap { display: flex; align-items: center; gap: 10px; }
+    .fixbar { width: 80px; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .fixbar-fill { height: 100%; background: var(--text-1); border-radius: 99px; }
+    .fixbar-pct  { font-size: 13px; font-weight: 800; color: var(--text-1); }
+    .hp-diagnosis {
+      padding: 14px 22px; background: #FFFDF8;
+      border-bottom: 1px solid var(--border);
+    }
+    .hp-diag-label { font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--text-3); margin-bottom: 7px; }
+    .hp-diag-text  { font-size: 12px; color: var(--text-2); line-height: 1.65; }
+    .hp-strategy { padding: 14px 22px; }
+    .hp-strat-label { font-size: 10px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: var(--text-3); margin-bottom: 5px; }
+    .hp-strat-value { font-size: 13px; font-weight: 700; color: var(--text-1); }
+
+    /* ─── Problem section ────────────────────────────────────── */
+    .problem { background: #111111; }
+    .problem .label { color: rgba(255,255,255,.3); }
+    .problem h2 {
+      font-size: clamp(30px, 3.8vw, 52px);
+      font-weight: 900; letter-spacing: -.04em;
+      color: #fff; line-height: 1.1; margin: 16px 0 14px;
+    }
+    .problem-intro {
+      font-size: 17px; color: rgba(255,255,255,.5); line-height: 1.8;
+      max-width: 580px; margin-bottom: 56px;
+    }
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid rgba(255,255,255,.08); border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .problem-cell {
+      padding: 32px 28px;
+      background: rgba(255,255,255,.03);
+      border-right: 1px solid rgba(255,255,255,.06);
+      transition: background .2s;
+    }
+    .problem-cell:last-child { border-right: none; }
+    .problem-cell:hover { background: rgba(255,255,255,.06); }
+    .pc-icon  { font-size: 24px; margin-bottom: 14px; }
+    .pc-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+    .pc-desc  { font-size: 13px; color: rgba(255,255,255,.45); line-height: 1.65; }
+
+    /* ─── Reality Check ──────────────────────────────────────── */
+    .reality-check { background: var(--surface); }
+    .rc-header { text-align: center; margin-bottom: 60px; }
+    h2.section-title {
+      font-size: clamp(30px, 3.8vw, 52px);
+      font-weight: 900; letter-spacing: -.04em;
+      line-height: 1.1; color: var(--text-1); margin: 14px 0 14px;
+    }
+    .section-sub {
+      font-size: 17px; color: var(--text-2);
+      max-width: 540px; margin: 0 auto; line-height: 1.8;
+    }
+    .rc-columns {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border: 1.5px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .rc-col { padding: 36px 32px; }
+    .rc-col-right { background: var(--surface-2); border-left: 1.5px solid var(--border); }
+    .rc-col-heading {
+      font-size: 12px; font-weight: 700; letter-spacing: .4px;
+      text-transform: uppercase; margin-bottom: 28px;
+      display: flex; align-items: center; gap: 9px; color: var(--text-2);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-green { background: #22C55E; }
+    .dot-red   { background: #EF4444; }
+    .rc-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+    }
+    .rc-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .rc-icon {
+      width: 34px; height: 34px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; flex-shrink: 0; margin-top: 1px;
+    }
+    .rc-icon.green { background: var(--good-bg); }
+    .rc-icon.red   { background: var(--high-bg); }
+    .rc-item-title { font-size: 14px; font-weight: 600; color: var(--text-1); margin-bottom: 3px; }
+    .rc-item-desc  { font-size: 13px; color: var(--text-3); line-height: 1.55; }
+
+    /* ─── Sample Report ──────────────────────────────────────── */
+    .sample-report { background: var(--surface-2); }
+    .sr-header { margin-bottom: 44px; }
+    .sr-title { font-size: clamp(28px, 3.5vw, 48px); font-weight: 900; letter-spacing: -.04em; margin: 14px 0 12px; }
+    .sr-sub   { font-size: 16px; color: var(--text-2); max-width: 500px; line-height: 1.75; }
+
+    .report-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .report-top {
+      padding: 22px 28px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    }
+    .report-shop { font-size: 16px; font-weight: 700; color: var(--text-1); }
+    .report-meta { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .report-scores {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .rs-cell {
+      padding: 22px 24px;
+      border-right: 1px solid var(--border);
+    }
+    .rs-cell:last-child { border-right: none; }
+    .rs-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .rs-value { font-size: 26px; font-weight: 800; color: var(--text-1); line-height: 1; margin-bottom: 8px; }
+    .rs-note  { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+    .report-diagnosis {
+      padding: 24px 28px; border-bottom: 1px solid var(--border); background: #FFFDF8;
+    }
+    .rd-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .rd-text  { font-size: 15px; color: var(--text-1); line-height: 1.8; }
+    .report-breakdown {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+    .rb-col { padding: 22px 24px; }
+    .rb-col:first-child { border-right: 1px solid var(--border); }
+    .rb-heading {
+      font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+      color: var(--text-2); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .rb-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .rb-row:last-child { border-bottom: none; }
+    .rb-row-label { color: var(--text-2); }
+    .rb-bar-group { display: flex; align-items: center; gap: 8px; }
+    .rb-bar { width: 56px; height: 4px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .rb-bar-fill { height: 100%; background: var(--text-1); border-radius: 99px; }
+    .rb-score { font-size: 12px; font-weight: 700; color: var(--text-1); min-width: 24px; text-align: right; }
+    .report-strategy {
+      padding: 22px 28px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .rstr-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 6px; }
+    .rstr-title { font-size: 15px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+    .rstr-desc  { font-size: 14px; color: var(--text-2); line-height: 1.65; }
+
+    /* ─── Algorithm section ──────────────────────────────────── */
+    .algorithm { background: var(--surface); }
+    .alg-header { text-align: center; margin-bottom: 52px; }
+    .alg-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .alg-card {
+      padding: 28px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); background: var(--bg);
+    }
+    .alg-num {
+      width: 34px; height: 34px; border-radius: 7px;
+      background: var(--text-1); color: #fff;
+      font-size: 15px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 16px;
+    }
+    .alg-title { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
+    .alg-desc  { font-size: 13px; color: var(--text-2); line-height: 1.65; }
+    .alg-tags  { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 14px; }
+    .alg-tag {
+      font-size: 11px; padding: 3px 8px; border-radius: 4px;
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-3); font-weight: 500;
+    }
+
+    /* ─── Pricing ────────────────────────────────────────────── */
+    .pricing { background: var(--surface-2); }
+    .pricing-header { text-align: center; margin-bottom: 44px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .price-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 30px; position: relative;
+    }
+    .price-card.featured { border-color: var(--text-1); }
+    .featured-tag {
+      position: absolute; top: -12px; left: 24px;
+      background: var(--text-1); color: #fff;
+      font-size: 11px; font-weight: 700; letter-spacing: .2px;
+      padding: 4px 12px; border-radius: 4px;
+    }
+    .plan-name  { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 6px; }
+    .plan-desc  { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+    .plan-price { margin: 22px 0; padding: 18px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .price-amt  { font-size: 34px; font-weight: 800; color: var(--text-1); line-height: 1; }
+    .price-per  { font-size: 13px; color: var(--text-3); margin-top: 5px; }
+    .plan-features { list-style: none; }
+    .plan-features li {
+      font-size: 13px; color: var(--text-2); padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .plan-features li:last-child { border-bottom: none; }
+    .plan-features li::before { content: '—'; color: var(--text-3); flex-shrink: 0; }
+    .plan-features li.dim { color: var(--text-3); }
+    .plan-cta { margin-top: 22px; width: 100%; justify-content: center; }
+
+    /* ─── CTA Banner ─────────────────────────────────────────── */
+    .cta-banner { background: #111111; padding: 96px 0; text-align: center; }
+    .cta-banner .label { color: rgba(255,255,255,.3); display: block; margin-bottom: 18px; }
+    .cta-banner h2 {
+      font-size: clamp(28px, 3.8vw, 50px); font-weight: 900;
+      letter-spacing: -.04em; color: #fff; line-height: 1.1;
+    }
+    .cta-banner p { font-size: 17px; color: rgba(255,255,255,.5); max-width: 500px; margin: 16px auto 40px; line-height: 1.8; }
+    .cta-actions { display: flex; align-items: center; justify-content: center; gap: 12px; }
+
+    /* ─── Footer ─────────────────────────────────────────────── */
+    footer { background: #0A0A0A; padding: 56px 0 36px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px;
+      padding-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .footer-brand { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -.02em; }
+    .footer-desc  { font-size: 13px; color: rgba(255,255,255,.3); margin-top: 12px; max-width: 260px; line-height: 1.7; }
+    .footer-col h4 { font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 10px; }
+    .footer-col a  { font-size: 14px; color: rgba(255,255,255,.45); text-decoration: none; transition: color .15s; }
+    .footer-col a:hover { color: rgba(255,255,255,.85); }
+    .footer-bottom { display: flex; justify-content: space-between; padding-top: 28px; font-size: 13px; color: rgba(255,255,255,.22); }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
       .hero-inner { grid-template-columns: 1fr; gap: 48px; }
-      .hero-visual { display: none; }
-      h1 { font-size: clamp(40px, 7vw, 64px); }
-      .feature-grid { grid-template-columns: repeat(2, 1fr); }
-      .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .hero-preview { position: static; max-width: 480px; }
+      .alg-grid { grid-template-columns: repeat(2, 1fr); }
     }
-
     @media (max-width: 768px) {
       .container { padding: 0 20px; }
-      .section { padding: 64px 0; }
-      .section-sm { padding: 48px 0; }
+      .section   { padding: 72px 0; }
 
-      .nav-actions .nav-link { display: none; }
-      .nav-mobile-toggle { display: flex; align-items: center; }
+      .nav-links { display: none; }
+      .nav-mobile-toggle { display: flex; }
 
-      h1 { font-size: clamp(36px, 8vw, 56px); }
-      h2.section-title { font-size: clamp(32px, 6vw, 56px); }
+      .form-grid-2 { grid-template-columns: 1fr; }
 
-      .hero { padding: 60px 0 64px; }
-      .hero-sub { font-size: 16px; }
+      .problem-grid { grid-template-columns: 1fr; }
+      .problem-cell { border-right: none; border-bottom: 1px solid rgba(255,255,255,.06); }
+      .problem-cell:last-child { border-bottom: none; }
 
-      form[action="/analyze"] > div {
-        grid-template-columns: 1fr !important;
-      }
+      .rc-columns { grid-template-columns: 1fr; }
+      .rc-col-right { border-left: none; border-top: 1.5px solid var(--border); }
 
-      .pain-grid { grid-template-columns: 1fr; }
-      .feature-grid { grid-template-columns: 1fr; }
+      .report-scores { grid-template-columns: 1fr 1fr; }
+      .report-breakdown { grid-template-columns: 1fr; }
+      .rb-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+      .report-top { flex-direction: column; }
 
-      .steps-row { grid-template-columns: 1fr; gap: 40px; }
-      .step-connector { display: none; }
-      .steps-row::before { display: none; }
-
-      .reco-grid { grid-template-columns: 1fr; }
-
+      .alg-grid { grid-template-columns: 1fr; }
       .pricing-grid { grid-template-columns: 1fr; }
 
-      .dash-header { flex-direction: column; gap: 16px; }
-      .dash-score-grid { grid-template-columns: repeat(3, 1fr); }
-
-      .footer-grid { grid-template-columns: 1fr; gap: 24px; }
-      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
-
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+      .footer-bottom { flex-direction: column; gap: 10px; }
       .cta-actions { flex-direction: column; align-items: stretch; }
-      .cta-actions .btn { justify-content: center; }
     }
-
     @media (max-width: 480px) {
-      .dash-score-grid { grid-template-columns: repeat(2, 1fr); }
-      .mini-scores { grid-template-columns: 1fr; }
-      .score-ring-wrap { flex-direction: column; }
+      .report-scores { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ───────────────────────────── NAV ───────────────────────────── -->
+<!-- ─── NAV ─────────────────────────────────────────────────────── -->
 <nav>
   <div class="container nav-inner">
-    <div class="nav-brand">ShopWise</div>
-    <div class="nav-actions">
+    <a href="/" class="nav-brand">ShopWise</a>
+    <div class="nav-links">
       <a href="/sample/overview" class="nav-link">Sample report</a>
       <a href="/pricing" class="nav-link">Pricing</a>
-      <a href="/#analyze" class="btn btn-primary">Analyze My Shop</a>
-      <button class="nav-mobile-toggle" id="burgerBtn" aria-label="Menu">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
-        </svg>
-      </button>
+      <a href="/#analyze" class="nav-cta">Run a Reality Check</a>
     </div>
+    <button class="nav-mobile-toggle" id="burgerBtn" aria-label="Open menu">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
+      </svg>
+    </button>
   </div>
-  <!-- Mobile dropdown — lives inside <nav> so it sticks with it -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="/sample/overview">Sample report</a>
     <a href="/pricing">Pricing</a>
-    <a href="/#analyze" class="btn btn-primary">Analyze My Shop — Free</a>
+    <a href="/#analyze">Run a Reality Check</a>
   </div>
 </nav>
 
-<!-- ───────────────────────────── HERO ──────────────────────────── -->
+<!-- ─── HERO ─────────────────────────────────────────────────────── -->
 <section class="hero">
   <div class="container hero-inner">
 
-    <!-- Left copy -->
+    <!-- Left: copy + form -->
     <div>
-      <div class="hero-badge">
-        <div class="hero-badge-dot">✦</div>
-        AI-powered · Built for local shops
-      </div>
-
-      <h1>
-        The <span class="highlight">AI Business&nbsp;Advisor</span>
-        for Local&nbsp;Shops
-      </h1>
-
+      <div class="label hero-eyebrow">Local business diagnostics</div>
+      <h1>Find out what's fixable — and what's not.</h1>
       <p class="hero-sub">
-        Analyze your location, menu, competitors, reviews, and online presence —
-        and get clear, practical steps to grow your business starting today.
+        ShopWise analyzes local demand, competition, online visibility, and business basics to give small shops an honest diagnosis — not just marketing advice.
       </p>
 
-      <form id="analyze" action="/analyze" method="POST" style="background: rgba(255,255,255,0.9); border-radius: 16px; padding: 24px; margin: 24px 0; box-shadow: var(--shadow);">
-        <h3 style="font-size: 18px; font-weight: 700; color: var(--neutral-900); margin-bottom: 16px;">Get Your Free AI Analysis</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
-          <input type="text" name="shopName" placeholder="Shop Name" required style="padding: 12px; border: 1px solid var(--neutral-300); border-radius: 8px; font-size: 14px;">
-          <input type="text" name="address" placeholder="Address" required style="padding: 12px; border: 1px solid var(--neutral-300); border-radius: 8px; font-size: 14px;">
+      <form id="analyze" action="/analyze" method="POST">
+        <div class="hero-form-card">
+          <h3>Run a Reality Check</h3>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="form-label">Business name</label>
+              <input class="form-input" type="text" name="shopName" placeholder="e.g. Golden Bowl Noodles" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Business type</label>
+              <select class="form-input" name="category">
+                <option value="restaurant">Restaurant</option>
+                <option value="cafe">Café / Coffee</option>
+                <option value="bakery">Bakery</option>
+                <option value="retail">Retail store</option>
+                <option value="bar">Bar / Pub</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="form-label">City or neighbourhood</label>
+              <input class="form-input" type="text" name="address" placeholder="e.g. Financial District, SF" required>
+            </div>
+            <div class="form-field">
+              <label class="form-label">Google rating <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input class="form-input" type="number" name="rating" placeholder="e.g. 4.2" min="1" max="5" step="0.1">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-field">
+              <label class="form-label">No. of Google reviews <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input class="form-input" type="number" name="reviews" placeholder="e.g. 89">
+            </div>
+            <div class="form-field">
+              <label class="form-label">Website URL <span style="font-weight:400;text-transform:none;letter-spacing:0">(optional)</span></label>
+              <input class="form-input" type="url" name="website" placeholder="https://...">
+            </div>
+          </div>
+          <div class="form-note">No account or credit card required. We generate a diagnostic report from your inputs and public data signals.</div>
+          <button type="submit" class="btn btn-primary form-submit">Run a Reality Check →</button>
         </div>
-        <button type="submit" class="btn btn-primary btn-xl" style="width: 100%;">🔍 Analyze My Shop — Free</button>
       </form>
+    </div>
 
-      <div class="hero-actions">
-        <a href="/sample/overview" class="btn btn-ghost btn-lg">
-          View sample dashboard
-        </a>
-      </div>
-
-      <div class="hero-trust">
-        <div class="trust-avatars">
-          <span>👩</span><span>👨</span><span>🧑</span><span>👩‍🍳</span>
+    <!-- Right: preview card -->
+    <div>
+      <div class="hero-preview">
+        <div class="hp-header">
+          <div class="hp-eyebrow">Reality Check Report · Sample</div>
+          <div class="hp-shop">🍜 Golden Bowl Noodles</div>
+          <div class="hp-loc">Restaurant · Financial District, San Francisco</div>
         </div>
-        <div class="trust-text">
-          <div class="stars">★★★★★</div>
-          <strong>2,400+ shop owners</strong> already got their diagnosis
+        <div class="hp-metrics">
+          <div class="hp-row">
+            <span class="hp-row-label">Market Pressure</span>
+            <span class="chip chip-high">High</span>
+          </div>
+          <div class="hp-row">
+            <span class="hp-row-label">Fixability Score</span>
+            <div class="fixbar-wrap">
+              <div class="fixbar"><div class="fixbar-fill" style="width:58%"></div></div>
+              <span class="fixbar-pct">58%</span>
+            </div>
+          </div>
+          <div class="hp-row">
+            <span class="hp-row-label">Competition Saturation</span>
+            <span class="chip chip-high">High</span>
+          </div>
+          <div class="hp-row">
+            <span class="hp-row-label">Local Demand</span>
+            <span class="chip chip-high">Declining</span>
+          </div>
+          <div class="hp-row">
+            <span class="hp-row-label">Online Visibility</span>
+            <span class="chip chip-med">Weak</span>
+          </div>
+        </div>
+        <div class="hp-diagnosis">
+          <div class="hp-diag-label">Diagnosis</div>
+          <div class="hp-diag-text">Around 58% of your challenges appear fixable through business actions. The area shows weak demand and high saturation — structural pressures outside your control.</div>
+        </div>
+        <div class="hp-strategy">
+          <div class="hp-strat-label">Recommended strategy</div>
+          <div class="hp-strat-value">Fix basics + Differentiate</div>
         </div>
       </div>
     </div>
 
-    <!-- Right illustration -->
-    <div class="hero-visual">
-      <div class="float-sticker top-right">
-        <span class="fs-icon">📈</span>
-        <div>
-          <div>+23% more customers</div>
-          <div class="fs-sub">after following recommendations</div>
-        </div>
-      </div>
-
-      <div class="hero-card">
-        <!-- Header -->
-        <div class="hc-header">
-          <div>
-            <div class="hc-title">🍜 Golden Bowl Noodles</div>
-            <div class="hc-subtitle">AI Business Report · Generated just now</div>
-          </div>
-          <div class="hc-badge">Report Ready</div>
-        </div>
-
-        <!-- Big score -->
-        <div class="score-ring-wrap">
-          <div class="score-ring">
-            <svg width="96" height="96" viewBox="0 0 96 96">
-              <circle cx="48" cy="48" r="40" stroke="#F1F0EF" stroke-width="8" fill="none"/>
-              <circle cx="48" cy="48" r="40" stroke="url(#g1)" stroke-width="8" fill="none"
-                stroke-dasharray="251.2" stroke-dashoffset="67.8" stroke-linecap="round"/>
-              <defs>
-                <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#111827"/>
-                  <stop offset="100%" stop-color="#4b5563"/>
-                </linearGradient>
-              </defs>
-            </svg>
-            <div class="score-ring-inner">
-              <div class="score-num">72</div>
-              <div class="score-denom">/100</div>
-            </div>
-          </div>
-          <div>
-            <div class="score-label">Overall Business Score</div>
-            <div class="score-desc">Good — 3 high-impact actions found</div>
-            <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;">
-              <span style="background:#f3f4f6;color:#111827;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;">Location B+</span>
-              <span style="background:#f3f4f6;color:#4b5563;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;">Reviews A-</span>
-              <span style="background:#f3f4f6;color:#4b5563;font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;">Online C</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Mini scores -->
-        <div class="mini-scores">
-          <div class="mini-score">
-            <div class="ms-label">📍 Location</div>
-            <div class="ms-bar-wrap"><div class="ms-bar" style="width:82%;background:#111827"></div></div>
-            <div class="ms-val">82</div>
-          </div>
-          <div class="mini-score">
-            <div class="ms-label">🍽 Menu</div>
-            <div class="ms-bar-wrap"><div class="ms-bar" style="width:68%;background:#4b5563"></div></div>
-            <div class="ms-val">68</div>
-          </div>
-          <div class="mini-score">
-            <div class="ms-label">⚔️ Competitors</div>
-            <div class="ms-bar-wrap"><div class="ms-bar" style="width:55%;background:#4b5563"></div></div>
-            <div class="ms-val">55</div>
-          </div>
-          <div class="mini-score">
-            <div class="ms-label">🌐 Online</div>
-            <div class="ms-bar-wrap"><div class="ms-bar" style="width:48%;background:#9ca3af"></div></div>
-            <div class="ms-val">48</div>
-          </div>
-        </div>
-
-        <!-- Recommendation -->
-        <div class="reco-card">
-          <div class="reco-title">⚡ Top Action for This Week</div>
-          <div class="reco-item">Add 10 food photos to Google Maps to increase profile clicks by ~40%</div>
-          <div class="reco-item">Create a lunch combo targeting nearby office workers</div>
-        </div>
-      </div>
-
-      <div class="float-sticker bottom-left">
-        <span class="fs-icon pulse">🟢</span>
-        <div>
-          <div>AI Analysis Complete</div>
-          <div class="fs-sub">6 areas scanned in 30 sec</div>
-        </div>
-      </div>
-    </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── PROBLEM ─────────────────────────── -->
+<!-- ─── PROBLEM ───────────────────────────────────────────────────── -->
 <section class="section problem" id="problem">
   <div class="container">
-    <div class="problem-center">
-      <div class="pill-label" style="background:rgba(255,255,255,.12);color:#fff;">
-        Sound familiar?
+    <div class="label">The honest problem</div>
+    <h2>"Improve your SEO.<br>Post more on Instagram.<br>Ask for more reviews."</h2>
+    <p class="problem-intro">
+      That's the advice most tools give. And sometimes it helps. But often the harder truth is weak local demand, too many competitors, or a location that is structurally difficult. Spending on marketing before knowing which problem you have is an expensive guess.
+    </p>
+    <div class="problem-grid">
+      <div class="problem-cell">
+        <div class="pc-icon">📉</div>
+        <div class="pc-title">The market may be the problem</div>
+        <div class="pc-desc">If demand in your area is declining — due to office vacancies, population shifts, or economic pressure — no amount of marketing will reverse it. Knowing this changes everything.</div>
       </div>
-      <h2 class="section-title mt-12">Running a shop is hard.<br/>Not knowing <em>what to fix</em> is harder.</h2>
-      <p class="section-sub" style="color:var(--neutral-300);margin:12px auto 0;">
-        Every shop owner faces the same nagging questions — but rarely has the tools or time to find real answers.
-      </p>
-    </div>
-
-    <div class="pain-grid mt-48">
-      <div class="pain-card">
-        <div class="pain-icon">📍</div>
-        <div class="pain-title">"Is my location good enough?"</div>
-        <div class="pain-desc">You picked the spot, signed the lease — but you're still not sure if the foot traffic or visibility is holding you back compared to competitors a few blocks away.</div>
+      <div class="problem-cell">
+        <div class="pc-icon">🏘️</div>
+        <div class="pc-title">Saturation is real</div>
+        <div class="pc-desc">Some neighbourhoods have far more restaurants than the area can support. Understanding your competitive density is the starting point, not an afterthought.</div>
       </div>
-      <div class="pain-card">
-        <div class="pain-icon">🥊</div>
-        <div class="pain-title">"Why are nearby competitors busier than me?"</div>
-        <div class="pain-desc">The café across the street always has a queue. You can't tell if it's their prices, their Instagram, their reviews, or something else entirely — so you don't know what to copy.</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-icon">🍽️</div>
-        <div class="pain-title">"Is my menu or website hurting my sales?"</div>
-        <div class="pain-desc">Your food is great — you know it. But maybe the menu layout, dish naming, pricing structure, or website design is turning customers away before they even try you.</div>
-      </div>
-      <div class="pain-card">
-        <div class="pain-icon">🎯</div>
-        <div class="pain-title">"What should I even improve first?"</div>
-        <div class="pain-desc">Everyone has advice: post more on Instagram, get more reviews, do a promotion. But with limited time and money, you need to know which action will actually move the needle.</div>
+      <div class="problem-cell">
+        <div class="pc-icon">🔧</div>
+        <div class="pc-title">Some things are genuinely fixable</div>
+        <div class="pc-desc">Your Google profile, review response rate, menu layout, website, and opening hours can all be improved — and they directly affect whether customers find and choose you.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── FEATURES ────────────────────────── -->
-<section class="section features" id="features">
+<!-- ─── REALITY CHECK ─────────────────────────────────────────────── -->
+<section class="section reality-check" id="reality-check">
   <div class="container">
-    <div class="features-header">
-      <div class="pill-label">What ShopWise analyzes</div>
-      <h2 class="section-title mt-12">Six lenses. One clear diagnosis.</h2>
-      <p class="section-sub">
-        ShopWise evaluates every dimension of your local business — then combines them into one actionable report.
-      </p>
+    <div class="rc-header">
+      <div class="label">Reality Check</div>
+      <h2 class="section-title">Some problems are fixable.<br>Some are structural.</h2>
+      <p class="section-sub">ShopWise separates what you can act on this week from what the market is doing to you.</p>
     </div>
 
-    <div class="feature-grid">
+    <div class="rc-columns">
 
-      <div class="feature-card c-orange">
-        <div class="fc-icon">📍</div>
-        <div class="fc-title">Location Analysis</div>
-        <div class="fc-desc">Evaluates foot traffic patterns, visibility, nearby landmarks, and how your spot compares to competitors' locations in your city area.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">Foot traffic</span>
-          <span class="fc-tag">Visibility</span>
-          <span class="fc-tag">Maps presence</span>
-        </div>
-      </div>
+      <!-- Left: Controllable -->
+      <div class="rc-col">
+        <div class="rc-col-heading"><span class="dot dot-green"></span> Things you control</div>
 
-      <div class="feature-card c-rose">
-        <div class="fc-icon">⚔️</div>
-        <div class="fc-title">Competitor Benchmarking</div>
-        <div class="fc-desc">Identifies your top nearby competitors and benchmarks your reviews, pricing, menu variety, and online presence side-by-side.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">Review comparison</span>
-          <span class="fc-tag">Price benchmarking</span>
-          <span class="fc-tag">Gap analysis</span>
-        </div>
-      </div>
-
-      <div class="feature-card c-amber">
-        <div class="fc-icon">🍽️</div>
-        <div class="fc-title">Menu & Pricing Review</div>
-        <div class="fc-desc">Analyzes your menu structure, dish descriptions, photo quality, price anchoring, and category balance — backed by local restaurant data.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">Price anchoring</span>
-          <span class="fc-tag">Menu design</span>
-          <span class="fc-tag">Photo quality</span>
-        </div>
-      </div>
-
-      <div class="feature-card c-green">
-        <div class="fc-icon">⭐</div>
-        <div class="fc-title">Review Sentiment Analysis</div>
-        <div class="fc-desc">Reads hundreds of customer reviews across Google, Yelp, and delivery platforms to surface what customers love, complain about, and want more of.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">Google reviews</span>
-          <span class="fc-tag">Sentiment trends</span>
-          <span class="fc-tag">Common complaints</span>
-        </div>
-      </div>
-
-      <div class="feature-card c-blue">
-        <div class="fc-icon">🌐</div>
-        <div class="fc-title">Website & Delivery Page Audit</div>
-        <div class="fc-desc">Scores your website usability, SEO basics, and delivery platform pages (Uber Eats, DoorDash) for conversion-killing issues like missing photos or slow load.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">SEO basics</span>
-          <span class="fc-tag">UberEats / DoorDash</span>
-          <span class="fc-tag">Mobile usability</span>
-        </div>
-      </div>
-
-      <div class="feature-card c-purple">
-        <div class="fc-icon">🤖</div>
-        <div class="fc-title">AI Action Plan</div>
-        <div class="fc-desc">Combines all six analyses to generate a prioritized, week-by-week action roadmap tailored to your shop type, size, and current performance gaps.</div>
-        <div class="fc-tags">
-          <span class="fc-tag">Prioritized steps</span>
-          <span class="fc-tag">Weekly roadmap</span>
-          <span class="fc-tag">ROI estimates</span>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── DASHBOARD ───────────────────────── -->
-<section class="section dashboard" id="dashboard">
-  <div class="container">
-    <div class="dash-header">
-      <div>
-        <div class="pill-label" style="background:rgba(249,115,22,.2);color:#FB923C;">Sample Report</div>
-        <h2 class="section-title mt-12">See what your report looks like</h2>
-        <p class="section-sub">A real AI diagnosis — scores, insights, and specific actions — generated for any local shop in under 60 seconds.</p>
-      </div>
-      <a href="/sample/overview" class="btn btn-primary btn-lg">View Sample Report →</a>
-    </div>
-
-    <div class="mock-browser">
-      <div class="browser-bar">
-        <div class="browser-dots">
-          <span class="bd-r"></span>
-          <span class="bd-y"></span>
-          <span class="bd-g"></span>
-        </div>
-        <div class="browser-url">shopwise.ai/report/golden-bowl-noodles</div>
-      </div>
-
-      <div class="dash-inner">
-        <!-- Top row -->
-        <div class="dash-top">
-          <div class="dash-shop-info">
-            <h3>🍜 Golden Bowl Noodles · San Francisco, CA</h3>
-            <p>Report generated May 10, 2026 · Analysis across 6 dimensions · 247 reviews analyzed</p>
+        <div class="rc-item">
+          <div class="rc-icon green">📸</div>
+          <div>
+            <div class="rc-item-title">Google Maps photos & profile</div>
+            <div class="rc-item-desc">Profiles with 10+ photos get significantly more clicks. Adding photos costs nothing and takes an hour.</div>
           </div>
-          <div class="dash-score-big">
-            <div class="score-circle-big">
-              <svg width="80" height="80" viewBox="0 0 80 80">
-                <circle cx="40" cy="40" r="33" stroke="rgba(255,255,255,.1)" stroke-width="7" fill="none"/>
-                <circle cx="40" cy="40" r="33" stroke="url(#g2)" stroke-width="7" fill="none"
-                  stroke-dasharray="207.3" stroke-dashoffset="57.9" stroke-linecap="round"/>
-                <defs>
-                  <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#111827"/>
-                    <stop offset="100%" stop-color="#4b5563"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-              <div class="scb-inner">
-                <div class="scb-num">72</div>
-                <div class="scb-denom">/100</div>
-              </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon green">⭐</div>
+          <div>
+            <div class="rc-item-title">Review quality & response rate</div>
+            <div class="rc-item-desc">Responding to reviews improves local search ranking and signals trust to potential customers.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon green">🍽️</div>
+          <div>
+            <div class="rc-item-title">Menu clarity & structure</div>
+            <div class="rc-item-desc">A well-organised menu with clear sections and photos reduces decision fatigue and increases average order value.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon green">🌐</div>
+          <div>
+            <div class="rc-item-title">Website & delivery page quality</div>
+            <div class="rc-item-desc">Missing opening hours, no order button, or slow mobile load all push customers to competitors.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon green">🎯</div>
+          <div>
+            <div class="rc-item-title">Positioning & differentiation</div>
+            <div class="rc-item-desc">A clear reason to choose you over the restaurant next door can be defined and communicated — it is not fixed by the market.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: External -->
+      <div class="rc-col rc-col-right">
+        <div class="rc-col-heading"><span class="dot dot-red"></span> Things the market controls</div>
+
+        <div class="rc-item">
+          <div class="rc-icon red">📊</div>
+          <div>
+            <div class="rc-item-title">Local spending power & confidence</div>
+            <div class="rc-item-desc">Economic downturns and rising costs reduce how often people dine out. This is not something you can market your way out of.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon red">🏘️</div>
+          <div>
+            <div class="rc-item-title">Number of nearby competitors</div>
+            <div class="rc-item-desc">If 14 similar restaurants are within 500m, your share of a fixed pool of customers is structurally constrained.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon red">🚶</div>
+          <div>
+            <div class="rc-item-title">Area foot traffic</div>
+            <div class="rc-item-desc">Office vacancies, construction, or neighbourhood decline reduce the number of people walking past your door each day.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon red">📅</div>
+          <div>
+            <div class="rc-item-title">Tourism seasonality</div>
+            <div class="rc-item-desc">Tourist-dependent areas see sharp demand swings that no amount of marketing can fully offset in low season.</div>
+          </div>
+        </div>
+        <div class="rc-item">
+          <div class="rc-icon red">💸</div>
+          <div>
+            <div class="rc-item-title">Rent, ingredient & energy costs</div>
+            <div class="rc-item-desc">External cost pressure squeezes margins regardless of how well you market or how good your food is.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── SAMPLE REPORT ─────────────────────────────────────────────── -->
+<section class="section sample-report" id="sample">
+  <div class="container">
+    <div class="sr-header">
+      <div class="label">Sample diagnostic report</div>
+      <div class="sr-title">What an honest diagnosis looks like</div>
+      <p class="sr-sub">Not generic tips — a specific assessment of what's fixable and what is structural market pressure.</p>
+    </div>
+
+    <div class="report-card">
+
+      <div class="report-top">
+        <div>
+          <div class="report-shop">🍜 Golden Bowl Noodles</div>
+          <div class="report-meta">Restaurant · Financial District, San Francisco · Diagnostic report · May 2026</div>
+        </div>
+        <a href="/sample/overview" class="btn btn-outline" style="font-size:13px;padding:9px 16px;flex-shrink:0;">View full report →</a>
+      </div>
+
+      <div class="report-scores">
+        <div class="rs-cell">
+          <div class="rs-label">Market Pressure</div>
+          <div class="rs-value"><span class="chip chip-high" style="font-size:14px;padding:5px 12px;">High</span></div>
+          <div class="rs-note">14 similar restaurants within 500m · Office vacancy ~28%</div>
+        </div>
+        <div class="rs-cell">
+          <div class="rs-label">Fixability Score</div>
+          <div class="rs-value">58%</div>
+          <div class="rs-note">Around 58% of challenges appear actionable through business changes</div>
+        </div>
+        <div class="rs-cell">
+          <div class="rs-label">Online Visibility</div>
+          <div class="rs-value"><span class="chip chip-med" style="font-size:14px;padding:5px 12px;">Weak</span></div>
+          <div class="rs-note">3 photos · fewer reviews than 78% of nearby competitors</div>
+        </div>
+      </div>
+
+      <div class="report-diagnosis">
+        <div class="rd-label">Diagnosis</div>
+        <div class="rd-text">"Your business may not be struggling only because of poor marketing. The Financial District area shows declining lunch foot traffic and high restaurant saturation — these are structural pressures outside your control. However, your Google visibility, review count, and menu clarity are all meaningfully below the area average and are fixable within weeks."</div>
+      </div>
+
+      <div class="report-breakdown">
+        <div class="rb-col">
+          <div class="rb-heading"><span style="color:#22C55E;">●</span> Controllable factors</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Google Visibility</span>
+            <div class="rb-bar-group">
+              <div class="rb-bar"><div class="rb-bar-fill" style="width:30%"></div></div>
+              <span class="rb-score">30</span>
             </div>
-            <div class="dash-score-label">
-              <h4>Overall Score</h4>
-              <p>Good · Room to grow</p>
-              <span class="score-grade grade-b">Grade B</span>
+          </div>
+          <div class="rb-row">
+            <span class="rb-row-label">Review Health</span>
+            <div class="rb-bar-group">
+              <div class="rb-bar"><div class="rb-bar-fill" style="width:55%"></div></div>
+              <span class="rb-score">55</span>
+            </div>
+          </div>
+          <div class="rb-row">
+            <span class="rb-row-label">Menu Clarity</span>
+            <div class="rb-bar-group">
+              <div class="rb-bar"><div class="rb-bar-fill" style="width:40%"></div></div>
+              <span class="rb-score">40</span>
+            </div>
+          </div>
+          <div class="rb-row">
+            <span class="rb-row-label">Website Quality</span>
+            <div class="rb-bar-group">
+              <div class="rb-bar"><div class="rb-bar-fill" style="width:35%"></div></div>
+              <span class="rb-score">35</span>
+            </div>
+          </div>
+          <div class="rb-row">
+            <span class="rb-row-label">Social Presence</span>
+            <div class="rb-bar-group">
+              <div class="rb-bar"><div class="rb-bar-fill" style="width:20%"></div></div>
+              <span class="rb-score">20</span>
             </div>
           </div>
         </div>
-
-        <!-- Score tiles -->
-        <div class="dash-score-grid">
-          <div class="score-tile">
-            <div class="st-icon">📍</div>
-            <div class="st-label">Location</div>
-            <div class="st-bar-wrap"><div class="st-bar" style="width:82%;background:linear-gradient(90deg,#111827,#6b7280)"></div></div>
-            <div class="st-val">82</div>
+        <div class="rb-col">
+          <div class="rb-heading"><span style="color:#EF4444;">●</span> External pressures</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Competition Density</span>
+            <span class="chip chip-high">High</span>
           </div>
-          <div class="score-tile">
-            <div class="st-icon">🍽️</div>
-            <div class="st-label">Menu</div>
-            <div class="st-bar-wrap"><div class="st-bar" style="width:68%;background:linear-gradient(90deg,#4b5563,#9ca3af)"></div></div>
-            <div class="st-val">68</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Local Demand</span>
+            <span class="chip chip-high">Declining</span>
           </div>
-          <div class="score-tile">
-            <div class="st-icon">⚔️</div>
-            <div class="st-label">Competitors</div>
-            <div class="st-bar-wrap"><div class="st-bar" style="width:55%;background:linear-gradient(90deg,#4b5563,#111827)"></div></div>
-            <div class="st-val">55</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Consumer Spending</span>
+            <span class="chip chip-med">Pressured</span>
           </div>
-          <div class="score-tile">
-            <div class="st-icon">🌐</div>
-            <div class="st-label">Online Presence</div>
-            <div class="st-bar-wrap"><div class="st-bar" style="width:48%;background:linear-gradient(90deg,#6b7280,#4b5563)"></div></div>
-            <div class="st-val">48</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Foot Traffic</span>
+            <span class="chip chip-med">Below avg</span>
           </div>
-          <div class="score-tile">
-            <div class="st-icon">⭐</div>
-            <div class="st-label">Reviews</div>
-            <div class="st-bar-wrap"><div class="st-bar" style="width:89%;background:linear-gradient(90deg,#4b5563,#9ca3af)"></div></div>
-            <div class="st-val">89</div>
-          </div>
-        </div>
-
-        <!-- Recommendations -->
-        <div class="dash-recos">
-          <div class="dr-title">
-            ⚡ AI Recommendations <span>3 high-impact actions</span>
-          </div>
-          <div class="reco-row">
-            <div class="rr-icon" style="background:rgba(249,115,22,.15)">📸</div>
-            <div class="rr-text">Add 10 high-quality food photos to your Google Maps listing. Profiles with 10+ photos get 42% more direction requests and 35% more website clicks.</div>
-            <div class="rr-impact imp-high">High impact</div>
-          </div>
-          <div class="reco-row">
-            <div class="rr-icon" style="background:rgba(250,204,21,.15)">🥡</div>
-            <div class="rr-text">Create a weekday lunch combo ($12–15) targeting the 3 office buildings within 400m. Your nearest competitor has a lunch special — you don't.</div>
-            <div class="rr-impact imp-high">High impact</div>
-          </div>
-          <div class="reco-row">
-            <div class="rr-icon" style="background:rgba(124,58,237,.15)">🌐</div>
-            <div class="rr-text">Your website is missing opening hours, a visible "Order Now" button, and a phone number above the fold. Fix these 3 items in under 2 hours.</div>
-            <div class="rr-impact imp-med">Medium impact</div>
+          <div class="rb-row">
+            <span class="rb-row-label">Cost Environment</span>
+            <span class="chip chip-high">High</span>
           </div>
         </div>
       </div>
+
+      <div class="report-strategy">
+        <div style="font-size:20px;flex-shrink:0;padding-top:2px;">→</div>
+        <div>
+          <div class="rstr-label">Recommended strategy</div>
+          <div class="rstr-title">Fix basics + Differentiate</div>
+          <div class="rstr-desc">Your execution has clear, fixable gaps — but the market is also working against you. Improving visibility and menu basics could meaningfully help. Long-term, plan for loyal customer retention and distinct positioning to survive the area's high saturation.</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── HOW IT WORKS ────────────────────── -->
-<section class="section how" id="how">
+<!-- ─── ALGORITHM EXPLAINER ───────────────────────────────────────── -->
+<section class="section algorithm" id="how">
   <div class="container">
-    <div class="how-header">
-      <div class="pill-label">Simple process</div>
-      <h2 class="section-title mt-12">Your AI diagnosis in 3 steps</h2>
-      <p class="section-sub">No technical knowledge needed. No agency fees. Just real insights in under a minute.</p>
+    <div class="alg-header">
+      <div class="label">How it works</div>
+      <h2 class="section-title">Four analyses. One honest score.</h2>
+      <p class="section-sub">We combine public signals, competitor comparison, and your inputs to separate what's fixable from what's structural.</p>
     </div>
 
-    <div class="steps-row">
-
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-title">Enter your shop info</div>
-        <div class="step-desc">Type your shop name and address. ShopWise will automatically pull your Google Maps profile, nearby competitors, and public review data.</div>
-        <div class="step-connector"></div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-title">Share your menu & links</div>
-        <div class="step-desc">Upload your menu (photo or PDF), paste your website URL, and optionally add your delivery platform links. Takes less than 2 minutes.</div>
-        <div class="step-connector"></div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-title">Get your AI diagnosis</div>
-        <div class="step-desc">Receive a full business report with scores across 6 areas, key insights, and a prioritized action plan tailored to your shop type and market.</div>
-      </div>
-
-    </div>
-
-    <!-- Supporting details -->
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:56px;">
-      <div style="background:#fff;border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);border:1.5px solid var(--neutral-100);">
-        <div style="font-size:26px">⚡</div>
-        <div>
-          <div style="font-weight:700;font-size:15px;color:var(--neutral-900)">Under 60 seconds</div>
-          <div style="font-size:13px;color:var(--neutral-500);margin-top:3px">AI scans 6 dimensions in real time</div>
+    <div class="alg-grid">
+      <div class="alg-card">
+        <div class="alg-num">1</div>
+        <div class="alg-title">Controllable Score</div>
+        <div class="alg-desc">We score how well your business is executing on the factors you can actually change — visibility, reviews, menu design, website, and positioning.</div>
+        <div class="alg-tags">
+          <span class="alg-tag">Google photos</span>
+          <span class="alg-tag">Review count</span>
+          <span class="alg-tag">Menu clarity</span>
+          <span class="alg-tag">Website</span>
+          <span class="alg-tag">Opening hours</span>
         </div>
       </div>
-      <div style="background:#fff;border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);border:1.5px solid var(--neutral-100);">
-        <div style="font-size:26px">🔒</div>
-        <div>
-          <div style="font-weight:700;font-size:15px;color:var(--neutral-900)">Private & secure</div>
-          <div style="font-size:13px;color:var(--neutral-500);margin-top:3px">Your data is never sold or shared</div>
+      <div class="alg-card">
+        <div class="alg-num">2</div>
+        <div class="alg-title">External Pressure Score</div>
+        <div class="alg-desc">We estimate the structural market pressure acting on your business — competitor density, local demand signals, consumer spending environment, and cost levels.</div>
+        <div class="alg-tags">
+          <span class="alg-tag">Nearby competitors</span>
+          <span class="alg-tag">Foot traffic</span>
+          <span class="alg-tag">Local demand</span>
+          <span class="alg-tag">Cost pressure</span>
         </div>
       </div>
-      <div style="background:#fff;border-radius:14px;padding:20px 24px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-sm);border:1.5px solid var(--neutral-100);">
-        <div style="font-size:26px">🆓</div>
-        <div>
-          <div style="font-weight:700;font-size:15px;color:var(--neutral-900)">Free to start</div>
-          <div style="font-size:13px;color:var(--neutral-500);margin-top:3px">No credit card required for a scan</div>
+      <div class="alg-card">
+        <div class="alg-num">3</div>
+        <div class="alg-title">Fixability Score</div>
+        <div class="alg-desc">We calculate what proportion of your challenges appear fixable through business actions, versus structural market conditions outside your control.</div>
+        <div class="alg-tags">
+          <span class="alg-tag">Controllable ÷ Total</span>
+          <span class="alg-tag">Weighted formula</span>
+          <span class="alg-tag">Displayed as %</span>
+        </div>
+      </div>
+      <div class="alg-card">
+        <div class="alg-num">4</div>
+        <div class="alg-title">Competitor Benchmark</div>
+        <div class="alg-desc">We compare your visibility, review count, rating, and online presence against similar businesses operating within walking distance of your location.</div>
+        <div class="alg-tags">
+          <span class="alg-tag">Rating percentile</span>
+          <span class="alg-tag">Review volume</span>
+          <span class="alg-tag">Photo count</span>
+          <span class="alg-tag">Category match</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── RECOMMENDATIONS ─────────────────── -->
-<section class="section recos" id="recommendations">
-  <div class="container">
-    <div class="recos-header">
-      <div class="pill-label">Real recommendations</div>
-      <h2 class="section-title mt-12">Specific. Practical. Proven.</h2>
-      <p class="section-sub">ShopWise doesn't give generic advice. Every recommendation is specific to your shop, your market, and your current gaps.</p>
-    </div>
-
-    <div class="reco-grid">
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#FFF7ED">📸</div>
-        <div class="ri-content">
-          <div class="ri-title">Add 10 high-quality food photos to Google Maps</div>
-          <div class="ri-desc">Your profile has 2 photos while competitors average 18. Listings with 10+ photos get 42% more clicks and 35% more direction requests.</div>
-          <div class="ri-impact" style="background:#f3f4f6;color:#111827">⚡ High impact · Do this week</div>
-        </div>
-      </div>
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#F0FDF4">🥡</div>
-        <div class="ri-content">
-          <div class="ri-title">Create a lunch combo for nearby office workers</div>
-          <div class="ri-desc">There are 3 office buildings within 400m of your shop. A $13 weekday lunch set could capture 20–40 new daily customers currently going to competitors.</div>
-          <div class="ri-impact" style="background:#f3f4f6;color:#4b5563">⚡ High impact · Plan this month</div>
-        </div>
-      </div>
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#EFF6FF">🏆</div>
-        <div class="ri-content">
-          <div class="ri-title">Highlight your top 5 best-selling dishes</div>
-          <div class="ri-desc">Your menu lists 38 items with no visual hierarchy. Adding a "Signatures" section with photos can increase average order value by 15–20%.</div>
-          <div class="ri-impact" style="background:#EFF6FF;color:#2563EB">📊 Medium impact · Easy to do</div>
-        </div>
-      </div>
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#F5F3FF">🌐</div>
-        <div class="ri-content">
-          <div class="ri-title">Fix your homepage: add hours, location & order button</div>
-          <div class="ri-desc">Your homepage has no visible address, no opening hours, and no "Order Online" link above the fold. These 3 fixes can be done in 1–2 hours and immediately reduce bounce rate.</div>
-          <div class="ri-impact" style="background:#f3f4f6;color:#4b5563">⚡ High impact · Quick fix</div>
-        </div>
-      </div>
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#FFF1F2">💬</div>
-        <div class="ri-content">
-          <div class="ri-title">Respond to your 8 unanswered Google reviews</div>
-          <div class="ri-desc">You have 8 reviews (including 2 critical ones) without a response. Businesses that reply to all reviews average 0.3 stars higher — and rank better in local search.</div>
-          <div class="ri-impact" style="background:#f3f4f6;color:#4b5563">⚡ High impact · Takes 15 minutes</div>
-        </div>
-      </div>
-
-      <div class="reco-item-card">
-        <div class="ri-bullet" style="background:#FFFBEB">📱</div>
-        <div class="ri-content">
-          <div class="ri-title">Set up an Instagram with weekly dish photos</div>
-          <div class="ri-desc">Both competitor cafés in your area have active Instagram accounts and tag your neighborhood. You have no social presence — start with 2 posts per week to start building a local following.</div>
-          <div class="ri-impact" style="background:#f3f4f6;color:#4b5563">📊 Medium impact · Long-term growth</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ─────────────────────────── PRICING ─────────────────────────── -->
+<!-- ─── PRICING ───────────────────────────────────────────────────── -->
 <section class="section pricing" id="pricing">
   <div class="container">
     <div class="pricing-header">
-      <div class="pill-label">Simple pricing</div>
-      <h2 class="section-title mt-12">Start free. Grow with confidence.</h2>
-      <p class="section-sub">No lock-in, no surprise fees. Built for small businesses with tight budgets.</p>
+      <div class="label">Pricing</div>
+      <h2 class="section-title">Simple and transparent</h2>
+      <p class="section-sub">Start with a free scan. Pay only when you want the full analysis.</p>
     </div>
 
     <div class="pricing-grid">
 
-      <!-- Free -->
       <div class="price-card">
-        <div class="plan-icon">🔍</div>
         <div class="plan-name">Free Scan</div>
-        <div class="plan-desc">See how your shop scores across all 6 areas. No credit card needed — ever.</div>
+        <div class="plan-desc">A high-level diagnosis: market pressure rating, fixability score, and your top 3 prioritised actions.</div>
         <div class="plan-price">
-          <div class="price-amount">$0</div>
-          <div class="price-period">Free forever</div>
+          <div class="price-amt">$0</div>
+          <div class="price-per">No account required</div>
         </div>
         <ul class="plan-features">
-          <li>Overall business score</li>
-          <li>6 category scores</li>
-          <li>3 top recommendations (preview)</li>
-          <li>Competitor count nearby</li>
-          <li class="dim">Full recommendations list</li>
-          <li class="dim">Detailed insights per category</li>
-          <li class="dim">Monthly progress tracking</li>
+          <li>Market Pressure rating</li>
+          <li>Fixability Score</li>
+          <li>3 prioritised actions</li>
+          <li>Nearby competitor count</li>
+          <li class="dim">Full factor breakdown</li>
+          <li class="dim">Competitor benchmarks</li>
+          <li class="dim">Strategy recommendation</li>
         </ul>
-        <a href="/#analyze" class="btn btn-outline btn-lg plan-cta">Start Free Scan</a>
+        <a href="/#analyze" class="btn btn-outline plan-cta">Run Free Scan</a>
       </div>
 
-      <!-- Pro -->
-      <div class="price-card popular">
-        <div class="popular-badge">Most popular</div>
-        <div class="plan-icon">📊</div>
-        <div class="plan-name">Pro Report</div>
-        <div class="plan-desc">The full AI diagnosis — every insight, every action, ready to share with your team.</div>
+      <div class="price-card featured">
+        <div class="featured-tag">Full analysis</div>
+        <div class="plan-name">Diagnosis Report</div>
+        <div class="plan-desc">The complete Reality Check — every factor scored, benchmarked, and explained in plain language.</div>
         <div class="plan-price">
-          <div class="price-amount"><sup>$</sup>29</div>
-          <div class="price-period">One-time report · No subscription</div>
+          <div class="price-amt">$29</div>
+          <div class="price-per">One-time · no subscription</div>
         </div>
         <ul class="plan-features">
           <li>Everything in Free Scan</li>
-          <li>Full recommendations list (15–20 actions)</li>
-          <li>Detailed per-category analysis</li>
-          <li>Competitor benchmark breakdown</li>
-          <li>Review sentiment deep-dive</li>
-          <li>Website & delivery page audit</li>
-          <li>PDF export to share</li>
-          <li class="dim">Monthly progress tracking</li>
+          <li>Full controllable factor breakdown</li>
+          <li>External pressure analysis</li>
+          <li>Competitor benchmark (10+ nearby)</li>
+          <li>Strategy recommendation</li>
+          <li>PDF export</li>
+          <li class="dim">Monthly tracking</li>
         </ul>
-        <a href="/sample/overview" class="btn btn-primary btn-lg plan-cta">Get Full Report →</a>
+        <a href="/#analyze" class="btn btn-primary plan-cta">Get Full Report</a>
       </div>
 
-      <!-- Monthly -->
       <div class="price-card">
-        <div class="plan-icon">🤝</div>
-        <div class="plan-name">Growth Assistant</div>
-        <div class="plan-desc">Monthly AI check-ins, updated reports, and progress tracking as you implement improvements.</div>
+        <div class="plan-name">Monthly Monitoring</div>
+        <div class="plan-desc">Track how your scores change month by month as you implement improvements and conditions shift.</div>
         <div class="plan-price">
-          <div class="price-amount"><sup>$</sup>49</div>
-          <div class="price-period">Per month · Cancel anytime</div>
+          <div class="price-amt">$49</div>
+          <div class="price-per">Per month · cancel anytime</div>
         </div>
         <ul class="plan-features">
-          <li>Everything in Pro Report</li>
-          <li>Fresh report every month</li>
-          <li>Progress score vs. last month</li>
-          <li>Priority support via chat</li>
+          <li>Everything in Diagnosis Report</li>
+          <li>Fresh report each month</li>
+          <li>Score change tracking</li>
           <li>New competitor alerts</li>
-          <li>Seasonal recommendation updates</li>
+          <li>Market condition updates</li>
           <li>Unlimited PDF exports</li>
+          <li>Priority support</li>
         </ul>
-        <a href="/sample/overview" class="btn btn-outline btn-lg plan-cta">Start Monthly Plan</a>
+        <a href="/#analyze" class="btn btn-outline plan-cta">Start Monitoring</a>
       </div>
 
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── CTA BANNER ──────────────────────── -->
+<!-- ─── CTA BANNER ────────────────────────────────────────────────── -->
 <section class="cta-banner">
   <div class="container">
-    <div class="pill-label" style="background:var(--accent-l);color:var(--accent);margin-bottom:20px;">
-      Free to start · No credit card
-    </div>
-    <h2>Ready to see how your shop scores?</h2>
-    <p>Join 2,400+ shop owners who got their AI diagnosis and know exactly what to improve next.</p>
+    <span class="label">Honest · Practical · Free to start</span>
+    <h2>Get a diagnosis before spending<br>more money on marketing.</h2>
+    <p>Most small businesses spend on ads and promotions before understanding what is actually holding them back. ShopWise tells you what to fix first — and what to stop worrying about.</p>
     <div class="cta-actions">
-      <a href="/#analyze" class="btn btn-primary btn-xl">🔍 Analyze My Shop — Free</a>
-      <a href="/sample/overview" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,.2);color:#fff;">View Sample Report</a>
+      <a href="/#analyze" class="btn btn-white btn-lg">Run a Reality Check →</a>
+      <a href="/sample/overview" class="btn btn-ghost-white btn-lg">View sample report</a>
     </div>
   </div>
 </section>
 
-<!-- ─────────────────────────── FOOTER ──────────────────────────── -->
+<!-- ─── FOOTER ────────────────────────────────────────────────────── -->
 <footer>
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="/" style="font-size:18px;font-weight:800;color:#fff;text-decoration:none;letter-spacing:-0.02em;">🏪 ShopWise</a>
-        <p>AI-powered business advisor for local restaurants, cafés, bakeries, and independent shops. Built to help small businesses compete and grow.</p>
+      <div>
+        <div class="footer-brand">ShopWise</div>
+        <p class="footer-desc">Honest business diagnostics for local restaurants, cafés, and independent shops. Built to separate what's fixable from what's structural.</p>
       </div>
       <div class="footer-col">
         <h4>Product</h4>
         <ul>
-          <li><a href="#">Features</a></li>
-          <li><a href="#">Sample Report</a></li>
-          <li><a href="#">How it works</a></li>
-          <li><a href="#">Pricing</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Shop Types</h4>
-        <ul>
-          <li><a href="#">Restaurants</a></li>
-          <li><a href="#">Cafés & Coffee</a></li>
-          <li><a href="#">Bakeries</a></li>
-          <li><a href="#">Retail Stores</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="/sample/overview">Sample report</a></li>
+          <li><a href="/pricing">Pricing</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
           <li><a href="#">About</a></li>
-          <li><a href="#">Blog</a></li>
           <li><a href="#">Contact</a></li>
-          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Privacy</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <div>© 2026 ShopWise AI · All rights reserved</div>
-      <div class="footer-social">
-        <a href="#" class="social-btn">𝕏</a>
-        <a href="#" class="social-btn">in</a>
-        <a href="#" class="social-btn">📷</a>
-      </div>
+      <span>© 2026 ShopWise · All rights reserved</span>
     </div>
   </div>
 </footer>
@@ -1332,5 +1014,6 @@
   burger.addEventListener('click', () => menu.classList.toggle('open'));
   menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
 </script>
+
 </body>
 </html>

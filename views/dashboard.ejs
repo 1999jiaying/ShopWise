@@ -3,482 +3,671 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopWise AI — Dashboard</title>
+  <title>ShopWise — Reality Check Report · <%= shopData.name %></title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
-    /* Same CSS as index.html, but for dashboard */
+    /* ─── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --bg:        #F8F7F4;
+      --surface:   #FFFFFF;
+      --surface-2: #F2F0EB;
+      --border:    #E3E1DB;
+      --border-2:  #CCCAC3;
+
+      --text-1: #0E0E0E;
+      --text-2: #484540;
+      --text-3: #8A877F;
+
+      --high:        #B91C1C;
+      --high-bg:     #FEF2F2;
+      --high-border: #FECACA;
+      --med:         #92400E;
+      --med-bg:      #FFFBEB;
+      --med-border:  #FDE68A;
+      --good:        #14532D;
+      --good-bg:     #F0FDF4;
+      --good-border: #BBF7D0;
+
+      --radius:    8px;
+      --radius-lg: 14px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+      --shadow:    0 4px 16px rgba(0,0,0,.07);
+    }
+
+    /* ─── Reset ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--neutral-50);
-      color: var(--neutral-900);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text-1);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
     }
 
-    :root {
-      --accent: #111827;
-      --accent-l: #f8fafc;
-      --muted: #4b5563;
-      --neutral-50:  #fafafa;
-      --neutral-100: #f5f5f5;
-      --neutral-200: #e5e5e5;
-      --neutral-300: #d1d5db;
-      --neutral-400: #9ca3af;
-      --neutral-500: #6b7280;
-      --neutral-600: #4b5563;
-      --neutral-700: #374151;
-      --neutral-800: #1f2937;
-      --neutral-900: #111827;
-      --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.06);
-      --shadow:    0 4px 16px rgba(17, 24, 39, 0.08);
-      --shadow-lg: 0 10px 30px rgba(17, 24, 39, 0.12);
-      --radius:    10px;
-      --radius-lg: 20px;
-      /* semantic colour tokens */
-      --primary:     #111827;
-      --primary-l:   #f3f4f6;
-      --secondary:   #4b5563;
-      --secondary-l: #f8fafc;
-      --success:     #059669;
-      --success-l:   #ecfdf5;
-      --warning:     #d97706;
-      --warning-l:   #fffbeb;
-      --danger:      #dc2626;
-      --danger-l:    #fef2f2;
-    }
+    /* ─── Layout ─────────────────────────────────────────────── */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 40px; }
 
-    .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; }
-    .section { padding: 96px 0; }
-    .section-sm { padding: 64px 0; }
-
-    /* App Header */
+    /* ─── App header ─────────────────────────────────────────── */
     .app-header {
-      background: #fff;
-      border-bottom: 1px solid var(--neutral-200);
+      background: rgba(248,247,244,.93);
+      border-bottom: 1px solid var(--border);
       position: sticky; top: 0; z-index: 100;
       backdrop-filter: blur(12px);
     }
     .app-nav {
       display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
+      height: 60px;
     }
+    .app-nav-left { display: flex; align-items: center; gap: 12px; }
     .app-brand {
-      font-size: 18px; font-weight: 800; color: var(--neutral-900);
-      letter-spacing: -0.03em;
-      text-decoration: none;
+      font-size: 16px; font-weight: 800; letter-spacing: -.03em;
+      color: var(--text-1); text-decoration: none;
     }
-    .app-user {
-      display: flex; align-items: center; gap: 12px;
-      font-size: 14px; color: var(--neutral-600);
-    }
-    .user-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
-      background: var(--neutral-100);
-      display: flex; align-items: center; justify-content: center;
-    }
+    .app-sep { color: var(--border-2); font-size: 18px; }
+    .app-report-label { font-size: 13px; color: var(--text-3); font-weight: 500; }
+    .app-nav-right { display: flex; align-items: center; gap: 12px; }
+    .app-shop-name { font-size: 13px; color: var(--text-2); font-weight: 600; }
 
-    /* Dashboard Layout */
-    .dashboard-layout {
-      display: grid; grid-template-columns: 280px 1fr; gap: 32px;
-      min-height: calc(100vh - 64px);
-    }
-    .sidebar {
-      background: #fff; border-radius: var(--radius); padding: 24px;
-      box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200);
-      position: sticky; top: 80px; height: fit-content;
-    }
-    .sidebar-title {
-      font-size: 16px; font-weight: 700; color: var(--neutral-900); margin-bottom: 16px;
-    }
-    .sidebar-menu {
-      list-style: none;
-    }
-    .sidebar-menu li {
-      margin-bottom: 8px;
-    }
-    .sidebar-menu a {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px; border-radius: 10px;
-      text-decoration: none; color: var(--neutral-700);
-      transition: all 0.2s;
-      font-size: 14px; font-weight: 500;
-    }
-    .sidebar-menu a:hover, .sidebar-menu a.active {
-      background: var(--accent-l); color: var(--accent);
-    }
-    .sidebar-menu a.active { background: var(--accent-l); }
-
-    .main-content {
-      background: #fff; border-radius: var(--radius); padding: 32px;
-      box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200);
-    }
-
-    /* Dashboard Content */
-    .dash-header {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      margin-bottom: 32px;
-    }
-    .dash-title {
-      font-size: 28px; font-weight: 800; color: var(--neutral-900);
-    }
-    .dash-subtitle {
-      font-size: 16px; color: var(--neutral-500); margin-top: 4px;
-    }
-    .dash-actions {
-      display: flex; gap: 12px;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      font-family: inherit; font-size: 14px; font-weight: 600;
-      padding: 10px 20px; border-radius: 12px;
-      border: none; cursor: pointer; transition: all 0.2s;
-      text-decoration: none; white-space: nowrap;
-    }
-    .btn-primary {
-      background: var(--accent);
-      color: #fff; box-shadow: var(--shadow);
-    }
-    .btn-primary:hover { opacity: 0.96; box-shadow: var(--shadow-lg); }
-    .btn-ghost {
-      background: transparent; color: var(--neutral-700);
-      border: 1.5px solid var(--neutral-300);
-    }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-    /* Score Cards */
-    .score-grid {
-      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;
-      margin-bottom: 32px;
-    }
-    .score-card {
-      background: #fff; border-radius: var(--radius); padding: 24px;
-      box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200);
-      transition: all 0.3s;
-    }
-    .score-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
-    .score-icon {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; margin-bottom: 16px;
-    }
-    .score-name { font-size: 14px; color: var(--neutral-500); font-weight: 500; margin-bottom: 8px; }
-    .score-value { font-size: 32px; font-weight: 800; color: var(--neutral-900); margin-bottom: 8px; }
-    .score-bar {
-      height: 6px; background: var(--neutral-200); border-radius: 99px;
-      margin-bottom: 8px;
-    }
-    .score-fill { height: 100%; border-radius: 99px; }
-
-    /* Charts and Insights */
-    .insights-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
-    }
-    .insight-card {
-      background: #fff; border-radius: var(--radius); padding: 24px;
-      box-shadow: var(--shadow-sm); border: 1px solid var(--neutral-200);
-    }
-    .insight-title {
-      font-size: 18px; font-weight: 700; color: var(--neutral-900); margin-bottom: 16px;
-    }
-
-    /* Recommendations */
-    .recs-list {
-      list-style: none;
-    }
-    .rec-item {
-      display: flex; align-items: flex-start; gap: 16px;
-      padding: 20px 0; border-bottom: 1px solid var(--neutral-100);
-    }
-    .rec-item:last-child { border-bottom: none; }
-    .rec-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 20px; flex-shrink: 0;
-    }
-    .rec-content {}
-    .rec-title { font-size: 16px; font-weight: 700; color: var(--neutral-900); margin-bottom: 4px; }
-    .rec-desc { font-size: 14px; color: var(--neutral-500); line-height: 1.5; margin-bottom: 8px; }
-    .rec-meta { display: flex; gap: 12px; }
-    .rec-priority {
-      font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 99px;
-    }
-
-    /* ─── Mobile burger ─────────────────────────────────────── */
     .burger {
-      display: none; background: none; border: none; cursor: pointer;
-      padding: 4px; color: var(--neutral-700);
+      display: none; background: none; border: none;
+      cursor: pointer; color: var(--text-2); padding: 4px;
     }
-    .burger svg { display: block; }
     .sidebar-overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,.4); z-index: 49;
     }
+    .sidebar-overlay.open { display: block; }
 
-    /* ─── Responsive ────────────────────────────────────────── */
+    /* ─── Buttons ────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      font-family: inherit; font-weight: 600; font-size: 13px;
+      border-radius: 7px; border: none; cursor: pointer;
+      text-decoration: none; transition: all .15s; white-space: nowrap; padding: 9px 16px;
+    }
+    .btn-primary { background: var(--text-1); color: #fff; }
+    .btn-primary:hover { opacity: .88; }
+    .btn-outline { background: transparent; color: var(--text-1); border: 1.5px solid var(--border-2); }
+    .btn-outline:hover { border-color: var(--text-1); }
+
+    /* ─── Status chips ───────────────────────────────────────── */
+    .chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; letter-spacing: .1px;
+      padding: 3px 9px; border-radius: 5px;
+    }
+    .chip-high    { background: var(--high-bg);   color: var(--high);  border: 1px solid var(--high-border); }
+    .chip-med     { background: var(--med-bg);    color: var(--med);   border: 1px solid var(--med-border); }
+    .chip-good    { background: var(--good-bg);   color: var(--good);  border: 1px solid var(--good-border); }
+    .chip-neutral { background: var(--surface-2); color: var(--text-2); border: 1px solid var(--border); }
+
+    /* ─── Dashboard layout ───────────────────────────────────── */
+    .dash-layout {
+      display: grid; grid-template-columns: 240px 1fr;
+      gap: 28px; padding: 24px 0 64px; min-height: calc(100vh - 60px);
+    }
+
+    /* ─── Sidebar ────────────────────────────────────────────── */
+    .sidebar {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 20px;
+      position: sticky; top: 80px; height: fit-content;
+    }
+    .sidebar-section { margin-bottom: 24px; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-heading {
+      font-size: 10px; font-weight: 700; letter-spacing: .7px;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; padding: 0 8px;
+    }
+    .sidebar-menu { list-style: none; }
+    .sidebar-menu li { margin-bottom: 2px; }
+    .sidebar-menu a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 10px; border-radius: var(--radius);
+      text-decoration: none; color: var(--text-2);
+      font-size: 13px; font-weight: 500; transition: all .15s;
+    }
+    .sidebar-menu a:hover  { background: var(--surface-2); color: var(--text-1); }
+    .sidebar-menu a.active { background: var(--text-1); color: #fff; }
+    .sidebar-menu a.active .nav-icon { filter: invert(1); }
+    .sidebar-divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+    /* ─── Main content ───────────────────────────────────────── */
+    .main { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ─── Cards ──────────────────────────────────────────────── */
+    .card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); overflow: hidden;
+    }
+    .card-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
+    .card-sub   { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+    .card-body  { padding: 24px; }
+
+    /* label utility */
+    .label {
+      font-size: 11px; font-weight: 700; letter-spacing: .6px;
+      text-transform: uppercase; color: var(--text-3);
+    }
+
+    /* ─── Report header band ─────────────────────────────────── */
+    .report-band {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px 26px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 20px;
+    }
+    .rb-shop  { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 4px; }
+    .rb-meta  { font-size: 13px; color: var(--text-3); }
+    .rb-actions { display: flex; gap: 10px; flex-shrink: 0; }
+
+    /* ─── Top metrics row ────────────────────────────────────── */
+    .metrics-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .metric-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 20px 22px;
+    }
+    .mc-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--text-3); margin-bottom: 10px; }
+    .mc-value { font-size: 30px; font-weight: 800; color: var(--text-1); line-height: 1; margin-bottom: 8px; }
+    .mc-note  { font-size: 12px; color: var(--text-3); line-height: 1.5; }
+    .fixbar-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .fixbar      { flex: 1; height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .fixbar-fill { height: 100%; background: var(--text-1); border-radius: 99px; }
+    .fixbar-pct  { font-size: 30px; font-weight: 800; color: var(--text-1); line-height: 1; }
+
+    /* ─── Diagnosis ──────────────────────────────────────────── */
+    .diagnosis-card {
+      background: #FFFDF8; border: 1.5px solid #F0EDDF;
+      border-radius: var(--radius-lg); padding: 22px 26px;
+    }
+    .dc-label { margin-bottom: 10px; }
+    .dc-text  { font-size: 15px; color: var(--text-1); line-height: 1.8; }
+
+    /* ─── Two-column breakdown ───────────────────────────────── */
+    .breakdown-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+    }
+    .breakdown-col-title {
+      font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+      color: var(--text-2); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .dot-green { background: #22C55E; }
+    .dot-red   { background: #EF4444; }
+    .factor-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .factor-row:last-child { border-bottom: none; }
+    .factor-label { color: var(--text-2); font-weight: 500; flex: 1; margin-right: 12px; }
+    .factor-detail { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .bar-group { display: flex; align-items: center; gap: 8px; }
+    .bar  { width: 72px; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
+    .bar-fill { height: 100%; border-radius: 99px; }
+    .bar-fill-normal  { background: var(--text-1); }
+    .bar-fill-ok      { background: #059669; }
+    .bar-fill-weak    { background: #D97706; }
+    .bar-fill-poor    { background: #B91C1C; }
+    .bar-score { font-size: 12px; font-weight: 700; color: var(--text-1); min-width: 24px; text-align: right; }
+
+    /* ─── Strategy card ──────────────────────────────────────── */
+    .strategy-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px 26px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .strat-arrow { font-size: 22px; flex-shrink: 0; padding-top: 2px; }
+    .strat-label { margin-bottom: 6px; }
+    .strat-title { font-size: 16px; font-weight: 700; color: var(--text-1); margin-bottom: 8px; }
+    .strat-desc  { font-size: 14px; color: var(--text-2); line-height: 1.7; }
+
+    /* ─── Benchmark table ────────────────────────────────────── */
+    .bench-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+    .bench-cell {
+      background: var(--bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 16px 18px;
+    }
+    .bench-label { font-size: 11px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; color: var(--text-3); margin-bottom: 8px; }
+    .bench-you   { font-size: 22px; font-weight: 800; color: var(--text-1); }
+    .bench-avg   { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+    .bench-pct   {
+      display: inline-block; margin-top: 6px;
+      font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px;
+    }
+    .pct-weak { background: var(--high-bg); color: var(--high); }
+    .pct-ok   { background: var(--good-bg); color: var(--good); }
+    .pct-med  { background: var(--med-bg);  color: var(--med); }
+
+    /* ─── Actions list ───────────────────────────────────────── */
+    .action-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 18px 0; border-bottom: 1px solid var(--border);
+    }
+    .action-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .action-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: var(--surface-2); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0; margin-top: 1px;
+    }
+    .action-title  { font-size: 14px; font-weight: 700; color: var(--text-1); margin-bottom: 4px; }
+    .action-detail { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+    .action-badges { display: flex; gap: 8px; margin-top: 8px; }
+    .badge {
+      font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px;
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-3);
+    }
+    .badge.high-impact { background: var(--good-bg); color: var(--good); border-color: var(--good-border); }
+
+    /* ─── Stub section ───────────────────────────────────────── */
+    .stub {
+      padding: 48px 24px; text-align: center;
+      color: var(--text-3); font-size: 14px; line-height: 1.7;
+    }
+    .stub strong { display: block; font-size: 16px; font-weight: 700; color: var(--text-2); margin-bottom: 8px; }
+
+    /* ─── Responsive ─────────────────────────────────────────── */
     @media (max-width: 900px) {
       .container { padding: 0 20px; }
 
-      .burger { display: flex; align-items: center; }
-
-      .dashboard-layout {
-        grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 16px 0 40px;
-      }
+      .burger { display: flex; }
+      .app-report-label { display: none; }
+      .app-sep { display: none; }
 
       .sidebar {
-        position: fixed; top: 0; left: -320px; bottom: 0; z-index: 50;
-        width: 280px; border-radius: 0; overflow-y: auto;
-        transition: left .25s ease; box-shadow: var(--shadow-lg);
+        position: fixed; top: 0; left: -280px; bottom: 0; z-index: 50;
+        width: 260px; border-radius: 0; overflow-y: auto;
+        transition: left .25s ease; box-shadow: var(--shadow);
       }
       .sidebar.open { left: 0; }
-      .sidebar-overlay.open { display: block; }
 
-      .main-content { border-radius: var(--radius); }
+      .dash-layout { grid-template-columns: 1fr; padding: 16px 0 48px; }
 
-      .dash-header { flex-direction: column; align-items: flex-start; gap: 16px; }
-      .dash-actions { width: 100%; }
-      .dash-actions .btn { flex: 1; justify-content: center; }
-
-      .score-grid { grid-template-columns: repeat(2, 1fr); }
-      .insights-grid { grid-template-columns: 1fr; }
+      .metrics-row    { grid-template-columns: 1fr 1fr; }
+      .breakdown-grid { grid-template-columns: 1fr; }
+      .bench-grid     { grid-template-columns: 1fr 1fr; }
+      .report-band    { flex-direction: column; }
+      .rb-actions     { width: 100%; }
+      .rb-actions .btn { flex: 1; justify-content: center; }
     }
-
-    @media (max-width: 480px) {
-      .score-grid { grid-template-columns: 1fr; }
+    @media (max-width: 540px) {
+      .metrics-row { grid-template-columns: 1fr; }
+      .bench-grid  { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- App Header -->
+<!-- ─── APP HEADER ────────────────────────────────────────────────── -->
 <header class="app-header">
   <div class="container app-nav">
-    <div style="display:flex;align-items:center;gap:12px;">
+    <div class="app-nav-left">
       <button class="burger" id="burgerBtn" aria-label="Open menu">
-        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="2" y1="6" x2="20" y2="6"/><line x1="2" y1="11" x2="20" y2="11"/><line x1="2" y1="16" x2="20" y2="16"/>
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="2" y1="5" x2="18" y2="5"/><line x1="2" y1="10" x2="18" y2="10"/><line x1="2" y1="15" x2="18" y2="15"/>
         </svg>
       </button>
       <a href="/" class="app-brand">ShopWise</a>
+      <span class="app-sep">/</span>
+      <span class="app-report-label">Reality Check Report</span>
     </div>
-    <div class="app-user">
-      <div class="user-avatar">👩‍🍳</div>
-      <span><%= shopData.name %></span>
+    <div class="app-nav-right">
+      <span class="app-shop-name"><%= shopData.name %></span>
     </div>
   </div>
 </header>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- Dashboard Layout -->
-<div class="container dashboard-layout">
+<!-- ─── DASHBOARD LAYOUT ──────────────────────────────────────────── -->
+<div class="container dash-layout">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
-    <div class="sidebar-title">Dashboard</div>
-    <ul class="sidebar-menu">
-      <li><a href="/sample/overview" class="<%= shopData.currentSection === 'overview' ? 'active' : '' %>"><span>📊</span> Overview</a></li>
-      <li><a href="/sample/location" class="<%= shopData.currentSection === 'location' ? 'active' : '' %>"><span>📍</span> Location</a></li>
-      <li><a href="/sample/menu" class="<%= shopData.currentSection === 'menu' ? 'active' : '' %>"><span>🍽️</span> Menu</a></li>
-      <li><a href="/sample/competitors" class="<%= shopData.currentSection === 'competitors' ? 'active' : '' %>"><span>⚔️</span> Competitors</a></li>
-      <li><a href="/sample/reviews" class="<%= shopData.currentSection === 'reviews' ? 'active' : '' %>"><span>⭐</span> Reviews</a></li>
-      <li><a href="/sample/online" class="<%= shopData.currentSection === 'online' ? 'active' : '' %>"><span>🌐</span> Online Presence</a></li>
-      <li><a href="/sample/recommendations" class="<%= shopData.currentSection === 'recommendations' ? 'active' : '' %>"><span>📋</span> Recommendations</a></li>
-      <li><a href="/sample/progress" class="<%= shopData.currentSection === 'progress' ? 'active' : '' %>"><span>📈</span> Progress</a></li>
-    </ul>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Report</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="/sample/overview" class="<%= shopData.currentSection === 'overview' ? 'active' : '' %>">
+            <span>📊</span> Overview
+          </a>
+        </li>
+        <li>
+          <a href="/sample/controllable" class="<%= shopData.currentSection === 'controllable' ? 'active' : '' %>">
+            <span>🔧</span> Controllable Factors
+          </a>
+        </li>
+        <li>
+          <a href="/sample/external" class="<%= shopData.currentSection === 'external' ? 'active' : '' %>">
+            <span>📉</span> External Pressures
+          </a>
+        </li>
+        <li>
+          <a href="/sample/benchmark" class="<%= shopData.currentSection === 'benchmark' ? 'active' : '' %>">
+            <span>⚖️</span> Competitor Benchmark
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Actions</div>
+      <ul class="sidebar-menu">
+        <li>
+          <a href="/sample/actions" class="<%= shopData.currentSection === 'actions' ? 'active' : '' %>">
+            <span>✅</span> Priority Actions
+          </a>
+        </li>
+        <li>
+          <a href="/sample/strategy" class="<%= shopData.currentSection === 'strategy' ? 'active' : '' %>">
+            <span>🎯</span> Strategy
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="sidebar-divider"></div>
+    <a href="/" style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-3);text-decoration:none;padding:8px 10px;">
+      ← Back to home
+    </a>
   </aside>
 
-  <!-- Main Content -->
-  <main class="main-content">
+  <!-- Main content -->
+  <main class="main">
 
+    <!-- ── OVERVIEW ─────────────────────────────────────────────── -->
     <% if (shopData.currentSection === 'overview') { %>
-    <!-- Header -->
-    <div class="dash-header">
+
+    <div class="report-band">
       <div>
-        <h1 class="dash-title">Business Overview</h1>
-        <p class="dash-subtitle">Last updated: May 10, 2026 · AI analysis complete for <%= shopData.name %></p>
+        <div class="rb-shop"><%= shopData.name %></div>
+        <div class="rb-meta"><%= shopData.category %> · <%= shopData.address %> · Reality Check Report</div>
       </div>
-      <div class="dash-actions">
-        <a href="#" class="btn btn-ghost">Export PDF</a>
-        <a href="#" class="btn btn-primary">Run New Analysis</a>
-      </div>
-    </div>
-
-    <!-- Score Cards -->
-    <div class="score-grid">
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--primary-l);">📊</div>
-        <div class="score-name">Overall Score</div>
-        <div class="score-value"><%= shopData.overallScore %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.overallScore %>%; background: linear-gradient(90deg, var(--primary), var(--secondary));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Good · Room for growth</div>
-      </div>
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--success-l);">📍</div>
-        <div class="score-name">Location</div>
-        <div class="score-value"><%= shopData.scores.location %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.scores.location %>%; background: linear-gradient(90deg, var(--success), var(--primary));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Excellent visibility</div>
-      </div>
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--warning-l);">🍽️</div>
-        <div class="score-name">Menu</div>
-        <div class="score-value"><%= shopData.scores.menu %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.scores.menu %>%; background: linear-gradient(90deg, var(--warning), var(--danger));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Needs optimization</div>
-      </div>
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--danger-l);">⚔️</div>
-        <div class="score-name">Competitors</div>
-        <div class="score-value"><%= shopData.scores.competitors %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.scores.competitors %>%; background: linear-gradient(90deg, var(--danger), var(--warning));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Below average</div>
-      </div>
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--success-l);">⭐</div>
-        <div class="score-name">Reviews</div>
-        <div class="score-value"><%= shopData.scores.reviews %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.scores.reviews %>%; background: linear-gradient(90deg, var(--success), var(--primary));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Strong performance</div>
-      </div>
-      <div class="score-card">
-        <div class="score-icon" style="background: var(--secondary-l);">🌐</div>
-        <div class="score-name">Online Presence</div>
-        <div class="score-value"><%= shopData.scores.online %></div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: <%= shopData.scores.online %>%; background: linear-gradient(90deg, var(--secondary), var(--danger));"></div>
-        </div>
-        <div style="font-size: 12px; color: var(--neutral-500);">Needs improvement</div>
+      <div class="rb-actions">
+        <a href="#" class="btn btn-outline">Export PDF</a>
+        <a href="/" class="btn btn-primary">Run New Analysis</a>
       </div>
     </div>
 
-    <!-- Insights Grid -->
-    <div class="insights-grid">
-      <div class="insight-card">
-        <h3 class="insight-title">📈 Key Insights</h3>
-        <ul style="list-style: none; padding: 0;">
-          <li style="padding: 8px 0; border-bottom: 1px solid var(--neutral-100);">
-            <strong>Location:</strong> Your spot has excellent foot traffic but lacks visual appeal from the street.
-          </li>
-          <li style="padding: 8px 0; border-bottom: 1px solid var(--neutral-100);">
-            <strong>Menu:</strong> High-quality food but menu presentation could be more compelling.
-          </li>
-          <li style="padding: 8px 0;">
-            <strong>Competitors:</strong> 3 nearby shops are outperforming you in online presence and pricing.
-          </li>
-        </ul>
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="mc-label">Market Pressure</div>
+        <div class="mc-value">
+          <span class="chip chip-high" style="font-size:15px;padding:6px 14px;"><%= shopData.marketPressure %></span>
+        </div>
+        <div class="mc-note"><%= shopData.nearbyCompetitorCount %> similar competitors within 500m · Local demand <%= shopData.localDemandTrend.toLowerCase() %></div>
       </div>
+      <div class="metric-card">
+        <div class="mc-label">Fixability Score</div>
+        <div class="fixbar-wrap">
+          <span class="fixbar-pct"><%= shopData.fixabilityScore %>%</span>
+        </div>
+        <div style="height:8px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:10px;">
+          <div style="width:<%= shopData.fixabilityScore %>%;height:100%;background:var(--text-1);border-radius:99px;"></div>
+        </div>
+        <div class="mc-note">Around <%= shopData.fixabilityScore %>% of challenges appear actionable through business changes</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">Online Visibility</div>
+        <div class="mc-value">
+          <span class="chip chip-med" style="font-size:15px;padding:6px 14px;"><%= shopData.onlineVisibility %></span>
+        </div>
+        <div class="mc-note">Below area average for photos, review count, and profile completeness</div>
+      </div>
+    </div>
 
-      <div class="insight-card">
-        <h3 class="insight-title">⚡ Top Recommendations</h3>
-        <ul class="recs-list">
-          <% shopData.recommendations.forEach(rec => { %>
-          <li class="rec-item">
-            <div class="rec-icon" style="background: <%= rec.bgColor %>;"><%= rec.icon %></div>
-            <div class="rec-content">
-              <div class="rec-title"><%= rec.title %></div>
-              <div class="rec-desc"><%= rec.desc %></div>
-              <div class="rec-meta">
-                <span class="rec-priority" style="background: <%= rec.bgColor %>; color: var(--accent);"><%= rec.impact %></span>
-                <span style="font-size: 12px; color: var(--neutral-500);">Quick to implement</span>
-              </div>
+    <div class="diagnosis-card">
+      <div class="label dc-label">Diagnosis</div>
+      <div class="dc-text">"<%= shopData.diagnosis %>"</div>
+    </div>
+
+    <div class="breakdown-grid">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title" style="display:flex;align-items:center;gap:8px;">
+              <span style="color:#22C55E;">●</span> Controllable Factors
             </div>
-          </li>
+            <div class="card-sub">Overall score: <%= shopData.controllableScore %> / 100</div>
+          </div>
+          <a href="/sample/controllable" class="btn btn-outline" style="font-size:12px;padding:7px 12px;">Full breakdown →</a>
+        </div>
+        <div class="card-body" style="padding-top:8px;padding-bottom:8px;">
+          <% shopData.controllable.forEach(f => { %>
+          <div class="factor-row">
+            <div>
+              <div class="factor-label"><%= f.label %></div>
+            </div>
+            <div class="bar-group">
+              <div class="bar">
+                <div class="bar-fill <%= f.score >= 70 ? 'bar-fill-ok' : f.score >= 50 ? 'bar-fill-normal' : f.score >= 35 ? 'bar-fill-weak' : 'bar-fill-poor' %>" style="width:<%= f.score %>%"></div>
+              </div>
+              <span class="bar-score"><%= f.score %></span>
+            </div>
+          </div>
           <% }); %>
-        </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title" style="display:flex;align-items:center;gap:8px;">
+              <span style="color:#EF4444;">●</span> External Pressures
+            </div>
+            <div class="card-sub">Pressure score: <%= shopData.externalPressureScore %> / 100</div>
+          </div>
+          <a href="/sample/external" class="btn btn-outline" style="font-size:12px;padding:7px 12px;">Full breakdown →</a>
+        </div>
+        <div class="card-body" style="padding-top:8px;padding-bottom:8px;">
+          <% shopData.external.forEach(e => { %>
+          <div class="factor-row">
+            <span class="factor-label"><%= e.label %></span>
+            <span class="chip chip-<%= e.chip %>"><%= e.level %></span>
+          </div>
+          <% }); %>
+        </div>
       </div>
     </div>
-    <% } else if (shopData.currentSection === 'location') { %>
-    <div class="dash-header">
+
+    <div class="strategy-card">
+      <div class="strat-arrow">→</div>
       <div>
-        <h1 class="dash-title">Location Analysis</h1>
-        <p class="dash-subtitle">Detailed insights about your shop's location performance</p>
+        <div class="label strat-label">Recommended strategy</div>
+        <div class="strat-title"><%= shopData.strategyLabel %></div>
+        <div class="strat-desc"><%= shopData.strategyDesc %></div>
       </div>
     </div>
-    <div class="insight-card" style="max-width: 800px;">
-      <h3 class="insight-title">📍 Location Performance</h3>
-      <p style="margin-bottom: 20px; color: var(--neutral-600);">Your location scores <%= shopData.scores.location %>/100, indicating excellent foot traffic potential but some visibility challenges.</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+    <!-- ── CONTROLLABLE FACTORS ──────────────────────────────────── -->
+    <% } else if (shopData.currentSection === 'controllable') { %>
+
+    <div class="card">
+      <div class="card-header">
         <div>
-          <h4 style="font-weight: 600; margin-bottom: 10px;">Strengths</h4>
-          <ul style="color: var(--neutral-600);">
-            <li>• High foot traffic area</li>
-            <li>• Good proximity to public transport</li>
-            <li>• Residential neighborhood with loyal customers</li>
-          </ul>
+          <div class="card-title">Controllable Factors</div>
+          <div class="card-sub">Overall controllable score: <%= shopData.controllableScore %> / 100 — things you can improve this week</div>
         </div>
+      </div>
+      <div class="card-body">
+        <% shopData.controllable.forEach(f => { %>
+        <div class="action-item">
+          <div class="action-icon">
+            <%= f.score >= 70 ? '✅' : f.score >= 50 ? '⚠️' : '🔴' %>
+          </div>
+          <div style="flex:1;">
+            <div class="action-title"><%= f.label %></div>
+            <div class="action-detail"><%= f.detail %></div>
+            <div class="action-badges" style="margin-top:8px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <div style="width:120px;height:5px;background:var(--border);border-radius:99px;overflow:hidden;">
+                  <div class="bar-fill <%= f.score >= 70 ? 'bar-fill-ok' : f.score >= 50 ? 'bar-fill-normal' : f.score >= 35 ? 'bar-fill-weak' : 'bar-fill-poor' %>" style="width:<%= f.score %>%;height:100%;"></div>
+                </div>
+                <span style="font-size:13px;font-weight:700;color:var(--text-1);"><%= f.score %>/100</span>
+              </div>
+              <% if (f.priority) { %><span class="badge high-impact">Priority fix</span><% } %>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- ── EXTERNAL PRESSURES ────────────────────────────────────── -->
+    <% } else if (shopData.currentSection === 'external') { %>
+
+    <div class="card">
+      <div class="card-header">
         <div>
-          <h4 style="font-weight: 600; margin-bottom: 10px;">Areas for Improvement</h4>
-          <ul style="color: var(--neutral-600);">
-            <li>• Limited street visibility</li>
-            <li>• No outdoor seating area</li>
-            <li>• Parking availability could be better</li>
-          </ul>
+          <div class="card-title">External Pressures</div>
+          <div class="card-sub">Pressure score: <%= shopData.externalPressureScore %> / 100 — structural factors outside your control</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <% shopData.external.forEach(e => { %>
+        <div class="action-item">
+          <div class="action-icon">📊</div>
+          <div style="flex:1;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;">
+            <div>
+              <div class="action-title"><%= e.label %></div>
+              <div class="action-detail"><%= e.detail %></div>
+            </div>
+            <span class="chip chip-<%= e.chip %>" style="flex-shrink:0;margin-top:2px;"><%= e.level %></span>
+          </div>
+        </div>
+        <% }); %>
+        <div style="margin-top:20px;padding:16px;background:var(--surface-2);border-radius:var(--radius);border:1.5px solid var(--border);">
+          <div class="label" style="margin-bottom:8px;">What this means</div>
+          <p style="font-size:13px;color:var(--text-2);line-height:1.7;">These are structural conditions acting on your business that cannot be resolved through marketing or operational improvements alone. Understanding them helps you make better decisions about where to invest effort and money — and when to consider different strategies such as cost reduction, repositioning, or focusing on loyal customer retention.</p>
         </div>
       </div>
     </div>
-    <% } else if (shopData.currentSection === 'menu') { %>
-    <div class="dash-header">
-      <div>
-        <h1 class="dash-title">Menu Analysis</h1>
-        <p class="dash-subtitle">Review of your menu design, pricing, and presentation</p>
-      </div>
-    </div>
-    <div class="insight-card" style="max-width: 800px;">
-      <h3 class="insight-title">🍽️ Menu Performance</h3>
-      <p style="margin-bottom: 20px; color: var(--neutral-600);">Your menu scores <%= shopData.scores.menu %>/100. The food quality is excellent, but presentation and pricing could be optimized.</p>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+    <!-- ── COMPETITOR BENCHMARK ──────────────────────────────────── -->
+    <% } else if (shopData.currentSection === 'benchmark') { %>
+
+    <div class="card">
+      <div class="card-header">
         <div>
-          <h4 style="font-weight: 600; margin-bottom: 10px;">Strengths</h4>
-          <ul style="color: var(--neutral-600);">
-            <li>• High-quality ingredients</li>
-            <li>• Authentic flavors</li>
-            <li>• Good portion sizes</li>
-          </ul>
-        </div>
-        <div>
-          <h4 style="font-weight: 600; margin-bottom: 10px;">Recommendations</h4>
-          <ul style="color: var(--neutral-600);">
-            <li>• Add more descriptive item names</li>
-            <li>• Include high-quality photos</li>
-            <li>• Consider price anchoring strategies</li>
-          </ul>
+          <div class="card-title">Competitor Benchmark</div>
+          <div class="card-sub"><%= shopData.benchmark.nearbyCount %> similar businesses within walking distance of <%= shopData.address %></div>
         </div>
       </div>
+      <div class="card-body">
+        <div class="bench-grid" style="margin-bottom:24px;">
+          <div class="bench-cell">
+            <div class="bench-label">Google Rating</div>
+            <div class="bench-you"><%= shopData.rating %> ★</div>
+            <div class="bench-avg">Area average: <%= shopData.benchmark.areaAvgRating %> ★</div>
+            <span class="bench-pct <%= shopData.ratingPercentile >= 50 ? 'pct-ok' : 'pct-med' %>">
+              Better than <%= shopData.benchmark.ratingPercentile %>% of competitors
+            </span>
+          </div>
+          <div class="bench-cell">
+            <div class="bench-label">Review Count</div>
+            <div class="bench-you"><%= shopData.reviews %></div>
+            <div class="bench-avg">Area average: <%= shopData.benchmark.areaAvgReviews %></div>
+            <span class="bench-pct pct-weak">
+              More than only <%= shopData.benchmark.reviewCountPercentile %>% of competitors
+            </span>
+          </div>
+          <div class="bench-cell">
+            <div class="bench-label">Google Photos</div>
+            <div class="bench-you">~3</div>
+            <div class="bench-avg">Area average: <%= shopData.benchmark.areaAvgPhotos %></div>
+            <span class="bench-pct pct-weak">
+              More than only <%= shopData.benchmark.photoPercentile %>% of competitors
+            </span>
+          </div>
+        </div>
+        <div style="padding:16px;background:var(--surface-2);border-radius:var(--radius);border:1.5px solid var(--border);">
+          <div class="label" style="margin-bottom:8px;">Key finding</div>
+          <p style="font-size:13px;color:var(--text-2);line-height:1.7;">Your rating is competitive, but your review volume and photo count are well below the area average. These are high-priority controllable improvements — customers and Google's local algorithm both use them to assess credibility and relevance.</p>
+        </div>
+      </div>
     </div>
+
+    <!-- ── PRIORITY ACTIONS ──────────────────────────────────────── -->
+    <% } else if (shopData.currentSection === 'actions') { %>
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Priority Actions</div>
+          <div class="card-sub">Ordered by impact vs effort — focus on the top items first</div>
+        </div>
+      </div>
+      <div class="card-body" style="padding-top:8px;padding-bottom:8px;">
+        <% shopData.actions.forEach((a, i) => { %>
+        <div class="action-item">
+          <div class="action-icon"><%= a.icon %></div>
+          <div style="flex:1;">
+            <div class="action-title"><%= i + 1 %>. <%= a.title %></div>
+            <div class="action-detail"><%= a.detail %></div>
+            <div class="action-badges">
+              <span class="badge <%= a.impact === 'High' ? 'high-impact' : '' %>"><%= a.impact %> impact</span>
+              <span class="badge"><%= a.effort %> effort</span>
+            </div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- ── STRATEGY ───────────────────────────────────────────────── -->
+    <% } else if (shopData.currentSection === 'strategy') { %>
+
+    <div class="strategy-card" style="flex-direction:column;gap:0;">
+      <div class="label" style="margin-bottom:10px;">Recommended strategy</div>
+      <div class="strat-title" style="font-size:20px;margin-bottom:12px;"><%= shopData.strategyLabel %></div>
+      <div class="strat-desc" style="font-size:15px;"><%= shopData.strategyDesc %></div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">Strategy decision rules</div></div>
+      <div class="card-body">
+        <% const rules = [
+          { condition: 'High external pressure + Low controllable score', strategy: 'Market is the main problem. Consider cost control, loyal customer focus, niche repositioning, or relocation.', match: shopData.externalPressureScore > 65 && shopData.controllableScore < 50 },
+          { condition: 'Low external pressure + Low controllable score',  strategy: 'The market is not the main issue. Fix visibility, reviews, menu, website, and positioning first.', match: shopData.externalPressureScore <= 65 && shopData.controllableScore < 50 },
+          { condition: 'High external pressure + High controllable score', strategy: 'You face both market pressure and internal weaknesses. Focus on the highest-impact controllable fixes first.', match: shopData.externalPressureScore > 65 && shopData.controllableScore >= 50 },
+          { condition: 'Low external pressure + High controllable score',  strategy: 'Situation is relatively healthy. Focus on optimisation and retention.', match: shopData.externalPressureScore <= 65 && shopData.controllableScore >= 50 },
+        ]; %>
+        <% rules.forEach(r => { %>
+        <div class="factor-row" style="align-items:flex-start;gap:16px;padding:14px 0;">
+          <div style="width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;background:<%= r.match ? '#22C55E' : 'var(--border)' %>;"></div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:<%= r.match ? 'var(--text-1)' : 'var(--text-3)' %>;margin-bottom:4px;"><%= r.condition %><%= r.match ? ' ← Your situation' : '' %></div>
+            <div style="font-size:13px;color:var(--text-2);line-height:1.6;"><%= r.strategy %></div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- ── FALLBACK ───────────────────────────────────────────────── -->
     <% } else { %>
-    <div class="dash-header">
-      <div>
-        <h1 class="dash-title"><%= shopData.currentSection.charAt(0).toUpperCase() + shopData.currentSection.slice(1) %></h1>
-        <p class="dash-subtitle">Analysis for <%= shopData.currentSection %></p>
+
+    <div class="card">
+      <div class="stub">
+        <strong><%= shopData.currentSection.charAt(0).toUpperCase() + shopData.currentSection.slice(1) %></strong>
+        This section will be available in the full report. <a href="/sample/overview" style="color:var(--text-1);">Go to overview →</a>
       </div>
     </div>
-    <div class="insight-card" style="max-width: 800px;">
-      <h3 class="insight-title"><%= shopData.currentSection.charAt(0).toUpperCase() + shopData.currentSection.slice(1) %> Analysis</h3>
-      <p style="color: var(--neutral-600);">Detailed analysis for this section will be available soon.</p>
-    </div>
+
     <% } %>
 
   </main>
-
 </div>
 
 <script>
-  const sidebar = document.querySelector('.sidebar');
+  const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
   document.getElementById('burgerBtn').addEventListener('click', () => {
     sidebar.classList.toggle('open');
