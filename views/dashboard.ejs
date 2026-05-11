@@ -20,6 +20,12 @@
       --text-2: #484540;
       --text-3: #8A877F;
 
+      --green:   #1B4D3E;
+      --green-l: #E8F0EB;
+      --green-d: #133529;
+      --sage:    #5F8B6A;
+      --sage-l:  #EDF3EF;
+
       --high:        #B91C1C;
       --high-bg:     #FEF2F2;
       --high-border: #FECACA;
@@ -64,6 +70,7 @@
       font-size: 16px; font-weight: 800; letter-spacing: -.03em;
       color: var(--text-1); text-decoration: none;
     }
+    .app-brand span { color: var(--sage); }
     .app-sep { color: var(--border-2); font-size: 18px; }
     .app-report-label { font-size: 13px; color: var(--text-3); font-weight: 500; }
     .app-nav-right { display: flex; align-items: center; gap: 12px; }
@@ -87,7 +94,7 @@
       text-decoration: none; transition: all .15s; white-space: nowrap; padding: 9px 16px;
     }
     .btn-primary { background: var(--text-1); color: #fff; }
-    .btn-primary:hover { opacity: .88; }
+    .btn-primary:hover { background: #2C2C2C; }
     .btn-outline { background: transparent; color: var(--text-1); border: 1.5px solid var(--border-2); }
     .btn-outline:hover { border-color: var(--text-1); }
 
@@ -129,7 +136,7 @@
       font-size: 13px; font-weight: 500; transition: all .15s;
     }
     .sidebar-menu a:hover  { background: var(--surface-2); color: var(--text-1); }
-    .sidebar-menu a.active { background: var(--text-1); color: #fff; }
+    .sidebar-menu a.active { background: var(--green); color: #fff; }
     .sidebar-menu a.active .nav-icon { filter: invert(1); }
     .sidebar-divider { height: 1px; background: var(--border); margin: 16px 0; }
 
@@ -211,8 +218,8 @@
     .bar-group { display: flex; align-items: center; gap: 8px; }
     .bar  { width: 72px; height: 5px; background: var(--border); border-radius: 99px; overflow: hidden; flex-shrink: 0; }
     .bar-fill { height: 100%; border-radius: 99px; }
-    .bar-fill-normal  { background: var(--text-1); }
-    .bar-fill-ok      { background: #059669; }
+    .bar-fill-normal  { background: var(--sage); }
+    .bar-fill-ok      { background: var(--sage); }
     .bar-fill-weak    { background: #D97706; }
     .bar-fill-poor    { background: #B91C1C; }
     .bar-score { font-size: 12px; font-weight: 700; color: var(--text-1); min-width: 24px; text-align: right; }

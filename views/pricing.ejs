@@ -9,9 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #F8F7F4; --surface: #FFFFFF; --surface-2: #F2F0EB;
-      --border: #E3E1DB; --border-2: #CCCAC3;
-      --text-1: #0E0E0E; --text-2: #484540; --text-3: #8A877F;
+      --bg: #FAF9F6; --surface: #FFFFFF; --surface-2: #F2EFE9;
+      --border: #E4E0D8; --border-2: #CCCAC0;
+      --text-1: #111111; --text-2: #4A4540; --text-3: #8A877F;
+      --green: #1B4D3E; --green-d: #133529;
+      --sage:  #5F8B6A; --sage-l: #EDF3EF;
       --radius: 8px; --radius-lg: 14px;
       --shadow: 0 4px 16px rgba(0,0,0,.07);
     }
@@ -26,7 +28,8 @@
     .nav-links { display: flex; align-items: center; gap: 28px; }
     .nav-link  { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; }
     .nav-link:hover { color: var(--text-1); }
-    .nav-cta   { display: inline-flex; background: var(--text-1); color: #fff; font-size: 13px; font-weight: 600; padding: 9px 18px; border-radius: 6px; text-decoration: none; }
+    .nav-cta   { display: inline-flex; background: var(--green); color: #fff; font-size: 13px; font-weight: 600; padding: 9px 20px; border-radius: 99px; text-decoration: none; transition: background .15s; }
+    .nav-cta:hover { background: var(--green-d); }
     .nav-cta:hover { opacity: .88; }
 
     /* Buttons */
