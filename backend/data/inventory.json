@@ -1,0 +1,70 @@
+{
+  "snapshot_date": "2026-05-23",
+  "snapshot_time": "06:30",
+  "items": [
+    { "ingredient": "salmon_kg",          "label": "Fresh Salmon",         "on_hand": 4.2,  "unit": "kg",  "shelf_life_hours": 48,  "received_date": "2026-05-22", "cost_per_unit": 18.50 },
+    { "ingredient": "mixed_greens_kg",    "label": "Mixed Salad Greens",   "on_hand": 2.8,  "unit": "kg",  "shelf_life_hours": 24,  "received_date": "2026-05-22", "cost_per_unit": 6.20  },
+    { "ingredient": "romaine_kg",         "label": "Romaine Lettuce",      "on_hand": 1.5,  "unit": "kg",  "shelf_life_hours": 48,  "received_date": "2026-05-22", "cost_per_unit": 4.80  },
+    { "ingredient": "potatoes_kg",        "label": "Potatoes",             "on_hand": 18.0, "unit": "kg",  "shelf_life_hours": 720, "received_date": "2026-05-20", "cost_per_unit": 1.20  },
+    { "ingredient": "cream_L",            "label": "Heavy Cream",          "on_hand": 5.5,  "unit": "L",   "shelf_life_hours": 120, "received_date": "2026-05-21", "cost_per_unit": 4.50  },
+    { "ingredient": "butter_kg",          "label": "Butter",               "on_hand": 3.0,  "unit": "kg",  "shelf_life_hours": 336, "received_date": "2026-05-19", "cost_per_unit": 7.80  },
+    { "ingredient": "bread_kg",           "label": "Artisan Bread / Dough","on_hand": 6.0,  "unit": "kg",  "shelf_life_hours": 24,  "received_date": "2026-05-23", "cost_per_unit": 3.40  },
+    { "ingredient": "beef_chuck_kg",      "label": "Beef Chuck",           "on_hand": 3.5,  "unit": "kg",  "shelf_life_hours": 72,  "received_date": "2026-05-22", "cost_per_unit": 14.20 },
+    { "ingredient": "chicken_breast_kg",  "label": "Chicken Breast",       "on_hand": 2.0,  "unit": "kg",  "shelf_life_hours": 48,  "received_date": "2026-05-22", "cost_per_unit": 9.60  },
+    { "ingredient": "mushrooms_kg",       "label": "Mushrooms",            "on_hand": 1.8,  "unit": "kg",  "shelf_life_hours": 72,  "received_date": "2026-05-22", "cost_per_unit": 8.50  },
+    { "ingredient": "parmesan_kg",        "label": "Parmesan Cheese",      "on_hand": 1.2,  "unit": "kg",  "shelf_life_hours": 720, "received_date": "2026-05-18", "cost_per_unit": 22.00 },
+    { "ingredient": "arborio_rice_kg",    "label": "Arborio Rice",         "on_hand": 5.0,  "unit": "kg",  "shelf_life_hours": 8760,"received_date": "2026-05-01", "cost_per_unit": 3.80  },
+    { "ingredient": "eggs_pcs",           "label": "Eggs",                 "on_hand": 48,   "unit": "pcs", "shelf_life_hours": 504, "received_date": "2026-05-20", "cost_per_unit": 0.35  },
+    { "ingredient": "sugar_kg",           "label": "Sugar",                "on_hand": 4.0,  "unit": "kg",  "shelf_life_hours": 8760,"received_date": "2026-04-15", "cost_per_unit": 1.10  },
+    { "ingredient": "chocolate_kg",       "label": "Dark Chocolate",       "on_hand": 1.5,  "unit": "kg",  "shelf_life_hours": 4380,"received_date": "2026-05-10", "cost_per_unit": 12.00 },
+    { "ingredient": "flour_kg",           "label": "Flour",                "on_hand": 8.0,  "unit": "kg",  "shelf_life_hours": 8760,"received_date": "2026-05-05", "cost_per_unit": 1.00  },
+    { "ingredient": "onions_kg",          "label": "Onions",               "on_hand": 5.0,  "unit": "kg",  "shelf_life_hours": 720, "received_date": "2026-05-18", "cost_per_unit": 1.50  },
+    { "ingredient": "carrots_kg",         "label": "Carrots",              "on_hand": 3.0,  "unit": "kg",  "shelf_life_hours": 336, "received_date": "2026-05-20", "cost_per_unit": 1.80  },
+    { "ingredient": "olive_oil_L",        "label": "Olive Oil",            "on_hand": 4.0,  "unit": "L",   "shelf_life_hours": 8760,"received_date": "2026-04-01", "cost_per_unit": 8.00  },
+    { "ingredient": "red_wine_L",         "label": "Cooking Red Wine",     "on_hand": 3.0,  "unit": "L",   "shelf_life_hours": 720, "received_date": "2026-05-15", "cost_per_unit": 6.50  },
+    { "ingredient": "lemon_pcs",          "label": "Lemons",               "on_hand": 20,   "unit": "pcs", "shelf_life_hours": 336, "received_date": "2026-05-21", "cost_per_unit": 0.40  },
+    { "ingredient": "vanilla_pcs",        "label": "Vanilla Pods",         "on_hand": 8,    "unit": "pcs", "shelf_life_hours": 8760,"received_date": "2026-05-01", "cost_per_unit": 3.50  }
+  ],
+  "pre_pickup_snapshot": {
+    "date": "2026-05-22",
+    "time": "17:00",
+    "description": "Initial surplus report generated 1h before closing. Sent to Agent 4 for deflection.",
+    "leftovers": [
+      { "item": "Roast Chicken portions",   "qty": "5.8 kg",  "expires": "2026-05-23T21:00", "type": "prepared", "deflection_channel": "resq" },
+      { "item": "Cream of Potato Soup",      "qty": "9 L",     "expires": "2026-05-23T20:00", "type": "prepared", "deflection_channel": "shelter" },
+      { "item": "Sourdough Rolls",           "qty": "36 pcs",  "expires": "2026-05-23T23:59", "type": "baked",    "deflection_channel": "resq" },
+      { "item": "Mixed Salad (dressed)",     "qty": "1.2 kg",  "expires": "2026-05-23T14:00", "type": "prepared", "deflection_channel": "waste" },
+      { "item": "Grilled Salmon (cooked)",   "qty": "2.1 kg",  "expires": "2026-05-23T18:00", "type": "prepared", "deflection_channel": "resq" }
+    ]
+  },
+  "post_pickup_snapshot": {
+    "date": "2026-05-22",
+    "time": "19:45",
+    "description": "Updated after ResQ pickup window and shelter collection deadline. Shows what was NOT collected.",
+    "pickup_results": [
+      { "item": "Roast Chicken portions",   "original_qty": "5.8 kg",  "picked_up": "4.2 kg",  "remaining": "1.6 kg",  "channel": "resq",    "status": "partial_pickup" },
+      { "item": "Cream of Potato Soup",      "original_qty": "9 L",     "picked_up": "9 L",     "remaining": "0 L",     "channel": "shelter",  "status": "fully_collected" },
+      { "item": "Sourdough Rolls",           "original_qty": "36 pcs",  "picked_up": "28 pcs",  "remaining": "8 pcs",   "channel": "resq",    "status": "partial_pickup" },
+      { "item": "Mixed Salad (dressed)",     "original_qty": "1.2 kg",  "picked_up": "0 kg",    "remaining": "1.2 kg",  "channel": "none",    "status": "expired_before_pickup" },
+      { "item": "Grilled Salmon (cooked)",   "original_qty": "2.1 kg",  "picked_up": "2.1 kg",  "remaining": "0 kg",    "channel": "resq",    "status": "fully_collected" }
+    ],
+    "final_waste": {
+      "total_remaining_kg": 2.8,
+      "total_remaining_value_eur": 22.40,
+      "items_wasted": [
+        { "item": "Roast Chicken portions", "qty": "1.6 kg", "reason": "Not collected from ResQ" },
+        { "item": "Sourdough Rolls", "qty": "8 pcs (~0.6 kg)", "reason": "Not collected from ResQ" },
+        { "item": "Mixed Salad (dressed)", "qty": "1.2 kg", "reason": "Expired before any pickup window" }
+      ]
+    },
+    "feedback_to_agent_1": "2.8 kg still wasted after deflection. Mixed salad expires too early for any rescue. Consider reducing lunch-salad prep by 15%. Roast chicken ResQ portions should be listed earlier (16:00 instead of 17:30)."
+  },
+  "waste_log_last_7_days": [
+    { "date": "2026-05-17", "wasted_kg": 3.2, "wasted_value_eur": 28.40 },
+    { "date": "2026-05-18", "wasted_kg": 6.8, "wasted_value_eur": 61.20 },
+    { "date": "2026-05-19", "wasted_kg": 4.1, "wasted_value_eur": 35.50 },
+    { "date": "2026-05-20", "wasted_kg": 2.9, "wasted_value_eur": 24.10 },
+    { "date": "2026-05-21", "wasted_kg": 5.5, "wasted_value_eur": 48.90 },
+    { "date": "2026-05-22", "wasted_kg": 4.3, "wasted_value_eur": 37.80 }
+  ]
+}

@@ -14,7 +14,7 @@ export default function Nav() {
         </Link>
         <div className="nav-links">
           <Link href="/#how-it-works" className="nav-link">How it works</Link>
-          <Link href="/planner" className="nav-cta">Open Planner</Link>
+          <Link href="/dashboard" className="nav-cta">Open Dashboard</Link>
         </div>
         <button
           className="nav-mobile-toggle"
@@ -30,7 +30,7 @@ export default function Nav() {
       </div>
       <div className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`}>
         <Link href="/#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</Link>
-        <Link href="/planner" onClick={() => setMobileMenuOpen(false)}>Open Planner</Link>
+        <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>Open Dashboard</Link>
       </div>
     </nav>
   );

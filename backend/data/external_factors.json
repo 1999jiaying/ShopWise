@@ -1,0 +1,24 @@
+{
+  "date": "2026-05-23",
+  "day_of_week": "Saturday",
+  "weather": {
+    "condition": "rainy",
+    "temperature_c": 12,
+    "wind_kmh": 25,
+    "precipitation_mm": 8.5,
+    "forecast_confidence": 0.85
+  },
+  "holidays": {
+    "is_public_holiday": false,
+    "is_school_holiday": false,
+    "nearby_events": [],
+    "notes": "Regular Saturday — historically 15% above weekday average"
+  },
+  "historical_patterns": {
+    "rainy_saturday_avg_covers": 98,
+    "sunny_saturday_avg_covers": 135,
+    "normal_saturday_avg_covers": 120,
+    "rainy_day_reduction_pct": 18,
+    "impact_summary": "Rain + wind forecast reduces expected covers from ~120 to ~98. Recommend trimming perishable orders by 15-20%."
+  }
+}

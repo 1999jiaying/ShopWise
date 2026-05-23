@@ -1,0 +1,67 @@
+{
+  "suppliers": [
+    {
+      "id": "makinen_tukku",
+      "name": "Mäkinen Tukku",
+      "delivery_schedule": "next-day 07:00",
+      "minimum_order_eur": 40,
+      "notes": "General wholesale, good for proteins",
+      "catalog": {
+        "chicken_breast_kg": { "price": 5.20, "available": true },
+        "whole_milk_L":      { "price": 0.95, "available": true },
+        "cream_L":           { "price": 2.10, "available": true },
+        "butter_kg":         { "price": 7.50, "available": true },
+        "salad_greens_kg":   { "price": null,  "available": false },
+        "potatoes_kg":       { "price": 0.60, "available": true },
+        "carrots_kg":        { "price": 0.90, "available": true },
+        "bread_loaves_u":    { "price": 0.40, "available": true },
+        "pasta_kg":          { "price": 1.80, "available": true },
+        "rice_kg":           { "price": 1.50, "available": true },
+        "salmon_kg":         { "price": 9.20, "available": true },
+        "beef_chuck_kg":     { "price": 13.50, "available": true }
+      }
+    },
+    {
+      "id": "tukku_vihannes",
+      "name": "Tukku Vihannes",
+      "delivery_schedule": "next-day 06:30",
+      "minimum_order_eur": 50,
+      "notes": "Specialty: dairy and fresh produce, best prices on vegetables",
+      "catalog": {
+        "chicken_breast_kg": { "price": 5.80, "available": true },
+        "whole_milk_L":      { "price": 0.85, "available": true },
+        "cream_L":           { "price": 1.95, "available": true },
+        "butter_kg":         { "price": 7.20, "available": true },
+        "salad_greens_kg":   { "price": 2.40, "available": true },
+        "potatoes_kg":       { "price": 0.55, "available": true },
+        "carrots_kg":        { "price": 0.85, "available": true },
+        "bread_loaves_u":    { "price": null,  "available": false },
+        "pasta_kg":          { "price": null,  "available": false },
+        "rice_kg":           { "price": null,  "available": false },
+        "salmon_kg":         { "price": 9.00, "available": true },
+        "beef_chuck_kg":     { "price": 14.00, "available": true }
+      }
+    },
+    {
+      "id": "nordic_wholesale",
+      "name": "Nordic Wholesale",
+      "delivery_schedule": "next-day 08:00",
+      "minimum_order_eur": 60,
+      "notes": "Best for dry goods, proteins, and imported items",
+      "catalog": {
+        "chicken_breast_kg": { "price": 5.50, "available": true },
+        "whole_milk_L":      { "price": 0.90, "available": true },
+        "cream_L":           { "price": 2.00, "available": true },
+        "butter_kg":         { "price": 7.80, "available": true },
+        "salad_greens_kg":   { "price": 2.65, "available": true },
+        "potatoes_kg":       { "price": 0.62, "available": true },
+        "carrots_kg":        { "price": null,  "available": false },
+        "bread_loaves_u":    { "price": 0.38, "available": true },
+        "pasta_kg":          { "price": 1.75, "available": true },
+        "rice_kg":           { "price": 1.45, "available": true },
+        "salmon_kg":         { "price": 8.50, "available": true },
+        "beef_chuck_kg":     { "price": 13.80, "available": true }
+      }
+    }
+  ]
+}

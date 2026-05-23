@@ -1,6 +1,12 @@
 import type { Metadata } from 'next';
-import { Newsreader, IBM_Plex_Mono } from 'next/font/google';
+import { Inter, Newsreader, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
 
 const newsreader = Newsreader({
   subsets: ['latin'],
@@ -19,7 +25,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: 'Sesonki.AI — Anti-Food Waste Planner',
-  description: 'AI-powered food ops for restaurants. Three agents plan your day: order right, buy cheapest, rescue every gram of surplus.',
+  description: 'AI-powered food ops for restaurants. Four agents plan your day: order right, buy cheapest, analyse waste, rescue every gram of surplus.',
 };
 
 export default function RootLayout({
@@ -28,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${newsreader.variable} ${ibmPlexMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}>
       <body>
         {children}
       </body>

@@ -1,0 +1,32 @@
+{
+  "restaurant_name": "Harbour Bistro",
+  "city": "Helsinki",
+
+  "scheduling": {
+    "procurement_trigger": {
+      "mode": "manual",
+      "auto_interval_days": 1,
+      "auto_time": "06:00",
+      "next_run": null,
+      "description": "How often Agent 1 + 2 run. Options: manual, daily (1), every_2_days (2), weekly (7)"
+    },
+    "analyst_trigger_time": "17:00",
+    "analyst_trigger_description": "Agent 3 generates initial waste report at this time (e.g. 1h before closing)",
+    "pickup_deadline": "19:30",
+    "pickup_deadline_description": "After this time, Agent 3 updates the waste report with what was NOT picked up",
+    "post_pickup_feedback_delay_minutes": 15,
+    "post_pickup_description": "Minutes after pickup_deadline to wait before generating final report and feeding back to Agent 1"
+  },
+
+  "supplier_config": {
+    "source": "user_provided",
+    "source_options": ["user_provided", "auto_fetch"],
+    "user_provided_file": "suppliers.json",
+    "auto_fetch_wholesalers": [
+      { "name": "Metro Cash & Carry", "api_url": null, "scrape_url": "https://www.metro.fi/catalog", "enabled": true },
+      { "name": "Kesko Food Service", "api_url": null, "scrape_url": "https://www.kesko.fi/foodservice", "enabled": false },
+      { "name": "Wolt Market B2B", "api_url": "https://api.wolt.com/b2b/catalog", "scrape_url": null, "enabled": false }
+    ],
+    "description": "user_provided = use suppliers.json manually maintained by owner. auto_fetch = scrape/API from wholesaler sites."
+  }
+}
