@@ -4,12 +4,12 @@ import { useState } from 'react';
 import AppShell from '@/components/AppShell';
 import LogWasteModal from '@/components/LogWasteModal';
 import PageHeader from '@/components/PageHeader';
+import { useWaste } from '@/context/WasteContext';
 
-const wasteItems = [
-  {
-    name: 'Wrong order',
-    weight: '2 kg',
-    cost: '€9,00',
+type VisualConfig = { icon: React.ReactNode; chartPath: string };
+
+const WASTE_VISUAL: Record<string, VisualConfig> = {
+  'Wrong order': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 12h18M3 12l4-4M3 12l4 4" />
@@ -17,10 +17,7 @@ const wasteItems = [
     ),
     chartPath: 'M0 38 C40 42, 80 34, 120 40 C160 46, 200 36, 240 42 C280 48, 320 38, 360 44 C400 50, 440 40, 480 44',
   },
-  {
-    name: 'Plate waste',
-    weight: '2 kg',
-    cost: '€8,00',
+  'Plate waste': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="9" />
@@ -29,10 +26,7 @@ const wasteItems = [
     ),
     chartPath: 'M0 32 C40 38, 80 28, 120 36 C160 44, 200 30, 240 38 C280 46, 320 32, 360 40 C400 48, 440 34, 480 38',
   },
-  {
-    name: 'Over-prep',
-    weight: '1 kg',
-    cost: '€4,00',
+  'Over-prep': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 8h12M6 8c0-2 1-4 6-4s6 2 6 4M6 8l1 10h10L18 8" />
@@ -41,10 +35,7 @@ const wasteItems = [
     ),
     chartPath: 'M0 44 C40 40, 80 46, 120 42 C160 38, 200 44, 240 40 C280 36, 320 42, 360 38 C400 34, 440 40, 480 36',
   },
-  {
-    name: 'Spoilage',
-    weight: '0 kg',
-    cost: '€0,00',
+  'Spoilage': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="9" />
@@ -53,7 +44,17 @@ const wasteItems = [
     ),
     chartPath: 'M0 50 C40 48, 80 50, 120 48 C160 46, 200 50, 240 48 C280 46, 320 48, 360 46 C400 44, 440 46, 480 44',
   },
-];
+};
+
+const DEFAULT_VISUAL: VisualConfig = {
+  icon: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v4l3 3" />
+    </svg>
+  ),
+  chartPath: 'M0 44 C40 40, 80 46, 120 42 C160 38, 200 44, 240 40 C280 36, 320 42, 360 38 C400 34, 440 40, 480 36',
+};
 
 function SparkLine({ path }: { path: string }) {
   return (
@@ -86,13 +87,16 @@ const recommendations = [
 export default function WasteTypePage() {
   const [expanded, setExpanded] = useState<string | null>('Wrong order');
   const [showLogWaste, setShowLogWaste] = useState(false);
+  const { wasteTypeItems, logWaste } = useWaste();
+
+  const items = wasteTypeItems.map(w => ({ ...w, ...(WASTE_VISUAL[w.name] ?? DEFAULT_VISUAL) }));
 
   return (
     <AppShell title="Dashboard">
       {showLogWaste && (
         <LogWasteModal
           onClose={() => setShowLogWaste(false)}
-          onSubmit={(data) => console.log('Waste logged:', data)}
+          onSubmit={logWaste}
         />
       )}
 
@@ -108,7 +112,7 @@ export default function WasteTypePage() {
         </div>
 
         <div className="waste-type-rows">
-          {wasteItems.map((item) => {
+          {items.map((item) => {
             const isExpanded = expanded === item.name;
             return (
               <div key={item.name} className="waste-type-row">

@@ -2,33 +2,10 @@
 
 import { useState } from 'react';
 import AppShell from '@/components/AppShell';
+import { useWaste } from '@/context/WasteContext';
 
-type StockLevel = 'red' | 'green' | 'yellow';
 type Step = 'give-away' | 'human-input' | 'finished';
 type Tab = 'all' | 'ingredients' | 'ready-food';
-type Category = 'ingredient' | 'ready-food';
-
-interface SurplusItem {
-  id: number;
-  name: string;
-  surplusQty: string;
-  giveQty: string;
-  expiresIn: string;
-  checked: boolean;
-  stockLevel: StockLevel;
-  pickedUp: number;
-  leftover: number;
-  category: Category;
-}
-
-const INITIAL_ITEMS: SurplusItem[] = [
-  { id: 1, name: 'Croissant',      surplusQty: '10 pcs',  giveQty: '10 pcs',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 0.5, leftover: 0,   category: 'ingredient' },
-  { id: 2, name: 'Dairy',       surplusQty: '1 L',     giveQty: '1 L',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 1,   leftover: 0,   category: 'ingredient' },
-  { id: 3, name: 'Ciabatta Bread',       surplusQty: '2 pcs', giveQty: '2 pcs',expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ingredient' },
-  { id: 4, name: 'Sandwich',    surplusQty: '1 pcs',   giveQty: '1 pcs',  expiresIn: 'in 5 days', checked: true, stockLevel: 'green',  pickedUp: 1,   leftover: 0,   category: 'ready-food' },
-  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs',   giveQty: '2 pcs',  expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ready-food' },
-  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg',  giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: true, stockLevel: 'red',    pickedUp: 0,   leftover: 0.5, category: 'ready-food' },
-];
 
 const CheckIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -45,7 +22,7 @@ const PencilIcon = () => (
 export default function DistributePage() {
   const [step, setStep] = useState<Step>('give-away');
   const [tab, setTab] = useState<Tab>('all');
-  const [items, setItems] = useState<SurplusItem[]>(INITIAL_ITEMS);
+  const { surplusItems: items, setSurplusItems: setItems } = useWaste();
 
   function toggleCheck(id: number) {
     setItems(prev => prev.map(it => it.id === id ? { ...it, checked: !it.checked } : it));

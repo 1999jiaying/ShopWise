@@ -4,12 +4,12 @@ import { useState } from 'react';
 import AppShell from '@/components/AppShell';
 import LogWasteModal from '@/components/LogWasteModal';
 import PageHeader from '@/components/PageHeader';
+import { useWaste } from '@/context/WasteContext';
 
-const foodItems = [
-  {
-    name: 'Salmon',
-    weight: '2 kg',
-    cost: '€16,00',
+type VisualConfig = { icon: React.ReactNode; chartPath: string };
+
+const FOOD_VISUAL: Record<string, VisualConfig> = {
+  'Salmon': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 12c-4-4-8-6-12-5C4 8 2 12 2 12s2 4 8 5c4 1 8-1 12-5z" />
@@ -19,10 +19,7 @@ const foodItems = [
     ),
     chartPath: 'M0 40 C40 38, 80 42, 120 39 C160 36, 200 40, 240 38 C280 36, 320 40, 360 38 C400 36, 440 39, 480 38',
   },
-  {
-    name: 'Salad greens',
-    weight: '1.5 kg',
-    cost: '€3,00',
+  'Salad greens': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22V12" />
@@ -32,10 +29,7 @@ const foodItems = [
     ),
     chartPath: 'M0 35 C40 30, 80 40, 120 32 C160 24, 200 38, 240 30 C280 22, 320 36, 360 28 C400 20, 440 34, 480 30',
   },
-  {
-    name: 'Bread',
-    weight: '3 kg',
-    cost: '€1,20',
+  'Bread': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="10" width="20" height="10" rx="3" />
@@ -44,7 +38,17 @@ const foodItems = [
     ),
     chartPath: 'M0 30 C40 40, 80 25, 120 38 C160 48, 200 30, 240 42 C280 52, 320 35, 360 45 C400 52, 440 38, 480 44',
   },
-];
+};
+
+const DEFAULT_VISUAL: VisualConfig = {
+  icon: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 8v4l3 3" />
+    </svg>
+  ),
+  chartPath: 'M0 40 C40 38, 80 42, 120 39 C160 36, 200 40, 240 38 C280 36, 320 40, 360 38 C400 36, 440 39, 480 38',
+};
 
 function SparkLine({ path }: { path: string }) {
   return (
@@ -77,13 +81,16 @@ const recommendations = [
 export default function FoodWastePage() {
   const [expanded, setExpanded] = useState<string | null>('Salmon');
   const [showLogWaste, setShowLogWaste] = useState(false);
+  const { foodItems, logWaste } = useWaste();
+
+  const items = foodItems.map(f => ({ ...f, ...(FOOD_VISUAL[f.name] ?? DEFAULT_VISUAL) }));
 
   return (
     <AppShell title="Dashboard">
       {showLogWaste && (
         <LogWasteModal
           onClose={() => setShowLogWaste(false)}
-          onSubmit={(data) => console.log('Waste logged:', data)}
+          onSubmit={logWaste}
         />
       )}
 
@@ -99,7 +106,7 @@ export default function FoodWastePage() {
         </div>
 
         <div className="food-type-rows">
-          {foodItems.map((item) => {
+          {items.map((item) => {
             const isExpanded = expanded === item.name;
             return (
               <div key={item.name} className="food-type-row">

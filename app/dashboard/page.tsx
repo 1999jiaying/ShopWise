@@ -6,6 +6,7 @@ import AppShell from '@/components/AppShell';
 import LogWasteModal from '@/components/LogWasteModal';
 import MetricsCard from '@/components/MetricsCard';
 import PageHeader from '@/components/PageHeader';
+import { useWaste } from '@/context/WasteContext';
 
 const metrics = [
   {
@@ -42,22 +43,6 @@ const metrics = [
   },
 ];
 
-const byFoodType = [
-  { name: 'Croissant', weight: '1kg', cost: '€16.00' },
-  { name: 'Salad greens', weight: '1.5kg', cost: '€3.00' },
-  { name: 'Ciabatta Bread', weight: '1kg', cost: '€10.00' },
-];
-
-const INITIAL_BY_WASTE_TYPE = [
-  { name: 'Wrong order', weight: '2kg', cost: '€9.00' },
-  { name: 'Plate waste', weight: '2kg', cost: '€8.00' },
-  { name: 'Over-prep', weight: '1kg', cost: '€4.00' },
-];
-
-function parseKg(str: string): number {
-  const match = str.match(/[\d.]+/);
-  return match ? parseFloat(match[0]) : 0;
-}
 
 const recommendations = [
   'Reduce salmon portions by 15% — current plate waste data shows 30% of salmon dishes are returned with significant leftovers.',
@@ -239,28 +224,14 @@ function DonutGauge() {
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<string>('All');
   const [showLogWaste, setShowLogWaste] = useState(false);
-  const [byWasteType, setByWasteType] = useState(INITIAL_BY_WASTE_TYPE);
-
-  function handleLogWaste(data: { item: string; quantity: string; wasteType: string }) {
-    const incoming = parseKg(data.quantity);
-    setByWasteType((prev) => {
-      const idx = prev.findIndex((w) => w.name === data.wasteType);
-      if (idx !== -1) {
-        const updated = [...prev];
-        const total = +(parseKg(updated[idx].weight) + incoming).toFixed(2);
-        updated[idx] = { ...updated[idx], weight: `${total}kg` };
-        return updated;
-      }
-      return [...prev, { name: data.wasteType, weight: `${incoming}kg`, cost: '' }];
-    });
-  }
+  const { foodItems, wasteTypeItems, logWaste } = useWaste();
 
   return (
     <AppShell title="Dashboard">
       {showLogWaste && (
         <LogWasteModal
           onClose={() => setShowLogWaste(false)}
-          onSubmit={handleLogWaste}
+          onSubmit={logWaste}
         />
       )}
       <PageHeader
@@ -291,7 +262,7 @@ export default function DashboardPage() {
           </div>
           <div className="breakdown-card-divider" />
           <div className="breakdown-card-items">
-            {byFoodType.map((f) => (
+            {foodItems.map((f) => (
               <div key={f.name} className="breakdown-card-item">
                 <div>
                   <div className="breakdown-item-label">{f.name}</div>
@@ -311,7 +282,7 @@ export default function DashboardPage() {
           </div>
           <div className="breakdown-card-divider" />
           <div className="breakdown-card-items">
-            {byWasteType.map((w) => (
+            {wasteTypeItems.map((w) => (
               <div key={w.name} className="breakdown-card-item">
                 <div>
                   <div className="breakdown-item-label">{w.name}</div>

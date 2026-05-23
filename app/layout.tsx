@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Newsreader, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
+import { WasteProvider } from '@/context/WasteContext';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -36,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${newsreader.variable} ${ibmPlexMono.variable}`}>
       <body>
-        {children}
+        <WasteProvider>{children}</WasteProvider>
       </body>
     </html>
   );
