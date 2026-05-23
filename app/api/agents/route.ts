@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        restaurant_name: body.restaurant_name || 'Harbour Bistro',
+        restaurant_name: body.restaurant_name || 'Linhs Bakery',
         city: body.city || 'Helsinki',
         context: body.context || null,
       }),

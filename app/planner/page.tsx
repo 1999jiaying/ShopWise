@@ -112,17 +112,17 @@ const FALLBACK_DEFLECTION: DeflectionData = {
     { item: 'Sourdough Rolls', qty: '36 pcs', expires: '2026-05-23T23:59', channel: 'resq', reason: 'Baked goods sell well on ResQ' },
   ],
   resq_listing: {
-    title: "Chef's Surprise Box — Harbour Bistro",
+    title: "Chef's Surprise Box — Linh's Bakery",
     description: 'Roast chicken + fresh sourdough rolls. A full meal at 50% off.',
     original_price_eur: 9.90, discounted_price_eur: 4.90, portions: 16, pickup_window: '17:30–19:00',
   },
   shelter_message: {
-    subject: 'Food donation available — Harbour Bistro',
-    body: "Hello,\n\nWe have approximately 9L of cream of potato soup available for donation today. Food-safe until 20:00. Pickup window 18:00–19:30 at the kitchen side entrance.\n\nPlease confirm if you can collect.\n\nBest regards,\nHarbour Bistro via Sesonki.AI",
+    subject: 'Food donation available — Linhs Bakery',
+    body: "Hello,\n\nWe have approximately 9L of cream of potato soup available for donation today. Food-safe until 20:00. Pickup window 18:00–19:30 at the kitchen side entrance.\n\nPlease confirm if you can collect.\n\nBest regards,\nLinh's Bakery via .GATHER",
     food_items: '9L cream of potato soup',
     pickup_deadline: '19:30',
   },
-  sms_summary: 'Sesonki.AI: 16 ResQ portions listed (pickup 17:30-19:00). Shelter contacted for 9L soup (pickup 18:00-19:30). Tap to view.',
+  sms_summary: 'GATHER: 16 ResQ portions listed (pickup 17:30-19:00). Shelter contacted for 9L soup (pickup 18:00-19:30). Tap to view.',
 };
 
 const FALLBACK_POST_PICKUP: PostPickupData = {
@@ -434,7 +434,7 @@ export default function PlannerPage() {
   const [postPickup,     setPostPickup]     = useState<PostPickupData | null>(null);
   const [loadingPostPickup, setLoadingPostPickup] = useState(false);
 
-  const kitchenName = restaurantName.trim() || 'Harbour Bistro';
+  const kitchenName = restaurantName.trim() || 'Linhs Bakery';
   const wasteSaved  = (orderApproved ? 9.4 : 0) + (deflectApproved ? 21.2 : 0);
   const moneySaved  = (purchaseApproved ? 18.7 : 0) + (orderApproved ? 41 : 0) + (deflectApproved ? 88 : 0);
 
@@ -583,7 +583,7 @@ export default function PlannerPage() {
                 boxShadow: `0 6px 16px -6px ${FOREST}`,
               }}>🍃</div>
               <span style={{ fontSize: 27, fontWeight: 700, letterSpacing: '-0.02em' }}>
-                Sesonki<span style={{ color: PINE }}>.AI</span>
+                GATHER<span style={{ color: PINE }}>.AI</span>
               </span>
             </div>
             <p style={{ margin: '8px 0 0', fontSize: 14.5, color: 'rgba(42,34,28,0.6)', maxWidth: 520 }}>
@@ -613,7 +613,7 @@ export default function PlannerPage() {
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
               <div style={{ flex: '1 1 180px' }}>
                 <label style={labelStyle}>Restaurant</label>
-                <input type="text" placeholder="Harbour Bistro" value={restaurantName}
+                <input type="text" placeholder="Linh's Bakery" value={restaurantName}
                   onChange={(e) => setRestaurantName(e.target.value)} style={inputStyle} />
               </div>
               <div style={{ flex: '1 1 140px' }}>

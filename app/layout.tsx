@@ -24,7 +24,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Sesonki.AI — Anti-Food Waste Planner',
+  title: 'GATHER — Anti-Food Waste Planner',
   description: 'AI-powered food ops for restaurants. Four agents plan your day: order right, buy cheapest, analyse waste, rescue every gram of surplus.',
 };
 

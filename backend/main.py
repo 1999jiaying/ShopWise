@@ -56,7 +56,7 @@ DATA_DIR = Path(__file__).parent / "data"
 # ── Models ────────────────────────────────────────────────────
 
 class AgentRequest(BaseModel):
-    restaurant_name: str = "Harbour Bistro"
+    restaurant_name: str = "Linh's Bakery"
     city: str = "Helsinki"
     context: str | None = None
 
@@ -230,9 +230,9 @@ MOCK_RESULTS = {
         },
         "shelter_message": {
             "subject": "Food donation available — Linh's Bakery",
-            "body": "Hello,\n\nWe have dairy products (1L) available for donation today. Food-safe for 5 more days.\n\nPlease confirm if you can collect.\n\nBest regards,\nLinh's Bakery via Sesonki.AI",
+            "body": "Hello,\n\nWe have dairy products (1L) available for donation today. Food-safe for 5 more days.\n\nPlease confirm if you can collect.\n\nBest regards,\nLinh's Bakery via GATHER",
         },
-        "sms_summary": "Sesonki.AI: 8 ResQ portions listed (pickup 17:30-19:00). Shelter contacted for dairy donation. Tap to view.",
+        "sms_summary": "GATHER: 8 ResQ portions listed (pickup 17:30-19:00). Shelter contacted for dairy donation. Tap to view.",
     },
     "analyst_phase2": {
         "deflection_summary": {

@@ -10,7 +10,7 @@ export default function Nav() {
     <nav>
       <div className="container nav-inner">
         <Link href="/" className="nav-brand">
-          Sesonki<span>.AI</span>
+          GATHER
         </Link>
         <div className="nav-links">
           <Link href="/#how-it-works" className="nav-link">How it works</Link>

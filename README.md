@@ -1,4 +1,4 @@
-# Sesonki.AI
+# GATHER
 
 AI-powered food-ops engine that helps restaurants **reduce waste, save money, and rescue surplus** through 4 independent agents built with **CrewAI** and a **Next.js** dashboard.
 

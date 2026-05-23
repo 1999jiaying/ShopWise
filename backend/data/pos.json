@@ -1,6 +1,6 @@
 {
   "meta": { "api": "pos", "version": "demo-v0.2", "description": "POS sales records. Agent 1 reads this to calculate ingredient consumption. Covers the previous full reporting period (Mon 18 May – Sun 24 May). Each record is one day of item sales." },
-  "restaurant": "Sesonki Bakery",
+  "restaurant": "Linh's Bakery",
   "currency": "EUR",
   "unit_prices": {
     "Sourdough loaf":       7.50,

@@ -55,12 +55,12 @@ export default function Sidebar() {
       <div className="sidebar-brand">
         <div className="sidebar-logo">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-            <circle cx="14" cy="14" r="14" fill="#22C55E" />
+            <circle cx="14" cy="14" r="14" fill="var(--forest-mid)" />
             <path d="M8 14c0-4 3-7 6-7s4 2 4 4c0 3-2 5-5 6-1 .3-2 .5-3 .5" stroke="#fff" strokeWidth="2" strokeLinecap="round" fill="none" />
           </svg>
         </div>
         <div>
-          <div className="sidebar-title">Sesonki.AI</div>
+          <div className="sidebar-title">GATHER</div>
           <div className="sidebar-subtitle">Linh&apos;s Bakery · Helsinki</div>
         </div>
       </div>
@@ -85,6 +85,14 @@ export default function Sidebar() {
           );
         })}
       </nav>
+
+      <div className="sidebar-date">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="1" y="2" width="12" height="11" rx="2" />
+          <path d="M1 6h12M5 1v2M9 1v2" />
+        </svg>
+        <span>May 2026</span>
+      </div>
     </aside>
   );
 }

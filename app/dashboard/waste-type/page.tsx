@@ -143,27 +143,13 @@ export default function WasteTypePage() {
       </div>
 
       {/* Recommendations */}
-      <div className="app-card-green" style={{ display: 'flex', gap: 24 }}>
-        <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
-          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {recommendations.map((r, i) => (
-              <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
-            ))}
-          </ol>
-        </div>
-        <div style={{ width: 140, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <svg width="120" height="110" viewBox="0 0 120 110" fill="none">
-            <ellipse cx="60" cy="100" rx="40" ry="6" fill="var(--green-100)" />
-            <rect x="20" y="55" width="55" height="38" rx="6" fill="var(--gray-200)" />
-            <rect x="24" y="59" width="47" height="28" rx="3" fill="#fff" />
-            <circle cx="85" cy="60" r="22" fill="var(--green-600)" />
-            <circle cx="78" cy="60" r="5" fill="#fff" />
-            <circle cx="85" cy="60" r="5" fill="#fff" />
-            <circle cx="92" cy="60" r="5" fill="#fff" />
-            <rect x="36" y="93" width="22" height="7" rx="2" fill="var(--gray-300)" />
-          </svg>
-        </div>
+      <div className="app-card-green">
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
+        <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {recommendations.map((r, i) => (
+            <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
+          ))}
+        </ol>
       </div>
     </AppShell>
   );

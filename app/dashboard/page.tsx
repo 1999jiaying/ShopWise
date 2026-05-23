@@ -331,25 +331,13 @@ export default function DashboardPage() {
       </div>
 
       {/* Recommendations */}
-      <div className="app-card-green" style={{ marginBottom: 24, display: 'flex', gap: 24 }}>
-        <div style={{ flex: 1 }}>
-          <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
-          <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
-            {recommendations.map((r, i) => (
-              <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
-            ))}
-          </ol>
-        </div>
-        <div style={{ width: 180, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-            <circle cx="60" cy="60" r="50" fill="var(--green-100)" />
-            <path d="M40 70 L55 50 L65 60 L80 40" stroke="var(--green-500)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            <circle cx="40" cy="70" r="4" fill="var(--green-500)" />
-            <circle cx="55" cy="50" r="4" fill="var(--green-500)" />
-            <circle cx="65" cy="60" r="4" fill="var(--green-500)" />
-            <circle cx="80" cy="40" r="4" fill="var(--green-500)" />
-          </svg>
-        </div>
+      <div className="app-card-green" style={{ marginBottom: 24 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
+        <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {recommendations.map((r, i) => (
+            <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
+          ))}
+        </ol>
       </div>
 
       {/* Distribute food status */}
