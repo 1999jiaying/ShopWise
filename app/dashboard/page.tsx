@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AppShell from '@/components/AppShell';
 import LogWasteModal from '@/components/LogWasteModal';
@@ -172,7 +172,7 @@ const distributeItems: {
   },
 ];
 
-function TrendLine() {
+function TrendLine({ delay = 0 }: { delay?: number }) {
   return (
     <svg width="48" height="20" viewBox="0 0 48 20" fill="none">
       <path
@@ -181,12 +181,21 @@ function TrendLine() {
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
+        strokeDasharray="60"
+        strokeDashoffset="60"
+        style={{ animation: `draw-trend 0.8s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms forwards` }}
       />
     </svg>
   );
 }
 
 function DonutGauge() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
+  }, []);
+
   const size = 180;
   const cx = size / 2;
   const cy = size / 2;
@@ -194,6 +203,7 @@ function DonutGauge() {
   const stroke = 18;
   const circumference = Math.PI * r;
   const eatenFraction = 0.8;
+  const dashLength = mounted ? circumference * eatenFraction : 0;
 
   return (
     <svg width={size} height={size / 2 + 30} viewBox={`0 0 ${size} ${size / 2 + 30}`}>
@@ -210,7 +220,8 @@ function DonutGauge() {
         stroke="var(--green-500)"
         strokeWidth={stroke}
         strokeLinecap="round"
-        strokeDasharray={`${circumference * eatenFraction} ${circumference}`}
+        strokeDasharray={`${dashLength} ${circumference}`}
+        style={{ transition: 'stroke-dasharray 1.2s cubic-bezier(0.4, 0, 0.2, 1)' }}
       />
       <text x={cx} y={cy - 10} textAnchor="middle" fontSize="28" fontWeight="700" fill="var(--gray-900)">
         2:8
@@ -258,7 +269,7 @@ export default function DashboardPage() {
       />
 
       {/* Metric Cards */}
-      <div className="metric-grid" style={{ marginBottom: 24 }}>
+      <div className="metric-grid metric-grid-wrap">
         {metrics.map((m) => (
           <MetricsCard
             key={m.label}
@@ -271,24 +282,20 @@ export default function DashboardPage() {
       </div>
 
       {/* 3-column breakdown section */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
+      <div className="breakdown-grid">
         {/* By Food Type */}
         <div className="app-card">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
-              BY FOOD TYPE
-            </h3>
-            <Link href="/dashboard/food-waste" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
-              View all →
-            </Link>
+          <div className="breakdown-card-header">
+            <h3 className="section-label">BY FOOD TYPE</h3>
+            <Link href="/dashboard/food-waste" className="card-link">View all →</Link>
           </div>
-          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="breakdown-card-divider" />
+          <div className="breakdown-card-items">
             {byFoodType.map((f) => (
-              <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div key={f.name} className="breakdown-card-item">
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--gray-800)' }}>{f.name}</div>
-                  <div style={{ fontSize: 13, color: 'var(--gray-400)' }}>{f.weight} &middot; {f.cost}</div>
+                  <div className="breakdown-item-label">{f.name}</div>
+                  <div className="breakdown-item-sub">{f.weight} &middot; {f.cost}</div>
                 </div>
                 <TrendLine />
               </div>
@@ -298,21 +305,17 @@ export default function DashboardPage() {
 
         {/* By Waste Type */}
         <div className="app-card" id="by-waste-type">
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
-              BY WASTE TYPE
-            </h3>
-            <Link href="/dashboard/waste-type" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
-              View all →
-            </Link>
+          <div className="breakdown-card-header">
+            <h3 className="section-label">BY WASTE TYPE</h3>
+            <Link href="/dashboard/waste-type" className="card-link">View all →</Link>
           </div>
-          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div className="breakdown-card-divider" />
+          <div className="breakdown-card-items">
             {byWasteType.map((w) => (
-              <div key={w.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div key={w.name} className="breakdown-card-item">
                 <div>
-                  <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--gray-800)' }}>{w.name}</div>
-                  <div style={{ fontSize: 13, color: 'var(--gray-400)' }}>{w.weight} &middot; {w.cost}</div>
+                  <div className="breakdown-item-label">{w.name}</div>
+                  <div className="breakdown-item-sub">{w.weight} &middot; {w.cost}</div>
                 </div>
                 <TrendLine />
               </div>
@@ -321,30 +324,26 @@ export default function DashboardPage() {
         </div>
 
         {/* Donut gauge */}
-        <div className="app-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <div className="app-card donut-card-body">
           <DonutGauge />
-          <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--gray-800)', marginTop: 12 }}>
-            80% of food produced was eaten this week
-          </p>
+          <p className="donut-card-caption">80% of food produced was eaten this week</p>
           <span className="app-badge app-badge-green" style={{ marginTop: 8 }}>+4% vs last week</span>
         </div>
       </div>
 
       {/* Recommendations */}
-      <div className="app-card-green" style={{ marginBottom: 24 }}>
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
-        <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div className="app-card-green recommendations-card">
+        <h3 className="section-title" style={{ color: 'var(--green-700)' }}>Recommendations</h3>
+        <ol className="recommendations-list">
           {recommendations.map((r, i) => (
-            <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
+            <li key={i} className="body-text">{r}</li>
           ))}
         </ol>
       </div>
 
       {/* Distribute food status */}
       <div className="app-card">
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--gray-900)', marginBottom: 16 }}>
-          Distribute food status for today
-        </h3>
+        <h3 className="distribute-status-header">Distribute food status for today</h3>
 
         <div className="app-tabs">
           {tabs.map((tab) => (
@@ -358,6 +357,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
+        <div className="app-table-wrap">
         <table className="app-table">
           <thead>
             <tr>
@@ -378,25 +378,26 @@ export default function DashboardPage() {
               })
               .map((row) => (
               <tr key={row.item}>
-                <td style={{ fontWeight: 600 }}>{row.item}</td>
+                <td className="td-name">{row.item}</td>
                 <td>
                   <span className={`stock-dot ${row.expiresColor}`}>{row.expires}</span>
                 </td>
                 <td>{row.originalPrice}</td>
                 <td>{row.sellPrice}</td>
-                <td style={{ color: 'var(--green-600)', fontWeight: 600 }}>{row.moneySaved}</td>
+                <td className="td-green">{row.moneySaved}</td>
                 <td>
                   <span className={`app-badge app-badge-${row.statusType}`} style={{ marginRight: 6 }}>
                     {row.status}
                   </span>
                   {row.platform && (
-                    <span style={{ fontSize: 12, color: 'var(--gray-400)' }}>{row.platform}</span>
+                    <span className="text-muted">{row.platform}</span>
                   )}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </AppShell>
   );

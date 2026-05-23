@@ -47,12 +47,22 @@ const NAV_ITEMS = [
   },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+export default function Sidebar({ open, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="app-sidebar">
-      <div className="sidebar-brand">
+    <aside className={`app-sidebar${open ? ' mobile-open' : ''}`}>
+      <button className="sidebar-close" onClick={onClose} aria-label="Close menu">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+          <path d="M3 3l12 12M15 3L3 15" />
+        </svg>
+      </button>
+      <Link href="/dashboard" className="sidebar-brand">
         <div className="sidebar-logo">
           <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
             <circle cx="14" cy="14" r="14" fill="var(--forest-mid)" />
@@ -63,11 +73,14 @@ export default function Sidebar() {
           <div className="sidebar-title">GATHER</div>
           <div className="sidebar-subtitle">Linh&apos;s Bakery · Helsinki</div>
         </div>
-      </div>
+      </Link>
 
       <nav className="sidebar-nav">
         {NAV_ITEMS.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+          const isActive =
+            pathname === item.href ||
+            pathname.startsWith(item.href + '/') ||
+            (item.href === '/dashboard' && pathname === '/');
           return (
             <Link
               key={item.href}

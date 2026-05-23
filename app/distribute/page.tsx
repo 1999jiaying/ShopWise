@@ -6,7 +6,6 @@ import AppShell from '@/components/AppShell';
 type StockLevel = 'red' | 'green' | 'yellow';
 type Step = 'give-away' | 'human-input' | 'finished';
 type Tab = 'all' | 'ingredients' | 'ready-food';
-
 type Category = 'ingredient' | 'ready-food';
 
 interface SurplusItem {
@@ -23,12 +22,12 @@ interface SurplusItem {
 }
 
 const INITIAL_ITEMS: SurplusItem[] = [
-  { id: 1, name: 'Salmon', surplusQty: '0.5 kg', giveQty: '0.5', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 0.5, leftover: 0, category: 'ingredient' },
-  { id: 2, name: 'Dairy', surplusQty: '1 L', giveQty: '1 L', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 1, leftover: 0, category: 'ingredient' },
-  { id: 3, name: 'Bread', surplusQty: '2 units', giveQty: '2 units', expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ingredient' },
-  { id: 4, name: 'Sandwich', surplusQty: '1 pcs', giveQty: '1 pcs', expiresIn: 'in 5 days', checked: true, stockLevel: 'green', pickedUp: 1, leftover: 0, category: 'ready-food' },
-  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs', giveQty: '2 pcs', expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ready-food' },
-  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg', giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: true, stockLevel: 'red', pickedUp: 0, leftover: 0.5, category: 'ready-food' },
+  { id: 1, name: 'Salmon',      surplusQty: '0.5 kg',  giveQty: '0.5',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 0.5, leftover: 0,   category: 'ingredient' },
+  { id: 2, name: 'Dairy',       surplusQty: '1 L',     giveQty: '1 L',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 1,   leftover: 0,   category: 'ingredient' },
+  { id: 3, name: 'Bread',       surplusQty: '2 units', giveQty: '2 units',expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ingredient' },
+  { id: 4, name: 'Sandwich',    surplusQty: '1 pcs',   giveQty: '1 pcs',  expiresIn: 'in 5 days', checked: true, stockLevel: 'green',  pickedUp: 1,   leftover: 0,   category: 'ready-food' },
+  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs',   giveQty: '2 pcs',  expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ready-food' },
+  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg',  giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: true, stockLevel: 'red',    pickedUp: 0,   leftover: 0.5, category: 'ready-food' },
 ];
 
 const CheckIcon = () => (
@@ -69,9 +68,7 @@ export default function DistributePage() {
     setStep('human-input');
   };
 
-  const handleFinished = () => {
-    setStep('finished');
-  };
+  const handleFinished = () => setStep('finished');
 
   function updatePickedUp(id: number, delta: number) {
     setItems(prev => prev.map(it => {
@@ -94,10 +91,8 @@ export default function DistributePage() {
   }
 
   return (
-    <AppShell title="Dashboard">
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--gray-900)', marginBottom: 16 }}>
-        Today&apos;s surplus
-      </h2>
+    <AppShell title="Distribute food">
+      <h2 className="page-title">Today&apos;s surplus</h2>
 
       <div className="app-tabs">
         {(['all', 'ingredients', 'ready-food'] as Tab[]).map(t => (
@@ -112,104 +107,88 @@ export default function DistributePage() {
       </div>
 
       <div className="app-card">
-        <table className="app-table">
-          <thead>
-            <tr>
-              {step !== 'finished' && (
-                <th style={{ width: 40 }}>
-                  <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
-                    {allChecked && <CheckIcon />}
-                  </div>
-                </th>
-              )}
-              <th>Item</th>
-              <th>Surplus quantity</th>
-              <th>Give away quantity</th>
-              <th>Expired date</th>
-              {step === 'human-input' && <th>Picked up?</th>}
-              {(step === 'human-input' || step === 'finished') && <th>Leftover</th>}
-              {step !== 'finished' && <th style={{ width: 40 }} />}
-            </tr>
-          </thead>
-          <tbody>
-            {filteredItems.map(item => (
-              <tr key={item.id}>
+        <div className="app-table-wrap">
+          <table className="app-table">
+            <thead>
+              <tr>
                 {step !== 'finished' && (
-                  <td>
-                    <div
-                      className={`app-checkbox${item.checked ? ' checked' : ''}`}
-                      onClick={() => toggleCheck(item.id)}
-                    >
-                      {item.checked && <CheckIcon />}
+                  <th style={{ width: 40 }}>
+                    <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
+                      {allChecked && <CheckIcon />}
                     </div>
-                  </td>
+                  </th>
                 )}
-                <td style={{ fontWeight: 500 }}>{item.name}</td>
-                <td>
-                  <span className={`stock-dot ${item.stockLevel}`}>
-                    {item.surplusQty}
-                  </span>
-                </td>
-                <td style={{ fontWeight: 700 }}>{item.giveQty}</td>
-                <td style={{ color: 'var(--gray-500)' }}>{item.expiresIn}</td>
-
-                {step === 'human-input' && (
-                  <td>
-                    <div className="qty-control">
-                      <button
-                        className="qty-btn"
-                        onClick={() => updatePickedUp(item.id, -0.5)}
-                      >
-                        −
-                      </button>
-                      <input
-                        className="qty-input"
-                        type="number"
-                        value={item.pickedUp}
-                        onChange={e => setPickedUpDirect(item.id, e.target.value)}
-                      />
-                      <button
-                        className="qty-btn"
-                        onClick={() => updatePickedUp(item.id, 0.5)}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                )}
-
-                {(step === 'human-input' || step === 'finished') && (
-                  <td style={{ fontWeight: 600, color: item.leftover > 0 ? 'var(--red-500)' : 'var(--gray-500)' }}>
-                    {item.leftover}
-                  </td>
-                )}
-
-                {step !== 'finished' && (
-                  <td>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-                      <PencilIcon />
-                    </button>
-                  </td>
-                )}
+                <th>Item</th>
+                <th>Surplus quantity</th>
+                <th>Give away quantity</th>
+                <th>Expired date</th>
+                {step === 'human-input' && <th>Picked up?</th>}
+                {(step === 'human-input' || step === 'finished') && <th>Leftover</th>}
+                {step !== 'finished' && <th style={{ width: 40 }} />}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filteredItems.map(item => (
+                <tr key={item.id}>
+                  {step !== 'finished' && (
+                    <td>
+                      <div
+                        className={`app-checkbox${item.checked ? ' checked' : ''}`}
+                        onClick={() => toggleCheck(item.id)}
+                      >
+                        {item.checked && <CheckIcon />}
+                      </div>
+                    </td>
+                  )}
+                  <td className="td-name">{item.name}</td>
+                  <td>
+                    <span className={`stock-dot ${item.stockLevel}`}>{item.surplusQty}</span>
+                  </td>
+                  <td className="td-bold">{item.giveQty}</td>
+                  <td className="td-muted">{item.expiresIn}</td>
+
+                  {step === 'human-input' && (
+                    <td>
+                      <div className="qty-control">
+                        <button className="qty-btn" onClick={() => updatePickedUp(item.id, -0.5)}>−</button>
+                        <input
+                          className="qty-input"
+                          type="number"
+                          value={item.pickedUp}
+                          onChange={e => setPickedUpDirect(item.id, e.target.value)}
+                        />
+                        <button className="qty-btn" onClick={() => updatePickedUp(item.id, 0.5)}>+</button>
+                      </div>
+                    </td>
+                  )}
+
+                  {(step === 'human-input' || step === 'finished') && (
+                    <td className={item.leftover > 0 ? 'td-red' : 'td-muted'}>
+                      {item.leftover}
+                    </td>
+                  )}
+
+                  {step !== 'finished' && (
+                    <td>
+                      <button className="btn-icon"><PencilIcon /></button>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         {step === 'give-away' && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
+          <div className="surplus-table-actions">
             <button className="app-btn app-btn-outline">+ Add more</button>
-            <button className="app-btn app-btn-green" onClick={handleGiveAway}>
-              Give away
-            </button>
+            <button className="app-btn app-btn-green" onClick={handleGiveAway}>Give away</button>
           </div>
         )}
 
         {step === 'human-input' && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
-            <button className="app-btn app-btn-green" onClick={handleFinished}>
-              Finished give away
-            </button>
+          <div className="surplus-table-end">
+            <button className="app-btn app-btn-green" onClick={handleFinished}>Finished give away</button>
           </div>
         )}
       </div>

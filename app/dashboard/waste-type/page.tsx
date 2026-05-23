@@ -102,52 +102,44 @@ export default function WasteTypePage() {
         onAddWaste={() => setShowLogWaste(true)}
       />
 
-      {/* By Waste Type card */}
       <div className="app-card" style={{ marginBottom: 16, padding: 0, overflow: 'hidden' }}>
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--gray-100)' }}>
-          <h3 style={{ fontSize: 12, fontWeight: 600, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>
-            BY WASTE TYPE
-          </h3>
+        <div className="waste-type-header">
+          <h3 className="section-label">BY WASTE TYPE</h3>
         </div>
 
-        {wasteItems.map((item, i) => {
-          const isExpanded = expanded === item.name;
-          return (
-            <div key={item.name} style={{ borderBottom: i < wasteItems.length - 1 ? '1px solid var(--gray-100)' : 'none' }}>
-              <button
-                onClick={() => setExpanded(isExpanded ? null : item.name)}
-                style={{
-                  width: '100%', background: 'none', border: 'none', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 16,
-                  padding: '18px 20px', textAlign: 'left',
-                }}
-              >
-                <span style={{ width: 32, height: 32, borderRadius: 8, background: 'var(--green-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {item.icon}
-                </span>
-                <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--gray-900)', flex: 1 }}>{item.name}</span>
-                <span style={{ fontSize: 14, color: 'var(--gray-400)', minWidth: 48 }}>{item.weight}</span>
-                <SparkLine path={item.chartPath} />
-                <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--gray-900)', minWidth: 56, textAlign: 'right' }}>{item.cost}</span>
-                <span style={{ fontSize: 14, color: 'var(--gray-400)', marginLeft: 4 }}>{isExpanded ? '∧' : '∨'}</span>
-              </button>
+        <div className="waste-type-rows">
+          {wasteItems.map((item) => {
+            const isExpanded = expanded === item.name;
+            return (
+              <div key={item.name} className="waste-type-row">
+                <button
+                  className="expand-row-btn"
+                  onClick={() => setExpanded(isExpanded ? null : item.name)}
+                >
+                  <span className="item-icon">{item.icon}</span>
+                  <span className="expand-row-name">{item.name}</span>
+                  <span className="expand-row-weight">{item.weight}</span>
+                  <SparkLine path={item.chartPath} />
+                  <span className="expand-row-cost">{item.cost}</span>
+                  <span className="expand-row-caret">{isExpanded ? '∧' : '∨'}</span>
+                </button>
 
-              {isExpanded && (
-                <div style={{ padding: '0 20px 20px', marginTop: -4 }}>
-                  <ExpandedChart path={item.chartPath} />
-                </div>
-              )}
-            </div>
-          );
-        })}
+                {isExpanded && (
+                  <div className="expand-chart">
+                    <ExpandedChart path={item.chartPath} />
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Recommendations */}
       <div className="app-card-green">
-        <h3 style={{ fontSize: 16, fontWeight: 700, color: 'var(--green-700)', marginBottom: 16 }}>Recommendations</h3>
-        <ol style={{ paddingLeft: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <h3 className="section-title" style={{ color: 'var(--green-700)' }}>Recommendations</h3>
+        <ol className="recommendations-list">
           {recommendations.map((r, i) => (
-            <li key={i} style={{ fontSize: 14, color: 'var(--gray-700)', lineHeight: 1.6 }}>{r}</li>
+            <li key={i} className="body-text">{r}</li>
           ))}
         </ol>
       </div>
