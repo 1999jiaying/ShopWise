@@ -10,12 +10,11 @@ export default function Nav() {
     <nav>
       <div className="container nav-inner">
         <Link href="/" className="nav-brand">
-          Shop<span style={{ color: 'var(--green)' }}>Wise</span>
+          Sesonki<span>.AI</span>
         </Link>
         <div className="nav-links">
-          <Link href="/sample" className="nav-link">Sample report</Link>
-          <Link href="/pricing" className="nav-link">Pricing</Link>
-          <Link href="/#analyze" className="nav-cta">Run a Reality Check</Link>
+          <Link href="/#how-it-works" className="nav-link">How it works</Link>
+          <Link href="/planner" className="nav-cta">Open Planner</Link>
         </div>
         <button
           className="nav-mobile-toggle"
@@ -30,9 +29,8 @@ export default function Nav() {
         </button>
       </div>
       <div className={`mobile-menu${mobileMenuOpen ? ' open' : ''}`}>
-        <Link href="/sample" onClick={() => setMobileMenuOpen(false)}>Sample report</Link>
-        <Link href="/pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
-        <Link href="/#analyze" onClick={() => setMobileMenuOpen(false)}>Run a Reality Check</Link>
+        <Link href="/#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it works</Link>
+        <Link href="/planner" onClick={() => setMobileMenuOpen(false)}>Open Planner</Link>
       </div>
     </nav>
   );
