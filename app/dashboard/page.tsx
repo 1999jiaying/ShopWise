@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import AppShell from '@/components/AppShell';
 import LogWasteModal from '@/components/LogWasteModal';
 import MetricsCard from '@/components/MetricsCard';
+import PageHeader from '@/components/PageHeader';
 
 const metrics = [
   {
@@ -180,16 +182,10 @@ export default function DashboardPage() {
           onSubmit={handleLogWaste}
         />
       )}
-      {/* Top action bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--gray-900)' }}>Waste report</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="app-btn app-btn-green" onClick={() => setShowLogWaste(true)}>+ Add waste</button>
-          <button className="app-btn app-btn-outline">
-            This week 1.1 – 7.1.2026 &gt;
-          </button>
-        </div>
-      </div>
+      <PageHeader
+        title="Waste report"
+        onAddWaste={() => setShowLogWaste(true)}
+      />
 
       {/* Metric Cards */}
       <div className="metric-grid" style={{ marginBottom: 24 }}>
@@ -208,9 +204,15 @@ export default function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* By Food Type */}
         <div className="app-card">
-          <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 16 }}>
-            BY FOOD TYPE
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+              BY FOOD TYPE
+            </h3>
+            <Link href="/dashboard/food-waste" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
+              View all →
+            </Link>
+          </div>
+          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {byFoodType.map((f) => (
               <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -226,9 +228,15 @@ export default function DashboardPage() {
 
         {/* By Waste Type */}
         <div className="app-card" id="by-waste-type">
-          <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 16 }}>
-            BY WASTE TYPE
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+              BY WASTE TYPE
+            </h3>
+            <Link href="/dashboard/waste-type" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
+              View all →
+            </Link>
+          </div>
+          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {byWasteType.map((w) => (
               <div key={w.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
