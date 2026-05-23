@@ -22,10 +22,10 @@ interface OrderRow {
 }
 
 const initialOrders: OrderRow[] = [
-  { item: 'Salmon', inStock: '0.5 kg', stockColor: 'red', toOrder: '12 kg', checked: false },
-  { item: 'Potatoes', inStock: '4 kg', stockColor: 'green', toOrder: '40 kg', checked: false },
-  { item: 'Dairy', inStock: '1 L', stockColor: 'red', toOrder: '25 L', checked: false },
-  { item: 'Bread', inStock: '2 units', stockColor: 'yellow', toOrder: '20 units', checked: false },
+  { item: 'Salmon', inStock: '0.5 kg', stockColor: 'red', toOrder: '12 kg', checked: true },
+  { item: 'Potatoes', inStock: '4 kg', stockColor: 'green', toOrder: '40 kg', checked: true },
+  { item: 'Dairy', inStock: '1 L', stockColor: 'red', toOrder: '25 L', checked: true },
+  { item: 'Bread', inStock: '2 units', stockColor: 'yellow', toOrder: '20 units', checked: true },
 ];
 
 interface SupplierPrice {
@@ -245,7 +245,7 @@ export default function ProcurementsPage() {
         const itemName = addMatch[1].trim().charAt(0).toUpperCase() + addMatch[1].trim().slice(1);
         const qty = addMatch[2];
         const unit = addMatch[3];
-        setOrders(prev => [...prev, { item: itemName, inStock: '0', stockColor: 'red', toOrder: `${qty} ${unit}`, checked: false }]);
+        setOrders(prev => [...prev, { item: itemName, inStock: '0', stockColor: 'red', toOrder: `${qty} ${unit}`, checked: true }]);
         response = `Added "${itemName}" (${qty} ${unit}) to the order list.`;
       }
 

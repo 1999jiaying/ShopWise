@@ -23,12 +23,12 @@ interface SurplusItem {
 }
 
 const INITIAL_ITEMS: SurplusItem[] = [
-  { id: 1, name: 'Salmon', surplusQty: '0.5 kg', giveQty: '0.5', expiresIn: 'in 5 days', checked: false, stockLevel: 'red', pickedUp: 0.5, leftover: 0, category: 'ingredient' },
-  { id: 2, name: 'Dairy', surplusQty: '1 L', giveQty: '1 L', expiresIn: 'in 5 days', checked: false, stockLevel: 'red', pickedUp: 1, leftover: 0, category: 'ingredient' },
-  { id: 3, name: 'Bread', surplusQty: '2 units', giveQty: '2 units', expiresIn: 'in 5 days', checked: false, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ingredient' },
-  { id: 4, name: 'Sandwich', surplusQty: '1 pcs', giveQty: '1 pcs', expiresIn: 'in 5 days', checked: false, stockLevel: 'green', pickedUp: 1, leftover: 0, category: 'ready-food' },
-  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs', giveQty: '2 pcs', expiresIn: 'in 3 days', checked: false, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ready-food' },
-  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg', giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: false, stockLevel: 'red', pickedUp: 0, leftover: 0.5, category: 'ready-food' },
+  { id: 1, name: 'Salmon', surplusQty: '0.5 kg', giveQty: '0.5', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 0.5, leftover: 0, category: 'ingredient' },
+  { id: 2, name: 'Dairy', surplusQty: '1 L', giveQty: '1 L', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 1, leftover: 0, category: 'ingredient' },
+  { id: 3, name: 'Bread', surplusQty: '2 units', giveQty: '2 units', expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ingredient' },
+  { id: 4, name: 'Sandwich', surplusQty: '1 pcs', giveQty: '1 pcs', expiresIn: 'in 5 days', checked: true, stockLevel: 'green', pickedUp: 1, leftover: 0, category: 'ready-food' },
+  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs', giveQty: '2 pcs', expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ready-food' },
+  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg', giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: true, stockLevel: 'red', pickedUp: 0, leftover: 0.5, category: 'ready-food' },
 ];
 
 const CheckIcon = () => (
@@ -115,31 +115,35 @@ export default function DistributePage() {
         <table className="app-table">
           <thead>
             <tr>
-              <th style={{ width: 40 }}>
-                <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
-                  {allChecked && <CheckIcon />}
-                </div>
-              </th>
+              {step !== 'finished' && (
+                <th style={{ width: 40 }}>
+                  <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
+                    {allChecked && <CheckIcon />}
+                  </div>
+                </th>
+              )}
               <th>Item</th>
               <th>Surplus quantity</th>
               <th>Give away quantity</th>
               <th>Expired date</th>
               {step === 'human-input' && <th>Picked up?</th>}
               {(step === 'human-input' || step === 'finished') && <th>Leftover</th>}
-              <th style={{ width: 40 }} />
+              {step !== 'finished' && <th style={{ width: 40 }} />}
             </tr>
           </thead>
           <tbody>
             {filteredItems.map(item => (
               <tr key={item.id}>
-                <td>
-                  <div
-                    className={`app-checkbox${item.checked ? ' checked' : ''}`}
-                    onClick={() => toggleCheck(item.id)}
-                  >
-                    {item.checked && <CheckIcon />}
-                  </div>
-                </td>
+                {step !== 'finished' && (
+                  <td>
+                    <div
+                      className={`app-checkbox${item.checked ? ' checked' : ''}`}
+                      onClick={() => toggleCheck(item.id)}
+                    >
+                      {item.checked && <CheckIcon />}
+                    </div>
+                  </td>
+                )}
                 <td style={{ fontWeight: 500 }}>{item.name}</td>
                 <td>
                   <span className={`stock-dot ${item.stockLevel}`}>
@@ -180,11 +184,13 @@ export default function DistributePage() {
                   </td>
                 )}
 
-                <td>
-                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-                    <PencilIcon />
-                  </button>
-                </td>
+                {step !== 'finished' && (
+                  <td>
+                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+                      <PencilIcon />
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
