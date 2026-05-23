@@ -7,6 +7,8 @@ type StockLevel = 'red' | 'green' | 'yellow';
 type Step = 'give-away' | 'human-input' | 'finished';
 type Tab = 'all' | 'ingredients' | 'ready-food';
 
+type Category = 'ingredient' | 'ready-food';
+
 interface SurplusItem {
   id: number;
   name: string;
@@ -17,13 +19,16 @@ interface SurplusItem {
   stockLevel: StockLevel;
   pickedUp: number;
   leftover: number;
+  category: Category;
 }
 
 const INITIAL_ITEMS: SurplusItem[] = [
-  { id: 1, name: 'Salmon', surplusQty: '0.5 kg', giveQty: '0.5', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 0.5, leftover: 0 },
-  { id: 2, name: 'Sandwich', surplusQty: '1 pcs', giveQty: '1 pcs', expiresIn: 'in 5 days', checked: true, stockLevel: 'green', pickedUp: 1, leftover: 0 },
-  { id: 3, name: 'Dairy', surplusQty: '1 L', giveQty: '1 L', expiresIn: 'in 5 days', checked: true, stockLevel: 'red', pickedUp: 1, leftover: 0 },
-  { id: 4, name: 'Bread', surplusQty: '2 units', giveQty: '2 units', expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1, leftover: 1 },
+  { id: 1, name: 'Salmon', surplusQty: '0.5 kg', giveQty: '0.5', expiresIn: 'in 5 days', checked: false, stockLevel: 'red', pickedUp: 0.5, leftover: 0, category: 'ingredient' },
+  { id: 2, name: 'Dairy', surplusQty: '1 L', giveQty: '1 L', expiresIn: 'in 5 days', checked: false, stockLevel: 'red', pickedUp: 1, leftover: 0, category: 'ingredient' },
+  { id: 3, name: 'Bread', surplusQty: '2 units', giveQty: '2 units', expiresIn: 'in 5 days', checked: false, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ingredient' },
+  { id: 4, name: 'Sandwich', surplusQty: '1 pcs', giveQty: '1 pcs', expiresIn: 'in 5 days', checked: false, stockLevel: 'green', pickedUp: 1, leftover: 0, category: 'ready-food' },
+  { id: 5, name: 'Carrot cake', surplusQty: '2 pcs', giveQty: '2 pcs', expiresIn: 'in 3 days', checked: false, stockLevel: 'yellow', pickedUp: 1, leftover: 1, category: 'ready-food' },
+  { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg', giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: false, stockLevel: 'red', pickedUp: 0, leftover: 0.5, category: 'ready-food' },
 ];
 
 const CheckIcon = () => (
@@ -46,6 +51,27 @@ export default function DistributePage() {
   function toggleCheck(id: number) {
     setItems(prev => prev.map(it => it.id === id ? { ...it, checked: !it.checked } : it));
   }
+
+  const filteredItems = items.filter(it => {
+    if (tab === 'ingredients') return it.category === 'ingredient';
+    if (tab === 'ready-food') return it.category === 'ready-food';
+    return true;
+  });
+
+  const allChecked = filteredItems.length > 0 && filteredItems.every(it => it.checked);
+  const toggleAll = () => {
+    const ids = new Set(filteredItems.map(it => it.id));
+    setItems(prev => prev.map(it => ids.has(it.id) ? { ...it, checked: !allChecked } : it));
+  };
+
+  const handleGiveAway = () => {
+    setItems(prev => prev.filter(it => it.checked));
+    setStep('human-input');
+  };
+
+  const handleFinished = () => {
+    setStep('finished');
+  };
 
   function updatePickedUp(id: number, delta: number) {
     setItems(prev => prev.map(it => {
@@ -85,100 +111,102 @@ export default function DistributePage() {
         ))}
       </div>
 
-      {tab === 'all' && (
-        <div className="app-card">
-          <table className="app-table">
-            <thead>
-              <tr>
-                <th style={{ width: 40 }} />
-                <th>Item</th>
-                <th>Surplus quantity</th>
-                <th>Give away quantity</th>
-                <th>Expired date</th>
-                {step === 'human-input' && <th>Picked up?</th>}
-                {(step === 'human-input' || step === 'finished') && <th>Leftover</th>}
-                <th style={{ width: 40 }} />
-              </tr>
-            </thead>
-            <tbody>
-              {items.map(item => (
-                <tr key={item.id}>
+      <div className="app-card">
+        <table className="app-table">
+          <thead>
+            <tr>
+              <th style={{ width: 40 }}>
+                <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
+                  {allChecked && <CheckIcon />}
+                </div>
+              </th>
+              <th>Item</th>
+              <th>Surplus quantity</th>
+              <th>Give away quantity</th>
+              <th>Expired date</th>
+              {step === 'human-input' && <th>Picked up?</th>}
+              {(step === 'human-input' || step === 'finished') && <th>Leftover</th>}
+              <th style={{ width: 40 }} />
+            </tr>
+          </thead>
+          <tbody>
+            {filteredItems.map(item => (
+              <tr key={item.id}>
+                <td>
+                  <div
+                    className={`app-checkbox${item.checked ? ' checked' : ''}`}
+                    onClick={() => toggleCheck(item.id)}
+                  >
+                    {item.checked && <CheckIcon />}
+                  </div>
+                </td>
+                <td style={{ fontWeight: 500 }}>{item.name}</td>
+                <td>
+                  <span className={`stock-dot ${item.stockLevel}`}>
+                    {item.surplusQty}
+                  </span>
+                </td>
+                <td style={{ fontWeight: 700 }}>{item.giveQty}</td>
+                <td style={{ color: 'var(--gray-500)' }}>{item.expiresIn}</td>
+
+                {step === 'human-input' && (
                   <td>
-                    <div
-                      className={`app-checkbox${item.checked ? ' checked' : ''}`}
-                      onClick={() => toggleCheck(item.id)}
-                    >
-                      {item.checked && <CheckIcon />}
+                    <div className="qty-control">
+                      <button
+                        className="qty-btn"
+                        onClick={() => updatePickedUp(item.id, -0.5)}
+                      >
+                        −
+                      </button>
+                      <input
+                        className="qty-input"
+                        type="number"
+                        value={item.pickedUp}
+                        onChange={e => setPickedUpDirect(item.id, e.target.value)}
+                      />
+                      <button
+                        className="qty-btn"
+                        onClick={() => updatePickedUp(item.id, 0.5)}
+                      >
+                        +
+                      </button>
                     </div>
                   </td>
-                  <td style={{ fontWeight: 500 }}>{item.name}</td>
-                  <td>
-                    <span className={`stock-dot ${item.stockLevel}`}>
-                      {item.surplusQty}
-                    </span>
+                )}
+
+                {(step === 'human-input' || step === 'finished') && (
+                  <td style={{ fontWeight: 600, color: item.leftover > 0 ? 'var(--red-500)' : 'var(--gray-500)' }}>
+                    {item.leftover}
                   </td>
-                  <td style={{ fontWeight: 700 }}>{item.giveQty}</td>
-                  <td style={{ color: 'var(--gray-500)' }}>{item.expiresIn}</td>
+                )}
 
-                  {step === 'human-input' && (
-                    <td>
-                      <div className="qty-control">
-                        <button
-                          className="qty-btn"
-                          onClick={() => updatePickedUp(item.id, -0.5)}
-                        >
-                          −
-                        </button>
-                        <input
-                          className="qty-input"
-                          type="number"
-                          value={item.pickedUp}
-                          onChange={e => setPickedUpDirect(item.id, e.target.value)}
-                        />
-                        <button
-                          className="qty-btn"
-                          onClick={() => updatePickedUp(item.id, 0.5)}
-                        >
-                          +
-                        </button>
-                      </div>
-                    </td>
-                  )}
+                <td>
+                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
+                    <PencilIcon />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
 
-                  {(step === 'human-input' || step === 'finished') && (
-                    <td style={{ fontWeight: 600, color: item.leftover > 0 ? 'var(--red-500)' : 'var(--gray-500)' }}>
-                      {item.leftover}
-                    </td>
-                  )}
+        {step === 'give-away' && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
+            <button className="app-btn app-btn-outline">+ Add more</button>
+            <button className="app-btn app-btn-green" onClick={handleGiveAway}>
+              Give away
+            </button>
+          </div>
+        )}
 
-                  <td>
-                    <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-                      <PencilIcon />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {step === 'give-away' && (
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20 }}>
-              <button className="app-btn app-btn-outline">+ Add more</button>
-              <button className="app-btn app-btn-green" onClick={() => setStep('human-input')}>
-                Give away
-              </button>
-            </div>
-          )}
-
-          {step === 'human-input' && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
-              <button className="app-btn app-btn-green" onClick={() => setStep('finished')}>
-                Finished give away
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+        {step === 'human-input' && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
+            <button className="app-btn app-btn-green" onClick={handleFinished}>
+              Finished give away
+            </button>
+          </div>
+        )}
+      </div>
     </AppShell>
   );
 }

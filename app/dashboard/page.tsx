@@ -29,39 +29,109 @@ const recommendations = [
 
 const tabs = ['All', 'Ingredients', 'Ready Food'] as const;
 
-const distributeItems = [
+type Category = 'ingredient' | 'ready-food';
+
+const distributeItems: {
+  item: string; expires: string; expiresColor: 'red' | 'yellow' | 'green';
+  originalPrice: string; sellPrice: string; moneySaved: string;
+  status: string; statusType: 'red' | 'green' | 'yellow'; platform: string;
+  category: Category;
+}[] = [
   {
     item: 'Salad greens',
     expires: '3d',
-    expiresColor: 'yellow' as const,
+    expiresColor: 'yellow',
     originalPrice: '€5.00',
     sellPrice: '€1.00',
     moneySaved: '€1.50',
     status: 'Messaged',
-    statusType: 'green' as const,
+    statusType: 'green',
     platform: '4 platforms',
+    category: 'ingredient',
   },
   {
     item: 'Bread',
     expires: '3d',
-    expiresColor: 'yellow' as const,
+    expiresColor: 'yellow',
     originalPrice: '€5.00',
     sellPrice: '€1.00',
     moneySaved: '€1.50',
     status: 'Confirmed',
-    statusType: 'green' as const,
+    statusType: 'green',
     platform: 'ResQ',
+    category: 'ingredient',
   },
   {
     item: 'Dairy',
     expires: '1d',
-    expiresColor: 'red' as const,
+    expiresColor: 'red',
     originalPrice: '€5.00',
     sellPrice: '€1.00',
     moneySaved: '€1.50',
     status: 'Not yet messaged',
-    statusType: 'red' as const,
+    statusType: 'red',
     platform: '',
+    category: 'ingredient',
+  },
+  {
+    item: 'Salmon fillet',
+    expires: '2d',
+    expiresColor: 'red',
+    originalPrice: '€12.00',
+    sellPrice: '€4.00',
+    moneySaved: '€4.00',
+    status: 'Messaged',
+    statusType: 'green',
+    platform: 'ResQ',
+    category: 'ingredient',
+  },
+  {
+    item: 'Sandwich (ham & cheese)',
+    expires: '1d',
+    expiresColor: 'red',
+    originalPrice: '€6.50',
+    sellPrice: '€2.00',
+    moneySaved: '€2.00',
+    status: 'Confirmed',
+    statusType: 'green',
+    platform: 'ResQ',
+    category: 'ready-food',
+  },
+  {
+    item: 'Carrot cake slice',
+    expires: '2d',
+    expiresColor: 'yellow',
+    originalPrice: '€4.50',
+    sellPrice: '€1.50',
+    moneySaved: '€1.50',
+    status: 'Messaged',
+    statusType: 'green',
+    platform: '3 platforms',
+    category: 'ready-food',
+  },
+  {
+    item: 'Pasta salad bowl',
+    expires: '1d',
+    expiresColor: 'red',
+    originalPrice: '€8.00',
+    sellPrice: '€3.00',
+    moneySaved: '€3.00',
+    status: 'Not yet messaged',
+    statusType: 'red',
+    platform: '',
+    category: 'ready-food',
+  },
+  {
+    item: 'Berry smoothie',
+    expires: '1d',
+    expiresColor: 'red',
+    originalPrice: '€5.00',
+    sellPrice: '€1.50',
+    moneySaved: '€1.50',
+    status: 'Confirmed',
+    statusType: 'green',
+    platform: 'ResQ',
+    category: 'ready-food',
   },
 ];
 
@@ -246,7 +316,13 @@ export default function DashboardPage() {
             </tr>
           </thead>
           <tbody>
-            {distributeItems.map((row) => (
+            {distributeItems
+              .filter((row) => {
+                if (activeTab === 'Ingredients') return row.category === 'ingredient';
+                if (activeTab === 'Ready Food') return row.category === 'ready-food';
+                return true;
+              })
+              .map((row) => (
               <tr key={row.item}>
                 <td style={{ fontWeight: 600 }}>{row.item}</td>
                 <td>

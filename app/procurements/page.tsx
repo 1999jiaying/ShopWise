@@ -2,8 +2,16 @@
 
 import { useState, Fragment } from 'react';
 import AppShell from '@/components/AppShell';
+import { usePersistedState } from '@/hooks/usePersistedState';
 
 type Step = 'empty' | 'loading' | 'analyzed' | 'chat' | 'supplier' | 'confirm';
+
+interface OrderHistoryEntry {
+  id: number;
+  date: string;
+  suppliers: ConfirmSupplier[];
+  status: 'Confirmed' | 'Delivered' | 'Pending';
+}
 
 interface OrderRow {
   item: string;
@@ -14,10 +22,10 @@ interface OrderRow {
 }
 
 const initialOrders: OrderRow[] = [
-  { item: 'Salmon', inStock: '0.5 kg', stockColor: 'red', toOrder: '12 kg', checked: true },
-  { item: 'Potatoes', inStock: '4 kg', stockColor: 'green', toOrder: '40 kg', checked: true },
-  { item: 'Dairy', inStock: '1 L', stockColor: 'red', toOrder: '25 L', checked: true },
-  { item: 'Bread', inStock: '2 units', stockColor: 'yellow', toOrder: '20 units', checked: true },
+  { item: 'Salmon', inStock: '0.5 kg', stockColor: 'red', toOrder: '12 kg', checked: false },
+  { item: 'Potatoes', inStock: '4 kg', stockColor: 'green', toOrder: '40 kg', checked: false },
+  { item: 'Dairy', inStock: '1 L', stockColor: 'red', toOrder: '25 L', checked: false },
+  { item: 'Bread', inStock: '2 units', stockColor: 'yellow', toOrder: '20 units', checked: false },
 ];
 
 interface SupplierPrice {
@@ -100,9 +108,71 @@ function EditIcon() {
 }
 
 export default function ProcurementsPage() {
-  const [step, setStep] = useState<Step>('empty');
-  const [orders, setOrders] = useState<OrderRow[]>(initialOrders);
+  const [step, setStep] = usePersistedState<Step>('proc-step', 'empty');
+  const [orders, setOrders] = usePersistedState<OrderRow[]>('proc-orders', initialOrders);
   const [chatMsg, setChatMsg] = useState('');
+  const [chatLoading, setChatLoading] = useState(false);
+  const [chatHistory, setChatHistory] = usePersistedState<{ role: 'user' | 'ai'; text: string }[]>('proc-chat', []);
+  const [orderHistory, setOrderHistory] = usePersistedState<OrderHistoryEntry[]>('proc-history', []);
+
+  const defaultSelections: Record<string, string> = {};
+  supplierData.forEach(row => {
+    const best = Object.entries(row.prices).find(([, v]) => v.best);
+    if (best) defaultSelections[row.ingredient] = best[0];
+  });
+  const [supplierSelections, setSupplierSelections] = useState<Record<string, string>>(defaultSelections);
+
+  const selectSupplier = (ingredient: string, supplier: string) => {
+    setSupplierSelections(prev => ({ ...prev, [ingredient]: supplier }));
+  };
+
+  const computeConfirmData = (): ConfirmSupplier[] => {
+    const grouped: Record<string, ConfirmItem[]> = {};
+    supplierData.forEach(row => {
+      const chosen = supplierSelections[row.ingredient];
+      if (!chosen) return;
+      if (!grouped[chosen]) grouped[chosen] = [];
+      grouped[chosen].push({
+        item: row.ingredient,
+        qty: row.qty,
+        unitPrice: row.prices[chosen].price,
+      });
+    });
+    return Object.entries(grouped).map(([name, items]) => {
+      const total = items.reduce((sum, it) => {
+        const priceNum = parseFloat(it.unitPrice.replace('€', ''));
+        const qtyNum = parseFloat(it.qty);
+        return sum + (priceNum * qtyNum);
+      }, 0);
+      return { name, total: `€${total.toFixed(2)}`, items };
+    });
+  };
+
+  const computedTotal = () => {
+    let total = 0;
+    supplierData.forEach(row => {
+      const chosen = supplierSelections[row.ingredient];
+      if (!chosen) return;
+      const priceNum = parseFloat(row.prices[chosen].price.replace('€', ''));
+      const qtyNum = parseFloat(row.qty);
+      total += priceNum * qtyNum;
+    });
+    return total;
+  };
+
+  const computedSaving = () => {
+    let maxTotal = 0;
+    supplierData.forEach(row => {
+      const prices = Object.values(row.prices).map(v => parseFloat(v.price.replace('€', '')));
+      const qtyNum = parseFloat(row.qty);
+      maxTotal += Math.max(...prices) * qtyNum;
+    });
+    return maxTotal - computedTotal();
+  };
+
+  if (step === 'loading') {
+    setStep('empty');
+  }
 
   const handleForecast = () => {
     setStep('loading');
@@ -113,10 +183,131 @@ export default function ProcurementsPage() {
     setOrders(prev => prev.map((r, i) => i === idx ? { ...r, checked: !r.checked } : r));
   };
 
+  const allChecked = orders.length > 0 && orders.every(r => r.checked);
+  const toggleAll = () => {
+    setOrders(prev => prev.map(r => ({ ...r, checked: !allChecked })));
+  };
+
+  const handleSendChat = () => {
+    const msg = chatMsg.trim();
+    if (!msg || chatLoading) return;
+
+    setChatHistory(prev => [...prev, { role: 'user', text: msg }]);
+    setChatMsg('');
+    setChatLoading(true);
+
+    setTimeout(() => {
+      const lower = msg.toLowerCase();
+      let response = '';
+
+      const removeMatch = lower.match(/remove\s+(.+?)(?:\s*,|\s+from|\s+we|\s+it|$)/);
+      if (removeMatch) {
+        const target = removeMatch[1].trim();
+        const before = orders.length;
+        setOrders(prev => prev.filter(r => !r.item.toLowerCase().includes(target)));
+        if (orders.find(r => r.item.toLowerCase().includes(target))) {
+          response = `Done — removed "${target}" from the order list. ${before - 1} items remaining.`;
+        } else {
+          response = `I couldn't find "${target}" in the current order list. Available items: ${orders.map(r => r.item).join(', ')}.`;
+        }
+      }
+
+      const increaseMatch = lower.match(/increase\s+(.+?)\s+(?:to|by)\s+(\d+)/);
+      if (!response && increaseMatch) {
+        const target = increaseMatch[1].trim();
+        const amount = increaseMatch[2];
+        setOrders(prev => prev.map(r => {
+          if (r.item.toLowerCase().includes(target)) {
+            const unit = r.toOrder.replace(/[\d.]+\s*/, '');
+            return { ...r, toOrder: `${amount} ${unit}`.trim() };
+          }
+          return r;
+        }));
+        response = `Updated — ${target} order quantity set to ${amount}. The forecast has been adjusted to account for your input.`;
+      }
+
+      const decreaseMatch = lower.match(/decrease\s+(.+?)\s+(?:to|by)\s+(\d+)/);
+      if (!response && decreaseMatch) {
+        const target = decreaseMatch[1].trim();
+        const amount = decreaseMatch[2];
+        setOrders(prev => prev.map(r => {
+          if (r.item.toLowerCase().includes(target)) {
+            const unit = r.toOrder.replace(/[\d.]+\s*/, '');
+            return { ...r, toOrder: `${amount} ${unit}`.trim() };
+          }
+          return r;
+        }));
+        response = `Updated — ${target} order quantity set to ${amount}.`;
+      }
+
+      const addMatch = lower.match(/add\s+(.+?)\s+(\d+)\s*(\w+)/);
+      if (!response && addMatch) {
+        const itemName = addMatch[1].trim().charAt(0).toUpperCase() + addMatch[1].trim().slice(1);
+        const qty = addMatch[2];
+        const unit = addMatch[3];
+        setOrders(prev => [...prev, { item: itemName, inStock: '0', stockColor: 'red', toOrder: `${qty} ${unit}`, checked: false }]);
+        response = `Added "${itemName}" (${qty} ${unit}) to the order list.`;
+      }
+
+      if (!response) {
+        response = `Understood — "${msg}". I've noted your preference. Based on this, I'd recommend reviewing the current quantities and adjusting manually using the edit icons, or try commands like "remove salmon", "increase bread to 30", or "add mushrooms 5 kg".`;
+      }
+
+      setChatHistory(prev => [...prev, { role: 'ai', text: response }]);
+      setChatLoading(false);
+    }, 1000);
+  };
+
   const groupedSupplier = supplierData.reduce<Record<string, SupplierPrice[]>>((acc, row) => {
     (acc[row.category] ??= []).push(row);
     return acc;
   }, {});
+
+  /* ── Order history section (reusable across states) ─────── */
+  const orderHistorySection = orderHistory.length > 0 && (
+    <div style={{ marginTop: 24 }}>
+      <h3 style={{ fontSize: 18, fontWeight: 700, color: 'var(--gray-900)', marginBottom: 16 }}>Order history</h3>
+      {orderHistory.map(entry => (
+        <div key={entry.id} className="app-card" style={{ marginBottom: 16 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--gray-800)' }}>{entry.date}</span>
+              <span className="app-badge app-badge-green">{entry.status}</span>
+            </div>
+            <span style={{ fontSize: 13, color: 'var(--gray-400)' }}>
+              Order baskets ({entry.suppliers.length})
+            </span>
+          </div>
+          {entry.suppliers.map(supplier => (
+            <div key={supplier.name} style={{ marginBottom: 20, border: '1px solid var(--gray-200)', borderRadius: 10, padding: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 10 }}>
+                <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--gray-900)' }}>{supplier.name}</h4>
+                <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--gray-600)' }}>{supplier.total}</span>
+              </div>
+              <table className="app-table" style={{ fontSize: 13 }}>
+                <thead>
+                  <tr>
+                    <th style={{ color: 'var(--green-600)' }}>Item</th>
+                    <th>Qty</th>
+                    <th>Unit price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {supplier.items.map(item => (
+                    <tr key={item.item}>
+                      <td style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{item.item}</td>
+                      <td>{item.qty}</td>
+                      <td>{item.unitPrice}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
 
   /* ── Empty state ─────────────────────────────────────────── */
   if (step === 'empty') {
@@ -134,6 +325,7 @@ export default function ProcurementsPage() {
             Forecast demand and create order list
           </button>
         </div>
+        {orderHistorySection}
       </AppShell>
     );
   }
@@ -167,7 +359,11 @@ export default function ProcurementsPage() {
       <table className="app-table">
         <thead>
           <tr>
-            <th style={{ width: 40 }} />
+            <th style={{ width: 40 }}>
+              <div className={`app-checkbox${allChecked ? ' checked' : ''}`} onClick={toggleAll}>
+                {allChecked && <CheckIcon />}
+              </div>
+            </th>
             <th>Item</th>
             <th>In stock</th>
             <th>To order</th>
@@ -192,18 +388,51 @@ export default function ProcurementsPage() {
       </table>
 
       {step === 'chat' && (
-        <div style={{ marginTop: 20, display: 'flex', gap: 10 }}>
-          <textarea
-            value={chatMsg}
-            onChange={e => setChatMsg(e.target.value)}
-            placeholder="I want to increase salmon more because I have 10 salmon soup pre-orders"
-            style={{
-              flex: 1, resize: 'vertical', minHeight: 56, padding: '12px 14px',
-              borderRadius: 10, border: '1px solid var(--gray-300)', fontSize: 14,
-              fontFamily: 'inherit', color: 'var(--gray-700)', lineHeight: 1.5,
-            }}
-          />
-          <button className="app-btn app-btn-green" style={{ alignSelf: 'flex-end' }}>Send</button>
+        <div style={{ marginTop: 20 }}>
+          {chatHistory.length > 0 && (
+            <div style={{ marginBottom: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {chatHistory.map((msg, i) => (
+                <div key={i} style={{
+                  padding: '10px 14px', borderRadius: 10, fontSize: 13, lineHeight: 1.6,
+                  maxWidth: '80%',
+                  alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
+                  background: msg.role === 'user' ? 'var(--green-50)' : 'var(--gray-50)',
+                  color: msg.role === 'user' ? 'var(--green-700)' : 'var(--gray-700)',
+                  border: `1px solid ${msg.role === 'user' ? 'var(--green-200)' : 'var(--gray-200)'}`,
+                  display: 'flex', gap: 8, alignItems: 'flex-start',
+                }}>
+                  <span style={{ fontWeight: 600, flexShrink: 0 }}>{msg.role === 'user' ? 'You:' : 'AI:'}</span>
+                  <span>{msg.text}</span>
+                </div>
+              ))}
+              {chatLoading && (
+                <div style={{ padding: '10px 14px', borderRadius: 10, background: 'var(--gray-50)', border: '1px solid var(--gray-200)', fontSize: 13, color: 'var(--gray-400)' }}>
+                  Thinking...
+                </div>
+              )}
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: 10 }}>
+            <textarea
+              value={chatMsg}
+              onChange={e => setChatMsg(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendChat(); } }}
+              placeholder="e.g. remove salmon, increase bread to 30, add mushrooms 5 kg"
+              style={{
+                flex: 1, resize: 'vertical', minHeight: 56, padding: '12px 14px',
+                borderRadius: 10, border: '1px solid var(--gray-300)', fontSize: 14,
+                fontFamily: 'inherit', color: 'var(--gray-700)', lineHeight: 1.5,
+              }}
+            />
+            <button
+              className="app-btn app-btn-green"
+              style={{ alignSelf: 'flex-end', opacity: chatLoading ? 0.6 : 1 }}
+              onClick={handleSendChat}
+              disabled={chatLoading}
+            >
+              Send
+            </button>
+          </div>
         </div>
       )}
 
@@ -214,7 +443,10 @@ export default function ProcurementsPage() {
             Adjust with AI
           </button>
         </div>
-        <button className="app-btn app-btn-green" onClick={() => setStep('supplier')}>
+        <button className="app-btn app-btn-green" onClick={() => {
+          setOrders(prev => prev.filter(r => r.checked));
+          setStep('supplier');
+        }}>
           Confirm order list
         </button>
       </div>
@@ -244,19 +476,19 @@ export default function ProcurementsPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 14, marginBottom: 24 }}>
             <div className="app-card" style={{ padding: 16, textAlign: 'center' }}>
               <p style={{ fontSize: 12, color: 'var(--gray-400)', marginBottom: 4 }}>Items to order</p>
-              <p style={{ fontSize: 22, fontWeight: 700 }}>12</p>
+              <p style={{ fontSize: 22, fontWeight: 700 }}>{supplierData.length}</p>
             </div>
             <div className="app-card" style={{ padding: 16, textAlign: 'center' }}>
               <p style={{ fontSize: 12, color: 'var(--gray-400)', marginBottom: 4 }}>Suppliers checked</p>
-              <p style={{ fontSize: 22, fontWeight: 700 }}>3</p>
+              <p style={{ fontSize: 22, fontWeight: 700 }}>{suppliers.length}</p>
             </div>
             <div className="app-card" style={{ padding: 16, textAlign: 'center' }}>
               <p style={{ fontSize: 12, color: 'var(--gray-400)', marginBottom: 4 }}>Combined total</p>
-              <p style={{ fontSize: 22, fontWeight: 700 }}>€286.00</p>
+              <p style={{ fontSize: 22, fontWeight: 700 }}>€{computedTotal().toFixed(2)}</p>
             </div>
             <div className="app-card" style={{ padding: 16, textAlign: 'center' }}>
               <p style={{ fontSize: 12, color: 'var(--gray-400)', marginBottom: 4 }}>Saving</p>
-              <p style={{ fontSize: 22, fontWeight: 700, color: 'var(--green-600)' }}>€31.40</p>
+              <p style={{ fontSize: 22, fontWeight: 700, color: 'var(--green-600)' }}>€{computedSaving().toFixed(2)}</p>
             </div>
           </div>
 
@@ -281,11 +513,25 @@ export default function ProcurementsPage() {
                     <tr key={row.ingredient}>
                       <td style={{ fontWeight: 600, color: 'var(--gray-800)' }}>{row.ingredient}</td>
                       <td>{row.qty}</td>
-                      {suppliers.map(s => (
-                        <td key={s} style={row.prices[s].best ? { background: 'var(--green-50)', fontWeight: 600, color: 'var(--green-700)' } : {}}>
-                          {row.prices[s].price}
-                        </td>
-                      ))}
+                      {suppliers.map(s => {
+                        const isSelected = supplierSelections[row.ingredient] === s;
+                        return (
+                          <td
+                            key={s}
+                            onClick={() => selectSupplier(row.ingredient, s)}
+                            style={{
+                              cursor: 'pointer',
+                              borderRadius: 6,
+                              transition: 'all 0.15s',
+                              ...(isSelected
+                                ? { background: 'var(--green-50)', fontWeight: 600, color: 'var(--green-700)', border: '2px solid var(--green-400)' }
+                                : {}),
+                            }}
+                          >
+                            {row.prices[s].price}
+                          </td>
+                        );
+                      })}
                     </tr>
                   ))}
                 </Fragment>
@@ -315,7 +561,19 @@ export default function ProcurementsPage() {
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
             <button className="app-btn app-btn-outline" style={{ fontSize: 13 }}>Refresh prices</button>
-            <button className="app-btn app-btn-green" style={{ fontSize: 13 }} onClick={() => alert('Order confirmed!')}>Confirm order</button>
+            <button className="app-btn app-btn-green" style={{ fontSize: 13 }} onClick={() => {
+              const now = new Date();
+              const dateStr = now.toLocaleDateString('fi-FI', { day: 'numeric', month: 'numeric', year: 'numeric' });
+              setOrderHistory(prev => [{
+                id: Date.now(),
+                date: dateStr,
+                suppliers: computeConfirmData(),
+                status: 'Confirmed',
+              }, ...prev]);
+              setOrders(initialOrders);
+              setChatHistory([]);
+              setStep('empty');
+            }}>Confirm order</button>
             <button
               onClick={() => setStep('supplier')}
               style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 20, color: 'var(--gray-400)', padding: '4px 8px' }}
@@ -323,7 +581,7 @@ export default function ProcurementsPage() {
           </div>
         </div>
         <div className="app-modal-body">
-          {confirmData.map(supplier => (
+          {computeConfirmData().map(supplier => (
             <div key={supplier.name} style={{ marginBottom: 28 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: 12 }}>
                 <h4 style={{ fontSize: 15, fontWeight: 700, color: 'var(--gray-900)' }}>{supplier.name}</h4>
