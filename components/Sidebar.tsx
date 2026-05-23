@@ -61,7 +61,7 @@ export default function Sidebar() {
         </div>
         <div>
           <div className="sidebar-title">Sesonki.AI</div>
-          <div className="sidebar-subtitle">Matti&apos;s Bistro · Helsinki</div>
+          <div className="sidebar-subtitle">Linh&apos;s Bakery · Helsinki</div>
         </div>
       </div>
 

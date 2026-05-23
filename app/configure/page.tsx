@@ -65,7 +65,7 @@ const labelStyle: React.CSSProperties = {
 };
 
 export default function ConfigurePage() {
-  const [restaurantName, setRestaurantName] = useState("Matti's Bistro");
+  const [restaurantName, setRestaurantName] = useState("Linh's Bakery");
   const [city, setCity] = useState('Helsinki');
 
   const [agentTrigger, setAgentTrigger] = useState<'manual' | 'auto'>('manual');

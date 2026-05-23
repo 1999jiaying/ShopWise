@@ -2,12 +2,42 @@
 
 import { useState } from 'react';
 import AppShell from '@/components/AppShell';
+import LogWasteModal from '@/components/LogWasteModal';
+import MetricsCard from '@/components/MetricsCard';
 
 const metrics = [
-  { label: 'MONEY SAVED', value: '€123', change: '+12%' },
-  { label: 'WASTE PER CAPITA', value: '10%', change: '+2%' },
-  { label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%' },
-  { label: 'DAILY AVERAGE', value: '12,2 kg', change: '+2%' },
+  {
+    label: 'MONEY SAVED', value: '€123', change: '+12%',
+    history: [
+      { week: '2 weeks ago', value: '€108' },
+      { week: 'Last week',   value: '€111', change: '+3%' },
+      { week: 'This week',   value: '€123', change: '+12%' },
+    ],
+  },
+  {
+    label: 'WASTE PER CAPITA', value: '10%', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '9.4%' },
+      { week: 'Last week',   value: '9.8%', change: '+4%' },
+      { week: 'This week',   value: '10%',  change: '+2%' },
+    ],
+  },
+  {
+    label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '66%' },
+      { week: 'Last week',   value: '68%', change: '+3%' },
+      { week: 'This week',   value: '70%', change: '+3%' },
+    ],
+  },
+  {
+    label: 'DAILY AVERAGE WASTE', value: '12,2 kg', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '11.8 kg' },
+      { week: 'Last week',   value: '12.0 kg', change: '+2%' },
+      { week: 'This week',   value: '12.2 kg', change: '+2%' },
+    ],
+  },
 ];
 
 const byFoodType = [
@@ -16,11 +46,16 @@ const byFoodType = [
   { name: 'Bread', weight: '3kg', cost: '€1.20' },
 ];
 
-const byWasteType = [
+const INITIAL_BY_WASTE_TYPE = [
   { name: 'Wrong order', weight: '2kg', cost: '€9.00' },
   { name: 'Plate waste', weight: '2kg', cost: '€8.00' },
   { name: 'Over-prep', weight: '1kg', cost: '€4.00' },
 ];
+
+function parseKg(str: string): number {
+  const match = str.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : 0;
+}
 
 const recommendations = [
   'Reduce salmon portions by 15% — current plate waste data shows 30% of salmon dishes are returned with significant leftovers.',
@@ -120,14 +155,36 @@ function DonutGauge() {
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<string>('All');
+  const [showLogWaste, setShowLogWaste] = useState(false);
+  const [byWasteType, setByWasteType] = useState(INITIAL_BY_WASTE_TYPE);
+
+  function handleLogWaste(data: { item: string; quantity: string; wasteType: string }) {
+    const incoming = parseKg(data.quantity);
+    setByWasteType((prev) => {
+      const idx = prev.findIndex((w) => w.name === data.wasteType);
+      if (idx !== -1) {
+        const updated = [...prev];
+        const total = +(parseKg(updated[idx].weight) + incoming).toFixed(2);
+        updated[idx] = { ...updated[idx], weight: `${total}kg` };
+        return updated;
+      }
+      return [...prev, { name: data.wasteType, weight: `${incoming}kg`, cost: '' }];
+    });
+  }
 
   return (
     <AppShell title="Dashboard">
+      {showLogWaste && (
+        <LogWasteModal
+          onClose={() => setShowLogWaste(false)}
+          onSubmit={handleLogWaste}
+        />
+      )}
       {/* Top action bar */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
         <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--gray-900)' }}>Waste report</h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="app-btn app-btn-green">+ Add waste</button>
+          <button className="app-btn app-btn-green" onClick={() => setShowLogWaste(true)}>+ Add waste</button>
           <button className="app-btn app-btn-outline">
             This week 1.1 – 7.1.2026 &gt;
           </button>
@@ -137,12 +194,13 @@ export default function DashboardPage() {
       {/* Metric Cards */}
       <div className="metric-grid" style={{ marginBottom: 24 }}>
         {metrics.map((m) => (
-          <div className="metric-card" key={m.label}>
-            <div className="metric-card-label">{m.label}</div>
-            <div className="metric-card-value">{m.value}</div>
-            <div className="metric-card-change up">{m.change}</div>
-            <button className="metric-card-review">Review</button>
-          </div>
+          <MetricsCard
+            key={m.label}
+            label={m.label}
+            value={m.value}
+            change={m.change}
+            history={m.history}
+          />
         ))}
       </div>
 
@@ -167,7 +225,7 @@ export default function DashboardPage() {
         </div>
 
         {/* By Waste Type */}
-        <div className="app-card">
+        <div className="app-card" id="by-waste-type">
           <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 16 }}>
             BY WASTE TYPE
           </h3>
