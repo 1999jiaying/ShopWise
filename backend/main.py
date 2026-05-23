@@ -224,13 +224,13 @@ MOCK_RESULTS = {
             {"item": "Bread", "qty": "2 units", "expires": "2026-05-28", "channel": "resq", "reason": "Baked goods sell well on ResQ"},
         ],
         "resq_listing": {
-            "title": "Chef's Surprise Box — Matti's Bistro",
+            "title": "Chef's Surprise Box — Linh's Bakery",
             "description": "Fresh salmon + artisan bread. A quality meal at 50% off.",
             "original_price_eur": 9.90, "discounted_price_eur": 4.90, "portions": 8, "pickup_window": "17:30–19:00",
         },
         "shelter_message": {
-            "subject": "Food donation available — Matti's Bistro",
-            "body": "Hello,\n\nWe have dairy products (1L) available for donation today. Food-safe for 5 more days.\n\nPlease confirm if you can collect.\n\nBest regards,\nMatti's Bistro via Sesonki.AI",
+            "subject": "Food donation available — Linh's Bakery",
+            "body": "Hello,\n\nWe have dairy products (1L) available for donation today. Food-safe for 5 more days.\n\nPlease confirm if you can collect.\n\nBest regards,\nLinh's Bakery via Sesonki.AI",
         },
         "sms_summary": "Sesonki.AI: 8 ResQ portions listed (pickup 17:30-19:00). Shelter contacted for dairy donation. Tap to view.",
     },
@@ -265,7 +265,7 @@ async def health():
 
 @app.get("/api/data/{dataset}")
 async def get_data(dataset: str):
-    allowed = {"inventory", "pos_sales", "suppliers", "external_factors", "config"}
+    allowed = {"inventory", "pos", "suppliers", "external_factors", "config"}
     if dataset not in allowed:
         raise HTTPException(404, f"Unknown dataset: {dataset}")
     return json.loads((DATA_DIR / f"{dataset}.json").read_text())

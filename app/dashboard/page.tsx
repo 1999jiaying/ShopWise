@@ -1,13 +1,45 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import AppShell from '@/components/AppShell';
+import LogWasteModal from '@/components/LogWasteModal';
+import MetricsCard from '@/components/MetricsCard';
+import PageHeader from '@/components/PageHeader';
 
 const metrics = [
-  { label: 'MONEY SAVED', value: '€123', change: '+12%' },
-  { label: 'WASTE PER CAPITA', value: '10%', change: '+2%' },
-  { label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%' },
-  { label: 'DAILY AVERAGE', value: '12,2 kg', change: '+2%' },
+  {
+    label: 'MONEY SAVED', value: '€123', change: '+12%',
+    history: [
+      { week: '2 weeks ago', value: '€108' },
+      { week: 'Last week',   value: '€111', change: '+3%' },
+      { week: 'This week',   value: '€123', change: '+12%' },
+    ],
+  },
+  {
+    label: 'WASTE PER CAPITA', value: '10%', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '9.4%' },
+      { week: 'Last week',   value: '9.8%', change: '+4%' },
+      { week: 'This week',   value: '10%',  change: '+2%' },
+    ],
+  },
+  {
+    label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '66%' },
+      { week: 'Last week',   value: '68%', change: '+3%' },
+      { week: 'This week',   value: '70%', change: '+3%' },
+    ],
+  },
+  {
+    label: 'DAILY AVERAGE WASTE', value: '12,2 kg', change: '+2%',
+    history: [
+      { week: '2 weeks ago', value: '11.8 kg' },
+      { week: 'Last week',   value: '12.0 kg', change: '+2%' },
+      { week: 'This week',   value: '12.2 kg', change: '+2%' },
+    ],
+  },
 ];
 
 const byFoodType = [
@@ -16,11 +48,16 @@ const byFoodType = [
   { name: 'Bread', weight: '3kg', cost: '€1.20' },
 ];
 
-const byWasteType = [
+const INITIAL_BY_WASTE_TYPE = [
   { name: 'Wrong order', weight: '2kg', cost: '€9.00' },
   { name: 'Plate waste', weight: '2kg', cost: '€8.00' },
   { name: 'Over-prep', weight: '1kg', cost: '€4.00' },
 ];
+
+function parseKg(str: string): number {
+  const match = str.match(/[\d.]+/);
+  return match ? parseFloat(match[0]) : 0;
+}
 
 const recommendations = [
   'Reduce salmon portions by 15% — current plate waste data shows 30% of salmon dishes are returned with significant leftovers.',
@@ -190,29 +227,46 @@ function DonutGauge() {
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<string>('All');
+  const [showLogWaste, setShowLogWaste] = useState(false);
+  const [byWasteType, setByWasteType] = useState(INITIAL_BY_WASTE_TYPE);
+
+  function handleLogWaste(data: { item: string; quantity: string; wasteType: string }) {
+    const incoming = parseKg(data.quantity);
+    setByWasteType((prev) => {
+      const idx = prev.findIndex((w) => w.name === data.wasteType);
+      if (idx !== -1) {
+        const updated = [...prev];
+        const total = +(parseKg(updated[idx].weight) + incoming).toFixed(2);
+        updated[idx] = { ...updated[idx], weight: `${total}kg` };
+        return updated;
+      }
+      return [...prev, { name: data.wasteType, weight: `${incoming}kg`, cost: '' }];
+    });
+  }
 
   return (
     <AppShell title="Dashboard">
-      {/* Top action bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-        <h2 style={{ fontSize: 18, fontWeight: 700, color: 'var(--gray-900)' }}>Waste report</h2>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <button className="app-btn app-btn-green">+ Add waste</button>
-          <button className="app-btn app-btn-outline">
-            This week 1.1 – 7.1.2026 &gt;
-          </button>
-        </div>
-      </div>
+      {showLogWaste && (
+        <LogWasteModal
+          onClose={() => setShowLogWaste(false)}
+          onSubmit={handleLogWaste}
+        />
+      )}
+      <PageHeader
+        title="Waste report"
+        onAddWaste={() => setShowLogWaste(true)}
+      />
 
       {/* Metric Cards */}
       <div className="metric-grid" style={{ marginBottom: 24 }}>
         {metrics.map((m) => (
-          <div className="metric-card" key={m.label}>
-            <div className="metric-card-label">{m.label}</div>
-            <div className="metric-card-value">{m.value}</div>
-            <div className="metric-card-change up">{m.change}</div>
-            <button className="metric-card-review">Review</button>
-          </div>
+          <MetricsCard
+            key={m.label}
+            label={m.label}
+            value={m.value}
+            change={m.change}
+            history={m.history}
+          />
         ))}
       </div>
 
@@ -220,9 +274,15 @@ export default function DashboardPage() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 24 }}>
         {/* By Food Type */}
         <div className="app-card">
-          <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 16 }}>
-            BY FOOD TYPE
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+              BY FOOD TYPE
+            </h3>
+            <Link href="/dashboard/food-waste" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
+              View all →
+            </Link>
+          </div>
+          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {byFoodType.map((f) => (
               <div key={f.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -237,10 +297,16 @@ export default function DashboardPage() {
         </div>
 
         {/* By Waste Type */}
-        <div className="app-card">
-          <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 16 }}>
-            BY WASTE TYPE
-          </h3>
+        <div className="app-card" id="by-waste-type">
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+            <h3 style={{ fontSize: 12, fontWeight: 500, color: 'var(--gray-400)', textTransform: 'uppercase', letterSpacing: '0.04em', margin: 0 }}>
+              BY WASTE TYPE
+            </h3>
+            <Link href="/dashboard/waste-type" style={{ fontSize: 13, fontWeight: 500, color: 'var(--green-600)', textDecoration: 'none' }}>
+              View all →
+            </Link>
+          </div>
+          <div style={{ borderBottom: '1px solid var(--gray-100)', marginBottom: 16 }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {byWasteType.map((w) => (
               <div key={w.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

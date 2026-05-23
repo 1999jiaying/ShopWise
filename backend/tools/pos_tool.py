@@ -12,7 +12,7 @@ def read_pos_sales(days: int = 4) -> str:
     Also includes ingredient usage ratios per menu item so you can
     calculate raw-ingredient demand from forecasted covers.
     """
-    data = json.loads((DATA_DIR / "pos_sales.json").read_text())
+    data = json.loads((DATA_DIR / "pos.json").read_text())
     sales = data["daily_sales"][-days:]
     usage = data["ingredient_usage_per_item"]
     return json.dumps({"daily_sales": sales, "ingredient_usage_per_item": usage}, indent=2)
@@ -23,5 +23,5 @@ def get_ingredient_usage_map() -> str:
     """Return the mapping of menu items to their raw-ingredient quantities.
     Use this to translate a sales forecast into a raw-ingredient order list.
     """
-    data = json.loads((DATA_DIR / "pos_sales.json").read_text())
+    data = json.loads((DATA_DIR / "pos.json").read_text())
     return json.dumps(data["ingredient_usage_per_item"], indent=2)

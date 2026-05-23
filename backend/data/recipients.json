@@ -1,0 +1,35 @@
+{
+  "meta": { "api": "recipients", "version": "demo-v0.1", "description": "Configured surplus deflection recipients. Agent 4 reads this to match surplus items to suitable recipients and select the correct outreach channel." },
+  "recipients": [
+    {
+      "id": "rec_001",
+      "name": "Kallio Community Kitchen",
+      "contact_name": "Maija Virtanen",
+      "phone": "+358 40 555 1234",
+      "channel": "sms",
+      "accepts": ["dairy", "baked_goods", "produce", "eggs", "meat", "condiment"],
+      "max_qty_kg_per_pickup": 10.0,
+      "pickup_window": "18:00–21:00",
+      "pickup_days": ["monday","tuesday","wednesday","thursday","friday"],
+      "address": "Fleminginkatu 8, 00500 Helsinki",
+      "notes": "Linh has existing relationship. Back door pickup agreed. Maija responds quickly to SMS — usually within 20 minutes.",
+      "active": true,
+      "preferred_for": ["dairy", "meat", "baked_goods"]
+    },
+    {
+      "id": "rec_002",
+      "name": "ResQ Club",
+      "contact_name": null,
+      "phone": null,
+      "channel": "api",
+      "accepts": ["baked_goods", "dairy", "prepared_food"],
+      "max_qty_kg_per_pickup": null,
+      "pickup_window": "flexible",
+      "pickup_days": ["monday","tuesday","wednesday","thursday","friday","saturday","sunday"],
+      "address": null,
+      "notes": "Platform listing. Linh already has account. Best for baked goods and pastries — high demand on ResQ for bakery items in Kallio.",
+      "active": true,
+      "preferred_for": ["baked_goods"]
+    }
+  ]
+}
