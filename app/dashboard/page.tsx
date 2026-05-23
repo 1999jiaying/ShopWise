@@ -43,9 +43,9 @@ const metrics = [
 ];
 
 const byFoodType = [
-  { name: 'Salmon', weight: '2kg', cost: '€16.00' },
+  { name: 'Croissant', weight: '1kg', cost: '€16.00' },
   { name: 'Salad greens', weight: '1.5kg', cost: '€3.00' },
-  { name: 'Bread', weight: '3kg', cost: '€1.20' },
+  { name: 'Ciabatta Bread', weight: '1kg', cost: '€10.00' },
 ];
 
 const INITIAL_BY_WASTE_TYPE = [

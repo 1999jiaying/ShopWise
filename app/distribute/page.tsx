@@ -22,9 +22,9 @@ interface SurplusItem {
 }
 
 const INITIAL_ITEMS: SurplusItem[] = [
-  { id: 1, name: 'Salmon',      surplusQty: '0.5 kg',  giveQty: '0.5',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 0.5, leftover: 0,   category: 'ingredient' },
+  { id: 1, name: 'Croissant',      surplusQty: '10 pcs',  giveQty: '10 pcs',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 0.5, leftover: 0,   category: 'ingredient' },
   { id: 2, name: 'Dairy',       surplusQty: '1 L',     giveQty: '1 L',    expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 1,   leftover: 0,   category: 'ingredient' },
-  { id: 3, name: 'Bread',       surplusQty: '2 units', giveQty: '2 units',expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ingredient' },
+  { id: 3, name: 'Ciabatta Bread',       surplusQty: '2 pcs', giveQty: '2 pcs',expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ingredient' },
   { id: 4, name: 'Sandwich',    surplusQty: '1 pcs',   giveQty: '1 pcs',  expiresIn: 'in 5 days', checked: true, stockLevel: 'green',  pickedUp: 1,   leftover: 0,   category: 'ready-food' },
   { id: 5, name: 'Carrot cake', surplusQty: '2 pcs',   giveQty: '2 pcs',  expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ready-food' },
   { id: 6, name: 'Pasta salad', surplusQty: '0.5 kg',  giveQty: '0.5 kg', expiresIn: 'in 2 days', checked: true, stockLevel: 'red',    pickedUp: 0,   leftover: 0.5, category: 'ready-food' },
