@@ -1,0 +1,21 @@
+{
+  "meta": { "api": "weather", "version": "demo-v0.1", "description": "10-day weather forecast for Helsinki Kallio. Agent 1 reads this to adjust demand forecast per day. Source: Weather.com." },
+  "location": { "city": "Helsinki", "neighbourhood": "Kallio", "lat": 60.1836, "lng": 24.9508, "timezone": "Europe/Helsinki" },
+  "fetched_at": "2026-05-25T06:00:00",
+  "forecast": [
+    { "date": "2026-05-25", "day": "Monday",    "condition": "Cloudy",        "temp_high_c": 14, "temp_low_c": 8,  "rain_probability": 0.20, "wind_kmh": 12, "traffic_modifier": 0.90, "notes": "Overcast. Normal indoor footfall expected." },
+    { "date": "2026-05-26", "day": "Tuesday",   "condition": "Cloudy",        "temp_high_c": 13, "temp_low_c": 7,  "rain_probability": 0.25, "wind_kmh": 14, "traffic_modifier": 0.88, "notes": "Slightly cooler. Delivery day — dairy arrives 07:00–10:00." },
+    { "date": "2026-05-27", "day": "Wednesday", "condition": "Rain",          "temp_high_c": 11, "temp_low_c": 6,  "rain_probability": 0.80, "wind_kmh": 18, "traffic_modifier": 0.72, "notes": "Heavy rain forecast. Terrace walk-ins down 15–20%. Reduce pastry batch." },
+    { "date": "2026-05-28", "day": "Thursday",  "condition": "Cloudy",        "temp_high_c": 15, "temp_low_c": 9,  "rain_probability": 0.30, "wind_kmh": 10, "traffic_modifier": 0.95, "notes": "Clearing after midday. Normal volume." },
+    { "date": "2026-05-29", "day": "Friday",    "condition": "Sunny",         "temp_high_c": 18, "temp_low_c": 10, "rain_probability": 0.05, "wind_kmh": 8,  "traffic_modifier": 1.10, "notes": "Sunny. Lunch crowd expected to increase. Good day for chorizo sandwiches." },
+    { "date": "2026-05-30", "day": "Saturday",  "condition": "Sunny",         "temp_high_c": 21, "temp_low_c": 11, "rain_probability": 0.00, "wind_kmh": 6,  "traffic_modifier": 1.35, "notes": "Hottest day of the week. Kallio market 10 AM. Highest footfall day — increase all batches by 30%." },
+    { "date": "2026-05-31", "day": "Sunday",    "condition": "Partly cloudy", "temp_high_c": 17, "temp_low_c": 9,  "rain_probability": 0.15, "wind_kmh": 9,  "traffic_modifier": 1.05, "notes": "Mild. Moderate volume. Use remaining berries — expiry risk Monday." },
+    { "date": "2026-06-01", "day": "Monday",    "condition": "Cloudy",        "temp_high_c": 15, "temp_low_c": 8,  "rain_probability": 0.20, "wind_kmh": 11, "traffic_modifier": 0.90, "notes": "Next week outlook — normal." },
+    { "date": "2026-06-02", "day": "Tuesday",   "condition": "Sunny",         "temp_high_c": 19, "temp_low_c": 10, "rain_probability": 0.05, "wind_kmh": 7,  "traffic_modifier": 1.12, "notes": "Warming trend — expect higher outdoor footfall." },
+    { "date": "2026-06-03", "day": "Wednesday", "condition": "Sunny",         "temp_high_c": 22, "temp_low_c": 12, "rain_probability": 0.00, "wind_kmh": 5,  "traffic_modifier": 1.20, "notes": "Warm early June day. Strong terrace demand likely." }
+  ],
+  "public_holidays": [],
+  "local_events": [
+    { "date": "2026-05-30", "name": "Kallio neighbourhood market", "impact": "high", "expected_footfall_increase": "30–40%", "peak_hours": "10:00–13:00" }
+  ]
+}

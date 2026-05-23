@@ -265,7 +265,7 @@ async def health():
 
 @app.get("/api/data/{dataset}")
 async def get_data(dataset: str):
-    allowed = {"inventory", "pos_sales", "suppliers", "external_factors", "config"}
+    allowed = {"inventory", "pos", "suppliers", "external_factors", "config"}
     if dataset not in allowed:
         raise HTTPException(404, f"Unknown dataset: {dataset}")
     return json.loads((DATA_DIR / f"{dataset}.json").read_text())

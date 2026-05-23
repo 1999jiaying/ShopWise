@@ -1,0 +1,193 @@
+{
+  "meta": { "api": "pos", "version": "demo-v0.2", "description": "POS sales records. Agent 1 reads this to calculate ingredient consumption. Covers the previous full reporting period (Mon 18 May – Sun 24 May). Each record is one day of item sales." },
+  "restaurant": "Sesonki Bakery",
+  "currency": "EUR",
+  "unit_prices": {
+    "Sourdough loaf":       7.50,
+    "Croissant":            2.80,
+    "Berry tart":           4.50,
+    "Cardamom bun":         3.00,
+    "Chocolate cake slice": 4.80,
+    "Oat cookie":           2.20,
+    "Chorizo sandwich":     5.50
+  },
+  "period": { "start": "2026-05-18", "end": "2026-05-24", "days": 7 },
+  "daily_sales": [
+    {
+      "date": "2026-05-18", "day": "Monday", "weather": "cloudy",
+      "total_covers": 48, "total_revenue_eur": 334.20,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 8,  "revenue": 60.00  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 22, "revenue": 61.60  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 11, "revenue": 49.50  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 18, "revenue": 54.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 6,  "revenue": 28.80  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 14, "revenue": 30.80  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 9,  "revenue": 49.50  }
+      ]
+    },
+    {
+      "date": "2026-05-19", "day": "Tuesday", "weather": "sunny",
+      "total_covers": 44, "total_revenue_eur": 291.40,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 7,  "revenue": 52.50  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 20, "revenue": 56.00  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 9,  "revenue": 40.50  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 16, "revenue": 48.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 5,  "revenue": 24.00  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 12, "revenue": 26.40  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 8,  "revenue": 44.00  }
+      ]
+    },
+    {
+      "date": "2026-05-20", "day": "Wednesday", "weather": "rainy",
+      "notes": "Rain all day — terrace closed",
+      "total_covers": 31, "total_revenue_eur": 200.20,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 5,  "revenue": 37.50  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 14, "revenue": 39.20  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 6,  "revenue": 27.00  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 10, "revenue": 30.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 4,  "revenue": 19.20  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 9,  "revenue": 19.80  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 5,  "revenue": 27.50  }
+      ]
+    },
+    {
+      "date": "2026-05-21", "day": "Thursday", "weather": "partly cloudy",
+      "total_covers": 52, "total_revenue_eur": 380.30,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 9,  "revenue": 67.50  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 24, "revenue": 67.20  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 13, "revenue": 58.50  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 20, "revenue": 60.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 7,  "revenue": 33.60  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 15, "revenue": 33.00  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 11, "revenue": 60.50  }
+      ]
+    },
+    {
+      "date": "2026-05-22", "day": "Friday", "weather": "sunny",
+      "total_covers": 61, "total_revenue_eur": 454.20,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 11, "revenue": 82.50  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 28, "revenue": 78.40  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 15, "revenue": 67.50  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 22, "revenue": 66.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 9,  "revenue": 43.20  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 18, "revenue": 39.60  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 14, "revenue": 77.00  }
+      ]
+    },
+    {
+      "date": "2026-05-23", "day": "Saturday", "weather": "sunny",
+      "notes": "Kallio market day — high foot traffic 10 AM–1 PM",
+      "total_covers": 84, "total_revenue_eur": 650.90,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 18, "revenue": 135.00 },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 40, "revenue": 112.00 },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 22, "revenue": 99.00  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 30, "revenue": 90.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 12, "revenue": 57.60  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 24, "revenue": 52.80  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 19, "revenue": 104.50 }
+      ]
+    },
+    {
+      "date": "2026-05-24", "day": "Sunday", "weather": "cloudy",
+      "total_covers": 55, "total_revenue_eur": 402.90,
+      "items_sold": [
+        { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "qty": 10, "revenue": 75.00  },
+        { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "qty": 26, "revenue": 72.80  },
+        { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "qty": 13, "revenue": 58.50  },
+        { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "qty": 19, "revenue": 57.00  },
+        { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "qty": 8,  "revenue": 38.40  },
+        { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "qty": 16, "revenue": 35.20  },
+        { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "qty": 12, "revenue": 66.00  }
+      ]
+    }
+  ],
+  "weekly_totals": {
+    "total_covers": 375,
+    "total_revenue_eur": 2714.10,
+    "items_sold_totals": [
+      { "item_id": "dish_001", "name": "Sourdough loaf",       "category": "bread",    "total_qty": 68,  "total_revenue": 510.00  },
+      { "item_id": "dish_002", "name": "Croissant",            "category": "pastry",   "total_qty": 174, "total_revenue": 487.20  },
+      { "item_id": "dish_003", "name": "Berry tart",           "category": "pastry",   "total_qty": 89,  "total_revenue": 400.50  },
+      { "item_id": "dish_004", "name": "Cardamom bun",         "category": "pastry",   "total_qty": 135, "total_revenue": 405.00  },
+      { "item_id": "dish_005", "name": "Chocolate cake slice", "category": "cake",     "total_qty": 51,  "total_revenue": 244.80  },
+      { "item_id": "dish_006", "name": "Oat cookie",           "category": "cookie",   "total_qty": 108, "total_revenue": 237.60  },
+      { "item_id": "dish_007", "name": "Chorizo sandwich",     "category": "sandwich", "total_qty": 78,  "total_revenue": 429.00  }
+    ]
+  },
+  "ingredient_usage_per_item": {
+    "Sourdough loaf": {
+      "wheat_flour_kg": 0.25,
+      "sourdough_starter_feed_kg": 0.10,
+      "salt_kg": 0.008
+    },
+    "Croissant": {
+      "wheat_flour_kg": 0.06,
+      "butter_kg": 0.03,
+      "whole_milk_L": 0.015,
+      "eggs_pcs": 0.3,
+      "sugar_kg": 0.01
+    },
+    "Berry tart": {
+      "wheat_flour_kg": 0.04,
+      "butter_kg": 0.02,
+      "eggs_pcs": 0.5,
+      "fresh_berries_kg": 0.08,
+      "cream_36_L": 0.01,
+      "sugar_kg": 0.02,
+      "vanilla_paste_jar": 0.001
+    },
+    "Cardamom bun": {
+      "wheat_flour_kg": 0.03,
+      "butter_kg": 0.015,
+      "whole_milk_L": 0.02,
+      "cardamom_kg": 0.002,
+      "eggs_pcs": 0.1,
+      "sugar_kg": 0.015
+    },
+    "Chocolate cake slice": {
+      "wheat_flour_kg": 0.012,
+      "dark_chocolate_kg": 0.06,
+      "butter_kg": 0.03,
+      "eggs_pcs": 1.0,
+      "sugar_kg": 0.04,
+      "cream_36_L": 0.017,
+      "vanilla_paste_jar": 0.001
+    },
+    "Oat cookie": {
+      "oat_flour_kg": 0.04,
+      "butter_kg": 0.01,
+      "eggs_pcs": 0.25,
+      "sugar_kg": 0.015
+    },
+    "Chorizo sandwich": {
+      "wheat_flour_kg": 0.08,
+      "chorizo_kg": 0.08,
+      "dijon_mustard_kg": 0.01,
+      "butter_kg": 0.01
+    }
+  },
+  "ingredient_consumption_derived": {
+    "description": "Pre-calculated by Agent 1 from dish sales × ingredient ratios. Used as input for order list generation.",
+    "items": [
+      { "ingredient_id": "ing_001", "name": "Wheat flour",           "total_consumed": 41.90, "unit": "kg"  },
+      { "ingredient_id": "ing_002", "name": "Oat flour",             "total_consumed": 4.32,  "unit": "kg"  },
+      { "ingredient_id": "ing_003", "name": "Whole milk",            "total_consumed": 5.40,  "unit": "L"   },
+      { "ingredient_id": "ing_004", "name": "Butter",                "total_consumed": 12.46, "unit": "kg"  },
+      { "ingredient_id": "ing_005", "name": "Cream 36%",             "total_consumed": 1.74,  "unit": "L"   },
+      { "ingredient_id": "ing_006", "name": "Eggs",                  "total_consumed": 188.1, "unit": "pcs" },
+      { "ingredient_id": "ing_007", "name": "Fresh berries",         "total_consumed": 7.12,  "unit": "kg"  },
+      { "ingredient_id": "ing_008", "name": "Vanilla paste",         "total_consumed": 0.071, "unit": "jar" },
+      { "ingredient_id": "ing_009", "name": "Dark chocolate",        "total_consumed": 3.06,  "unit": "kg"  },
+      { "ingredient_id": "ing_010", "name": "Sourdough starter feed","total_consumed": 6.80,  "unit": "kg"  },
+      { "ingredient_id": "ing_011", "name": "Cardamom",              "total_consumed": 0.27,  "unit": "kg"  },
+      { "ingredient_id": "ing_013", "name": "Chorizo",               "total_consumed": 6.24,  "unit": "kg"  },
+      { "ingredient_id": "ing_014", "name": "Dijon mustard",         "total_consumed": 0.78,  "unit": "kg"  }
+    ]
+  }
+}
