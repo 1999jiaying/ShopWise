@@ -29,7 +29,7 @@ const metrics = [
   },
   {
     label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%',
-    invertColor: false,
+    invertColor: true,
     history: [
       { week: '2 weeks ago', value: '66%' },
       { week: 'Last week',   value: '68%', change: '+3%' },
