@@ -15,7 +15,7 @@ const WASTE_VISUAL: Record<string, VisualConfig> = {
         <path d="M3 12h18M3 12l4-4M3 12l4 4" />
       </svg>
     ),
-    chartPath: 'M0 38 C40 42, 80 34, 120 40 C160 46, 200 36, 240 42 C280 48, 320 38, 360 44 C400 50, 440 40, 480 44',
+    chartPath: 'M0 20 C40 50, 90 5, 150 45 C190 55, 240 10, 300 42 C340 52, 390 8, 430 35 C460 50, 475 18, 480 28',
   },
   'Plate waste': {
     icon: (
@@ -24,7 +24,7 @@ const WASTE_VISUAL: Record<string, VisualConfig> = {
         <path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4" />
       </svg>
     ),
-    chartPath: 'M0 32 C40 38, 80 28, 120 36 C160 44, 200 30, 240 38 C280 46, 320 32, 360 40 C400 48, 440 34, 480 38',
+    chartPath: 'M0 48 C50 8, 100 52, 160 12 C200 45, 250 5, 310 38 C350 55, 400 10, 440 42 C465 52, 478 20, 480 30',
   },
   'Over-prep': {
     icon: (
@@ -33,7 +33,7 @@ const WASTE_VISUAL: Record<string, VisualConfig> = {
         <path d="M10 12h4" />
       </svg>
     ),
-    chartPath: 'M0 44 C40 40, 80 46, 120 42 C160 38, 200 44, 240 40 C280 36, 320 42, 360 38 C400 34, 440 40, 480 36',
+    chartPath: 'M0 8 C45 50, 100 10, 160 48 C200 15, 250 52, 310 10 C350 45, 395 8, 440 40 C458 52, 472 15, 480 22',
   },
   'Spoilage': {
     icon: (
@@ -42,7 +42,7 @@ const WASTE_VISUAL: Record<string, VisualConfig> = {
         <path d="M12 7v5l3 3" />
       </svg>
     ),
-    chartPath: 'M0 50 C40 48, 80 50, 120 48 C160 46, 200 50, 240 48 C280 46, 320 48, 360 46 C400 44, 440 46, 480 44',
+    chartPath: 'M0 40 C35 12, 80 55, 140 18 C180 48, 230 5, 290 42 C330 55, 375 12, 420 38 C450 50, 468 15, 480 25',
   },
 };
 
@@ -53,7 +53,7 @@ const DEFAULT_VISUAL: VisualConfig = {
       <path d="M12 8v4l3 3" />
     </svg>
   ),
-  chartPath: 'M0 44 C40 40, 80 46, 120 42 C160 38, 200 44, 240 40 C280 36, 320 42, 360 38 C400 34, 440 40, 480 36',
+  chartPath: 'M0 35 C50 55, 110 8, 170 45 C210 52, 260 12, 320 40 C360 50, 400 15, 440 38 C460 48, 475 22, 480 30',
 };
 
 function SparkLine({ path }: { path: string }) {

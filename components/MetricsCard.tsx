@@ -13,11 +13,13 @@ interface Props {
   value: string;
   change: string;
   history: HistoryRow[];
+  invertColor?: boolean;
 }
 
-export default function MetricsCard({ label, value, change, history }: Props) {
+export default function MetricsCard({ label, value, change, history, invertColor }: Props) {
   const [showModal, setShowModal] = useState(false);
-  const direction = change.startsWith('-') ? 'down' : 'up';
+  const raw = change.startsWith('-') ? 'down' : 'up';
+  const direction = invertColor ? (raw === 'up' ? 'down' : 'up') : raw;
 
   return (
     <>
@@ -80,7 +82,8 @@ export default function MetricsCard({ label, value, change, history }: Props) {
               <div style={{ borderTop: '1px solid var(--gray-100)' }} />
 
               {history.map((row) => {
-                const rowDir = row.change?.startsWith('-') ? 'down' : 'up';
+                const rawDir = row.change?.startsWith('-') ? 'down' : 'up';
+                const rowDir = invertColor ? (rawDir === 'up' ? 'down' : 'up') : rawDir;
                 return (
                   <div
                     key={row.week}

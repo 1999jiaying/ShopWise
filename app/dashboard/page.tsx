@@ -11,6 +11,7 @@ import { useWaste } from '@/context/WasteContext';
 const metrics = [
   {
     label: 'MONEY SAVED', value: '€123', change: '+12%',
+    invertColor: false,
     history: [
       { week: '2 weeks ago', value: '€108' },
       { week: 'Last week',   value: '€111', change: '+3%' },
@@ -19,6 +20,7 @@ const metrics = [
   },
   {
     label: 'WASTE PER CAPITA', value: '10%', change: '+2%',
+    invertColor: true,
     history: [
       { week: '2 weeks ago', value: '9.4%' },
       { week: 'Last week',   value: '9.8%', change: '+4%' },
@@ -27,6 +29,7 @@ const metrics = [
   },
   {
     label: 'DEFLECTION POTENTIAL', value: '70%', change: '+2%',
+    invertColor: false,
     history: [
       { week: '2 weeks ago', value: '66%' },
       { week: 'Last week',   value: '68%', change: '+3%' },
@@ -35,6 +38,7 @@ const metrics = [
   },
   {
     label: 'DAILY AVERAGE WASTE', value: '12,2 kg', change: '+2%',
+    invertColor: true,
     history: [
       { week: '2 weeks ago', value: '11.8 kg' },
       { week: 'Last week',   value: '12.0 kg', change: '+2%' },
@@ -248,6 +252,7 @@ export default function DashboardPage() {
             value={m.value}
             change={m.change}
             history={m.history}
+            invertColor={m.invertColor}
           />
         ))}
       </div>

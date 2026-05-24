@@ -17,7 +17,7 @@ const FOOD_VISUAL: Record<string, VisualConfig> = {
         <path d="M2 12c2-2 4-3 6-3" />
       </svg>
     ),
-    chartPath: 'M0 40 C40 38, 80 42, 120 39 C160 36, 200 40, 240 38 C280 36, 320 40, 360 38 C400 36, 440 39, 480 38',
+    chartPath: 'M0 45 C30 10, 80 50, 140 15 C180 45, 220 8, 280 40 C320 55, 380 12, 420 35 C450 50, 465 20, 480 30',
   },
   'Salad greens': {
     icon: (
@@ -27,7 +27,7 @@ const FOOD_VISUAL: Record<string, VisualConfig> = {
         <path d="M12 12C12 7 17 4 20 6c0 4-3 7-8 6z" />
       </svg>
     ),
-    chartPath: 'M0 35 C40 30, 80 40, 120 32 C160 24, 200 38, 240 30 C280 22, 320 36, 360 28 C400 20, 440 34, 480 30',
+    chartPath: 'M0 30 C50 52, 100 5, 160 42 C200 55, 250 10, 300 35 C340 50, 390 8, 430 28 C455 48, 470 15, 480 25',
   },
   'Bread': {
     icon: (
@@ -36,7 +36,7 @@ const FOOD_VISUAL: Record<string, VisualConfig> = {
         <path d="M4 10c0-3 2-6 8-6s8 3 8 6" />
       </svg>
     ),
-    chartPath: 'M0 30 C40 40, 80 25, 120 38 C160 48, 200 30, 240 42 C280 52, 320 35, 360 45 C400 52, 440 38, 480 44',
+    chartPath: 'M0 10 C40 48, 90 5, 150 50 C190 15, 240 55, 300 8 C340 45, 380 10, 420 52 C450 20, 468 45, 480 18',
   },
 };
 
@@ -47,7 +47,7 @@ const DEFAULT_VISUAL: VisualConfig = {
       <path d="M12 8v4l3 3" />
     </svg>
   ),
-  chartPath: 'M0 40 C40 38, 80 42, 120 39 C160 36, 200 40, 240 38 C280 36, 320 40, 360 38 C400 36, 440 39, 480 38',
+  chartPath: 'M0 35 C50 55, 110 8, 170 45 C210 52, 260 12, 320 40 C360 50, 400 15, 440 38 C460 48, 475 22, 480 30',
 };
 
 function SparkLine({ path }: { path: string }) {
