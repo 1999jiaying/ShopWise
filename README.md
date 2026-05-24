@@ -28,7 +28,9 @@ Each agent runs **independently** — no fixed pipeline. Triggered manually or o
 
 | Page | Description |
 |------|-------------|
-| **Dashboard** (`/`) | Waste report metrics (money saved, waste per capita, deflection potential, daily average), breakdown by food type and waste type, eaten/wasted ratio gauge, AI recommendations, food distribution status table |
+| **Dashboard** (`/dashboard`) | Waste report metrics (money saved, waste per capita, deflection potential, daily average), breakdown by food type and waste type, eaten/wasted ratio gauge, AI recommendations, food distribution status table |
+| **By Food Waste** (`/dashboard/food-waste`) | Per-item food waste breakdown with animated sparklines, expandable charts, and AI recommendations |
+| **By Waste Type** (`/dashboard/waste-type`) | Waste categorised by type (over-prep, plate waste, wrong order, spoilage) with animated sparklines and expandable charts |
 | **Procurements** (`/procurements`) | Multi-step flow: forecast demand → AI insight + order list → adjust with AI chat → supplier price comparison across 3 suppliers → confirm order grouped by supplier |
 | **Distribute food** (`/distribute`) | Today's surplus table → select items to give away → track pickups with +/- controls → view final leftovers |
 | **Configure** (`/configure`) | Restaurant settings, scheduling, supplier configuration, notification preferences |
@@ -55,6 +57,7 @@ Each agent runs **independently** — no fixed pipeline. Triggered manually or o
 
 - **Backend:** Python, CrewAI, FastAPI
 - **Frontend:** Next.js 14, React, TypeScript
+- **State:** React Context (`WasteContext`) — shared waste log state across dashboard, food-waste, waste-type, and distribute pages
 - **Fonts:** Inter (app), Newsreader (landing)
 - **Data:** JSON mock files (POS sales, inventory, suppliers, weather, config)
 
@@ -86,18 +89,25 @@ backend/
   main.py           # FastAPI server with per-agent endpoints
 
 app/
-  page.tsx          # Dashboard (home page)
-  dashboard/        # Dashboard page component
+  page.tsx          # Landing page
+  dashboard/
+    page.tsx        # Waste report dashboard (metrics, breakdowns, gauge)
+    food-waste/     # Per-food-item waste detail with animated charts
+    waste-type/     # Per-waste-type detail with animated charts
   procurements/     # Multi-step procurement flow
   distribute/       # Surplus distribution + pickup tracking
   configure/        # Settings page
   api/agents/       # Next.js proxy to Python backend
-  planner/          # Legacy agent demo (tab-based)
+
+context/
+  WasteContext.tsx  # Shared state: food items, waste types, surplus — updated by LogWasteModal across all pages
 
 components/
-  Sidebar.tsx       # App sidebar navigation
   AppShell.tsx      # Layout wrapper (sidebar + header)
-  Nav.tsx           # Landing page nav (unused in app)
+  LogWasteModal.tsx # Log waste modal (item, quantity, waste type)
+  PageHeader.tsx    # Breadcrumb + date range + add waste button
+  MetricsCard.tsx   # KPI card with sparkline and history popover
+  Sidebar.tsx       # App sidebar navigation
 ```
 
 ## Hackathon Demo
