@@ -43,7 +43,7 @@ export default function AppShell({ children, title, actions }: AppShellProps) {
             <path d="M8 14c0-4 3-7 6-7s4 2 4 4c0 3-2 5-5 6-1 .3-2 .5-3 .5" stroke="#fff" strokeWidth="2" strokeLinecap="round" fill="none" />
           </svg>
           <div>
-            <div className="mobile-brand-name">Sesonki.AI</div>
+            <div className="mobile-brand-name">GATHER</div>
             <div className="mobile-brand-sub">Linh&apos;s Bakery · Helsinki</div>
           </div>
         </div>

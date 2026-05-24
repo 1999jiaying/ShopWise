@@ -9,7 +9,7 @@ import { useWaste } from '@/context/WasteContext';
 type VisualConfig = { icon: React.ReactNode; chartPath: string };
 
 const FOOD_VISUAL: Record<string, VisualConfig> = {
-  'Salmon': {
+  'Croissant': {
     icon: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green-600)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
         <path d="M22 12c-4-4-8-6-12-5C4 8 2 12 2 12s2 4 8 5c4 1 8-1 12-5z" />
@@ -79,7 +79,7 @@ const recommendations = [
 ];
 
 export default function FoodWastePage() {
-  const [expanded, setExpanded] = useState<string | null>('Salmon');
+  const [expanded, setExpanded] = useState<string | null>('Croissant');
   const [showLogWaste, setShowLogWaste] = useState(false);
   const { foodItems, logWaste } = useWaste();
 

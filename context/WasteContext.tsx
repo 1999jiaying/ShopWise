@@ -31,7 +31,7 @@ export interface SurplusItem {
 }
 
 const INITIAL_FOOD_ITEMS: FoodItemData[] = [
-  { name: 'Salmon',       weight: '2 kg',   cost: '€16,00' },
+  { name: 'Croissant',       weight: '2 kg',   cost: '€16,00' },
   { name: 'Salad greens', weight: '1.5 kg', cost: '€3,00'  },
   { name: 'Bread',        weight: '3 kg',   cost: '€1,20'  },
 ];
@@ -44,9 +44,9 @@ const INITIAL_WASTE_TYPES: WasteTypeData[] = [
 ];
 
 const INITIAL_SURPLUS: SurplusItem[] = [
-  { id: 1, name: 'Croissant',     surplusQty: '10 pcs',  giveQty: '10 pcs',  expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 0.5, leftover: 0,   category: 'ingredient' },
+  { id: 1, name: 'Croissant',     surplusQty: '10 pcs',  giveQty: '10 pcs',  expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 1, leftover: 0,   category: 'ready-food' },
   { id: 2, name: 'Dairy',         surplusQty: '1 L',     giveQty: '1 L',     expiresIn: 'in 5 days', checked: true, stockLevel: 'red',    pickedUp: 1,   leftover: 0,   category: 'ingredient' },
-  { id: 3, name: 'Ciabatta Bread',surplusQty: '2 pcs',   giveQty: '2 pcs',   expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ingredient' },
+  { id: 3, name: 'Ciabatta Bread',surplusQty: '2 pcs',   giveQty: '2 pcs',   expiresIn: 'in 5 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ready-food' },
   { id: 4, name: 'Sandwich',      surplusQty: '1 pcs',   giveQty: '1 pcs',   expiresIn: 'in 5 days', checked: true, stockLevel: 'green',  pickedUp: 1,   leftover: 0,   category: 'ready-food' },
   { id: 5, name: 'Carrot cake',   surplusQty: '2 pcs',   giveQty: '2 pcs',   expiresIn: 'in 3 days', checked: true, stockLevel: 'yellow', pickedUp: 1,   leftover: 1,   category: 'ready-food' },
   { id: 6, name: 'Pasta salad',   surplusQty: '0.5 kg',  giveQty: '0.5 kg',  expiresIn: 'in 2 days', checked: true, stockLevel: 'red',    pickedUp: 0,   leftover: 0.5, category: 'ready-food' },
